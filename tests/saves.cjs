@@ -3,7 +3,7 @@ const fs = require('node:fs'), path = require('node:path'), vm = require('node:v
 function fixture(root) {
   const stored = new Map(), messages = [], failures = { get: false, set: false, remove: false }; let now = 100000;
   class Clock extends Date { static now() { return now; } }
-  const nodes = new Map(), element = id => { if (!nodes.has(id)) nodes.set(id, { hidden: true, disabled: false, style: {}, getContext: () => ({}) }); return nodes.get(id); };
+  const nodes = new Map(), element = id => { if (!nodes.has(id)) nodes.set(id, { hidden: true, disabled: false, style: {}, getContext: () => ({}), querySelectorAll: () => [], replaceChildren() {} }); return nodes.get(id); };
   const context = vm.createContext({ console, Date: Clock, performance: { now: () => now }, window: { addEventListener() {} }, document: { hidden: false, addEventListener() {} }, requestAnimationFrame() {}, cancelAnimationFrame() {},
     localStorage: { getItem(k) { if (failures.get) throw Error('blocked'); return stored.get(k) || null; }, setItem(k, v) { if (failures.set) throw Error('quota'); stored.set(k, String(v)); }, removeItem(k) { if (failures.remove) throw Error('blocked'); stored.delete(k); } },
     $: element, ART: { clearPortraits() {} }, UI: { toast: s => messages.push(s), intermission() {} }, SFX: {}, G: { map: null }, MAP: { stop() {} } });

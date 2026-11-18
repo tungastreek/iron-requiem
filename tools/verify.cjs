@@ -15,7 +15,28 @@ class PixelCanvas{
   constructor(){this._w=0;this._h=0;this.data=new Uint8ClampedArray();this.style={};this.className='';}
   get width(){return this._w}set width(w){this._w=Math.max(0,Math.round(w));this.data=new Uint8ClampedArray(this._w*this._h*4)}
   get height(){return this._h}set height(h){this._h=Math.max(0,Math.round(h));this.data=new Uint8ClampedArray(this._w*this._h*4)}
-  getContext(){const c=this;return {drawImage(src,sx,sy,sw,sh,dx,dy,dw,dh){if(arguments.length!==9)throw Error('Expected unscaled crop');if(dw!==sw||dh!==sh)throw Error('Unexpected scale');for(let y=0;y<sh;y++){const a=((sy+y)*src.width+sx)*4,b=((dy+y)*c.width+dx)*4;c.data.set(src.data.subarray(a,a+sw*4),b);}},getImageData(){return {data:Uint8ClampedArray.from(c.data)}},putImageData(d){c.data.set(d.data)}};}
+  getContext(){
+    const c = this;
+    return {
+      drawImage(src, sx, sy, sw, sh, dx, dy, dw, dh) {
+        if (arguments.length !== 9) throw Error('Expected source and destination rectangles');
+        for (let y = 0; y < dh; y++) {
+          const srcRow = (sy + Math.floor(y * sh / dh)) * src.width + sx;
+          const dstRow = (dy + y) * c.width + dx;
+          if (dw === sw) {
+            c.data.set(src.data.subarray(srcRow * 4, (srcRow + sw) * 4), dstRow * 4);
+            continue;
+          }
+          for (let x = 0; x < dw; x++) {
+            const p = (srcRow + Math.floor(x * sw / dw)) * 4;
+            c.data.set(src.data.subarray(p, p + 4), (dstRow + x) * 4);
+          }
+        }
+      },
+      getImageData(){return {data:Uint8ClampedArray.from(c.data)}},
+      putImageData(d){c.data.set(d.data)}
+    };
+  }
 }
 async function verify(root=path.resolve(__dirname,'..')){
   const errors=[],assert=(ok,msg)=>{if(!ok)errors.push(msg)},read=p=>fs.readFileSync(path.join(root,p),'utf8');
@@ -34,6 +55,7 @@ async function verify(root=path.resolve(__dirname,'..')){
   const mechs=vm.runInContext('MECHS',c),aliases={carmine_e:'carmine'};
   for(const [id,m] of Object.entries(mechs)){if(aliases[id])continue;const file='assets/units/'+(m.atlas?.sheet||id)+'.png';assert(fs.existsSync(path.join(root,file)),'Missing sprite '+file);if(!decoded.has(file))decoded.set(file,decodePNG(fs.readFileSync(path.join(root,file))));c.testImage=decoded.get(file);c.testLayout=m.atlas||undefined;
     const sprite=vm.runInContext('ASSETS._process(testImage,testLayout)',c);assert(sprite.frames.length===4&&sprite.ground>0,'Sprite frames '+id);
+    assert(Math.max(sprite.w, sprite.h) <= 448, 'Sprite fits runtime canvas budget '+id);
     for(const f of sprite.frames){const corners=[0,(f.width-1)*4,(f.width*(f.height-1))*4,(f.width*f.height-1)*4];assert(corners.filter(i=>f.data[i+3]<40).length>=3,'Opaque sprite corner '+id)}
     sprites.push({id,width:sprite.w,height:sprite.h,ground:Number(sprite.ground.toFixed(3))});}
   const maps=vm.runInContext(`(()=>{const errors=[],sizes=new Set();for(const [id,ch] of Object.entries(CHAPTERS)){

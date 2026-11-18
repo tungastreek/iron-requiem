@@ -73,20 +73,37 @@ const GAME = (() => {
   function loadSlot(id) { const s = slots().find(s => s.id === String(id)); if (!s?.save) throw new Error(s?.error || 'This slot is empty.'); useSave(s.save); }
   function exportJSON() { tick(); return JSON.stringify(migrate(playing ? SAVE : loadSave() || SAVE), null, 2); }
   function importJSON(text) { if (typeof text !== 'string' || text.length > 2e6) throw new Error('Paste an Iron Requiem save smaller than 2 MB.'); let s; try { s = JSON.parse(text); } catch (e) { throw new Error('The pasted text is not valid JSON.'); } const clean = migrate(s); useSave(clean); return clean; }
-  function hideAll() { if (titleViewer) titleViewer.stop(); ['#title', '#setup', '#inter', '#story', '#mapScreen', '#battle'].forEach(s => { const e = $(s); if (e) e.hidden = true; }); }
+  function clearSetup() {
+    const box = $('#setupBody');
+    if (!box) return;
+    for (const canvas of box.querySelectorAll('canvas')) canvas.width = 0;
+    box.replaceChildren();
+  }
+  function hideAll() {
+    if (titleViewer) titleViewer.stop();
+    cancelAnimationFrame(titleRaf);
+    const titleCanvas = $('#titleCanvas');
+    if (titleCanvas) titleCanvas.width = 1;
+    clearSetup();
+    ['#title', '#setup', '#inter', '#story', '#mapScreen', '#battle'].forEach(s => { const e = $(s); if (e) e.hidden = true; });
+  }
   function toTitle() {
     tick(); playing = false;
     hideAll(); if (G.map) MAP.stop();
     const el = $('#title'); el.hidden = false;
     $('#btnContinue').disabled = !loadSave();
     const keyArt = ASSETS.title();
-    if (R3D.ok && !titleViewer && !keyArt) { try { titleViewer = R3D.viewer($('#title3d'), 'alteonz'); } catch (e) { titleViewer = null; } }
+    if (R3D.ok && ASSETS.loaded && !titleViewer && !keyArt) { try { titleViewer = R3D.viewer($('#title3d'), 'alteonz'); } catch (e) { titleViewer = null; } }
     $('#title3d').hidden = !titleViewer || !!keyArt; if (titleViewer && !keyArt) titleViewer.start();
-    cancelAnimationFrame(titleRaf); titleLoop();
+    titleLoop();
     SFX.music('title');
   }
   function titleLoop() {
-    const c = $('#titleCanvas'); const ctx = c.getContext('2d'); const W = c.clientWidth, H = c.clientHeight; if (c.width !== W || c.height !== H) { c.width = W; c.height = H; }
+    const c = $('#titleCanvas'), scale = Math.min(1, 1920 / c.clientWidth, 1080 / c.clientHeight);
+    const W = Math.max(1, Math.round(c.clientWidth * scale)), H = Math.max(1, Math.round(c.clientHeight * scale));
+    if (c.width !== W || c.height !== H) { c.width = W; c.height = H; }
+    const ctx = c.getContext('2d');
+    if (!ctx) return;
     const t = performance.now() / 1000;
     const ka = ASSETS.title();
     if (ka) { const s0 = Math.max(W / ka.width, H / ka.height) * 1.03; ctx.drawImage(ka, (W - ka.width * s0) / 2 + Math.sin(t * 0.1) * 8, (H - ka.height * s0) / 2, ka.width * s0, ka.height * s0); }
@@ -99,37 +116,49 @@ const GAME = (() => {
     hideAll(); $('#setup').hidden = false;
     const st = { gender: 'm', path: 'real', name: 'Rei Kasuga' };
     let step = 1;
+    const box = $('#setupBody');
+    const selectCard = id => {
+      for (const card of box.querySelectorAll('.pick')) {
+        const active = card.id === id;
+        card.classList.toggle('on', active);
+        card.setAttribute('aria-pressed', String(active));
+      }
+    };
     const render = (focusId) => {
-      const box = $('#setupBody');
+      clearSetup();
       const pilotCard = (gender, label) => {
-        const canvas = h('canvas', { width: 560, height: 620, 'aria-hidden': 'true' });
-        const ctx = canvas.getContext('2d');
         const art = ASSETS.portrait(gender === 'f' ? 'rina' : 'rei', 'normal', 560, 620);
-        if (art) ctx.drawImage(art, 0, 0);
-        else ART.drawPortrait(ctx, gender === 'f' ? PORTRAITS.rina : PORTRAITS.rei_m, 560, 620, 'normal');
+        const canvas = art || h('canvas', { width: 560, height: 620 });
+        canvas.setAttribute('aria-hidden', 'true');
+        if (!art) {
+          const ctx = canvas.getContext('2d');
+          if (ctx) ART.drawPortrait(ctx, gender === 'f' ? PORTRAITS.rina : PORTRAITS.rei_m, 560, 620, 'normal');
+        }
         return h('button', { id: 'pilot-' + gender, type: 'button', class: 'pick' + (st.gender === gender ? ' on' : ''), 'aria-pressed': String(st.gender === gender), onclick: () => {
           const defaults = ['Rei Kasuga', 'Rina Kasuga'];
-          if (defaults.includes(st.name)) st.name = label;
+          if (defaults.includes(st.name)) { st.name = label; $('#heroName').value = label; }
           st.gender = gender;
+          selectCard('pilot-' + gender);
           SFX.play('select');
-          render('pilot-' + gender);
         } }, canvas, h('strong', {}, label));
       };
       const frameCard = (path, id, role, description) => {
         const width = 760, height = 520, mech = MECHS[id];
         const canvas = h('canvas', { width, height, 'aria-hidden': 'true' });
         const ctx = canvas.getContext('2d');
-        if (!ASSETS.drawStoryBG(ctx, width, height, 'hangar', 0)) ART.drawBG(ctx, width, height, 'hangar', 0, 0);
-        const sprite = ASSETS.unit(id);
-        if (sprite) {
-          const frame = sprite.frames[0], scale = Math.min(width * .94 / frame.width, height * .95 / frame.height);
-          ctx.drawImage(frame, (width - frame.width * scale) / 2, height * .96 - frame.height * sprite.ground * scale, frame.width * scale, frame.height * scale);
-        } else {
-          ctx.save(); ctx.translate(width / 2, height * .96); ctx.scale(3.35, 3.35);
-          ART.drawMech(ctx, mech.vis, { t: .5 }); ctx.restore();
+        if (ctx) {
+          if (!ASSETS.drawStoryBG(ctx, width, height, 'hangar', 0)) ART.drawBG(ctx, width, height, 'hangar', 0, 0);
+          const sprite = ASSETS.unit(id);
+          if (sprite) {
+            const frame = sprite.frames[0], scale = Math.min(width * .94 / frame.width, height * .95 / frame.height);
+            ctx.drawImage(frame, (width - frame.width * scale) / 2, height * .96 - frame.height * sprite.ground * scale, frame.width * scale, frame.height * scale);
+          } else {
+            ctx.save(); ctx.translate(width / 2, height * .96); ctx.scale(3.35, 3.35);
+            ART.drawMech(ctx, mech.vis, { t: .5 }); ctx.restore();
+          }
         }
         return h('button', { id: 'frame-' + path, type: 'button', class: 'pick' + (st.path === path ? ' on' : ''), 'aria-pressed': String(st.path === path), onclick: () => {
-          st.path = path; SFX.play('select'); render('frame-' + path);
+          st.path = path; selectCard('frame-' + path); SFX.play('select');
         } }, canvas, h('span', { class: 'pickDetails' }, h('span', { class: 'eyebrow' }, role), h('strong', {}, mech.name),
           h('span', {}, description), h('span', { class: 'muted' }, `${ARMOR[mech.armor].name} · HP ${mech.hp.toLocaleString()} · Move ${mech.move}`)));
       };

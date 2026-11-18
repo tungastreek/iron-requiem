@@ -25,6 +25,10 @@ const ASSETS = (() => {
     });
   }
   function canvasOf(w, h) { const c = document.createElement('canvas'); c.width = Math.max(1, Math.round(w)); c.height = Math.max(1, Math.round(h)); return c; }
+  function fit(w, h, maxSize) {
+    const scale = Math.min(1, maxSize / Math.max(w, h));
+    return [Math.max(1, Math.round(w * scale)), Math.max(1, Math.round(h * scale))];
+  }
   // ---- background removal: flood fill from a cell's border with colour tolerance, soft edge ----
   function keyCell(img, sx, sy, sw, sh, tolerance) {
     const c = canvasOf(sw, sh), x = c.getContext('2d'); x.drawImage(img, sx, sy, sw, sh, 0, 0, sw, sh);
@@ -60,26 +64,43 @@ const ASSETS = (() => {
   function processUnit(img, layout, meta={}) {
     const cw = Math.floor(img.width / (layout ? 4 : 2)), chh = Math.floor(img.height / (layout ? 4 : 2));
     const origins = layout ? [0, 1, 2, 3].map(col => [col * cw, layout.row * chh]) : [[0, 0], [cw, 0], [0, chh], [cw, chh]];
-    const cells = origins.map(([sx, sy]) => keyCell(img, sx, sy, cw, chh,meta.keyTolerance));
-    let x0 = cw, y0 = chh, x1 = 0, y1 = 0; cells.forEach(c => { const [bx, by, bw, bh] = c.box; x0 = Math.min(x0, bx); y0 = Math.min(y0, by); x1 = Math.max(x1, bx + bw); y1 = Math.max(y1, by + bh); });
-    const pad = 4; x0 = Math.max(0, x0 - pad); y0 = Math.max(0, y0 - pad); x1 = Math.min(cw, x1 + pad); y1 = Math.min(chh, y1 + pad);
-    const w = x1 - x0, h = y1 - y0;
-    const frames = cells.map(c => { const f = canvasOf(w, h); f.getContext('2d').drawImage(c.canvas, x0, y0, w, h, 0, 0, w, h); return f; });
-    // the idle frame's own extent drives map icons & anchors
-    const ib = cells[0].box; const ground = (ib[1] + ib[3] - y0) / h;
-    return { frames, w, h, ground:meta.ground??ground, meta, keyed: !tainted };
+    const cells = [];
+    try {
+      for (const [sx, sy] of origins) cells.push(keyCell(img, sx, sy, cw, chh, meta.keyTolerance));
+      let x0 = cw, y0 = chh, x1 = 0, y1 = 0; cells.forEach(c => { const [bx, by, bw, bh] = c.box; x0 = Math.min(x0, bx); y0 = Math.min(y0, by); x1 = Math.max(x1, bx + bw); y1 = Math.max(y1, by + bh); });
+      const pad = 4; x0 = Math.max(0, x0 - pad); y0 = Math.max(0, y0 - pad); x1 = Math.min(cw, x1 + pad); y1 = Math.min(chh, y1 + pad);
+      const cropW = x1 - x0, cropH = y1 - y0;
+      const [w, h] = fit(cropW, cropH, 448);
+      const frames = cells.map(({canvas}) => {
+        const frame = canvasOf(w, h);
+        frame.getContext('2d').drawImage(canvas, x0, y0, cropW, cropH, 0, 0, w, h);
+        return frame;
+      });
+      // the idle frame's own extent drives map icons & anchors
+      const ib = cells[0].box; const ground = (ib[1] + ib[3] - y0) / cropH;
+      return { frames, w, h, ground:meta.ground??ground, meta, keyed: !tainted };
+    } finally {
+      // Release the full-resolution keying surfaces before importing the next sheet.
+      for (const {canvas} of cells) canvas.width = 0;
+    }
   }
-  function grid(img, cols, rows) {
+  function cellRects(img, cols, rows) {
     const cells = [];
     for (let row = 0; row < rows; row++) for (let col = 0; col < cols; col++) {
       const left = Math.round(col * img.width / cols), top = Math.round(row * img.height / rows);
       const width = Math.round((col + 1) * img.width / cols) - left;
       const height = Math.round((row + 1) * img.height / rows) - top;
-      const cell = canvasOf(width, height);
-      cell.getContext('2d').drawImage(img, left, top, width, height, 0, 0, width, height);
-      cells.push(cell);
+      cells.push({ img, left, top, width, height });
     }
     return cells;
+  }
+  function grid(img, cols, rows, maxSize) {
+    return cellRects(img, cols, rows).map(({ left, top, width, height }) => {
+      const [w, h] = fit(width, height, maxSize);
+      const cell = canvasOf(w, h);
+      cell.getContext('2d').drawImage(img, left, top, width, height, 0, 0, w, h);
+      return cell;
+    });
   }
 
   // ---- lists of what to look for ----
@@ -117,9 +138,9 @@ const ASSETS = (() => {
     switch (kind) {
       case 'units': store.units[id] = processUnit(img,null,window.IRON_ART_META?.units?.[id]||{}); break;
       case 'atlases': Object.keys(MECHS).filter(mid => MECHS[mid].atlas?.sheet === id).forEach(mid => { store.units[mid] = processUnit(img, MECHS[mid].atlas,window.IRON_ART_META?.units?.[mid]||{}); }); break;
-      case 'portraits': { const cells = grid(img, 2, 2); store.portraits[id] = { normal: cells[0], angry: cells[1], smile: cells[2], shock: cells[3], sad: cells[3] }; break; }
+      case 'portraits': { const cells = cellRects(img, 2, 2); store.portraits[id] = { normal: cells[0], angry: cells[1], smile: cells[2], shock: cells[3], sad: cells[3] }; break; }
       case 'portraitAtlases': {
-        const cells = grid(img, 4, 4);
+        const cells = cellRects(img, 4, 4);
         for (const [pid, mapping] of Object.entries(ATLAS_PORTRAITS)) {
           if (mapping.sheet !== id) continue;
           const [normal, angry, alternate, hurt] = cells.slice(mapping.row * 4, mapping.row * 4 + 4);
@@ -128,8 +149,11 @@ const ASSETS = (() => {
         }
         break;
       }
-      case 'tiles': store.tiles[id] = grid(img, 4, 4); break;
-      case 'icons': store.icons[id] = grid(img, 4, 4).map(c => { const k = keyCell(c, 0, 0, c.width, c.height); return k.canvas; }); break;
+      case 'tiles': store.tiles[id] = grid(img, 4, 4, 192); break;
+      case 'icons': store.icons[id] = grid(img, 4, 4, 96).map(c => {
+        try { return keyCell(c, 0, 0, c.width, c.height).canvas; }
+        finally { c.width = 0; }
+      }); break;
       default: store[kind][id] = img;
     }
   }
@@ -153,18 +177,22 @@ const ASSETS = (() => {
   function title() { return store.key.title || null; }
   function portrait(pid, expr, w, h) {
     const p = store.portraits[pid]; if (!p) return null;
-    const src = p[expr] || p.normal; const c = canvasOf(w, h);
+    const src = p[expr] || p.normal; const c = canvasOf(w, h), ctx = c.getContext('2d');
+    if (!ctx) return null;
     const face=window.IRON_ART_META?.portraits?.[pid]?.face;
-    if(face){const [fx,fy,size]=face,s=w*.6/(src.width*size),dw=src.width*s,dh=src.height*s;c.getContext('2d').drawImage(src,w*.5-fx*dw,h*.38-fy*dh,dw,dh);return c;}
-    // cover-crop biased to the upper part (faces)
-    const s = Math.max(w / src.width, h / src.height); const dw = src.width * s, dh = src.height * s;
-    c.getContext('2d').drawImage(src, (w - dw) / 2, Math.min(0, (h - dh) * 0.2), dw, dh); return c;
+    const s = face ? w * .6 / (src.width * face[2]) : Math.max(w / src.width, h / src.height);
+    const dw = src.width * s, dh = src.height * s;
+    const x = face ? w * .5 - face[0] * dw : (w - dw) / 2;
+    const y = face ? h * .38 - face[1] * dh : Math.min(0, (h - dh) * .2);
+    ctx.drawImage(src.img, src.left, src.top, src.width, src.height, x, y, dw, dh);
+    return c;
   }
   const iconCache = {};
   function mapIcon(id, size, flip, frame = 0) {
     const u = unit(id); if (!u) return null;
     const key = id + size + flip + frame; if (iconCache[key]) return iconCache[key];
     const S = size * 2, c = canvasOf(S, S), x = c.getContext('2d'), f = u.frames[frame] || u.frames[0];
+    if (!x) return null;
     const big = ['XL', 'L'].includes(MECHS[id].size) ? 1 : 0.86; const sc = Math.min(S * 0.94 * big / f.width, S * 0.8 * big / f.height);
     const w = f.width * sc, hh = f.height * sc;
     x.save(); x.translate(S / 2, 0); if (!!flip !== !!u.meta?.facesLeft) x.scale(-1, 1);
