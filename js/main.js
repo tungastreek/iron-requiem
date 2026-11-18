@@ -228,13 +228,12 @@ const GAME = (() => {
     toTitle();
     tag.textContent = 'Loading art…';
     $('#btnNew').disabled = $('#btnContinue').disabled = $('#btnArchive').disabled = $('#btnLoad').disabled = true;
-    ASSETS.load((d, n) => { tag.textContent = `Loading art… ${d}/${n}`; }).then(n => {
+    return ASSETS.load((d, n) => { tag.textContent = `Loading art… ${d}/${n}`; }).then(n => {
       tag.textContent = tagText + (n ? ` · ${n} art files loaded` : '');
-      $('#btnNew').disabled = $('#btnArchive').disabled = $('#btnLoad').disabled = false;
+      $('#btnNew').disabled = $('#btnArchive').disabled = $('#btnLoad').disabled = $('#btnTitleSettings').disabled = false;
       if (n && ASSETS.tainted) UI.toast('Some offline art needs rebuilding. See the asset guide.');
       if (!$('#title').hidden) toTitle();
     });
   }
   return { boot, persist, toTitle, startChapter, afterMap, retryMap, toIntermission, newGame, migrate, slots, saveSlot, loadSlot, deleteSlot, exportJSON, importJSON, continue: cont };
 })();
-window.addEventListener('load', () => GAME.boot());

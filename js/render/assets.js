@@ -10,9 +10,20 @@ const ASSETS = (() => {
     const formats = inventory ? inventory[base] : EXT;
     if (!formats?.length) return Promise.resolve(null);
     return new Promise(res => {
-      let i = 0; const img = new Image();
-      const next = () => { if (i >= formats.length) { res(null); return; } img.src = base + '.' + formats[i++]; };
-      img.onload = () => res(img); img.onerror = next;
+      let i = 0, retried = false, source; const img = new Image();
+      const next = () => {
+        if (i >= formats.length) { res(null); return; }
+        retried = false;
+        source = base + '.' + formats[i++];
+        img.src = source;
+      };
+      img.onload = () => res(img);
+      img.onerror = () => {
+        if (inventory && source && /^https?:$/.test(location.protocol) && !retried) {
+          retried = true;
+          setTimeout(() => { img.src = source + '?retry=' + Date.now(); }, 200);
+        } else next();
+      };
       // file:// images taint canvases in Safari/Chrome. A local script delivers
       // the same PNG bytes as a data URL, which is safe for both canvas and WebGL.
       if (location.protocol === 'file:' && formats.includes('png')) {
@@ -129,7 +140,7 @@ const ASSETS = (() => {
     EVENT_KEYS.forEach(k => jobs.push(['events', k, 'assets/events/' + k]));
     let done = 0; const total = jobs.length;
     const worker = async () => { while (jobs.length) { const [kind, id, path] = jobs.shift(); const img = await loadImage(path); if (img) { try { ingest(kind, id, img); count++; } catch (e) { console.warn('Art import failed for', path, e); } } done++; if (onProgress) onProgress(done, total); } };
-    await Promise.all([worker(), worker(), worker(), worker(), worker(), worker()]);
+    await Promise.all([worker(), worker(), worker()]);
     loaded = true;
     if (count && tainted) console.warn('Some art could not be processed. Rebuild the offline asset scripts with tools/build_offline.py.');
     return count;

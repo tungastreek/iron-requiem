@@ -14,13 +14,13 @@
     <canvas id="title3d" hidden></canvas>
     <div class="titleInner">
       <div class="logo"><span class="logo-a">IRON</span><span class="logo-b">REQUIEM</span></div>
-      <div class="tagline">A tactical mecha saga · Concord Year 0089</div>
+      <div class="tagline" role="status">A tactical mecha saga · Concord Year 0089</div>
       <div class="tmenu">
-        <button id="btnNew" class="btn primary big">New Game</button>
-        <button id="btnContinue" class="btn big">Continue</button>
-        <button id="btnLoad" class="btn">Load Game</button>
-        <button id="btnArchive" class="btn">Frame Archive</button>
-        <button id="btnTitleSettings" class="btn">Settings</button>
+        <button id="btnNew" disabled class="btn primary big">New Game</button>
+        <button id="btnContinue" disabled class="btn big">Continue</button>
+        <button id="btnLoad" disabled class="btn">Load Game</button>
+        <button id="btnArchive" disabled class="btn">Frame Archive</button>
+        <button id="btnTitleSettings" disabled class="btn">Settings</button>
       </div>
       <p class="tfoot">Mouse or touch. Right-click / Esc cancels. Click during battle scenes to fast-forward; Esc skips.</p>
     </div>
@@ -91,35 +91,41 @@
   <div id="modal" class="modal" hidden></div>
   <div id="toast"></div>
 </div>
-<script src="js/data/types.js"></script>
-<script src="js/data/mechs.js"></script>
-<script src="js/data/pilots.js"></script>
-<script src="js/data/story.js"></script>
-<script src="js/data/expansion.js"></script>
-<script src="js/data/combos.js"></script>
-<script src="js/data/enemy-deployments.js"></script>
-<script src="assets/music/tracks.js"></script>
-<script src="js/render/audio.js"></script>
-<script src="js/render/mechart.js"></script>
-<script src="vendor/three/three.min.js"></script>
-<script src="vendor/three/CopyShader.js"></script>
-<script src="vendor/three/LuminosityHighPassShader.js"></script>
-<script src="vendor/three/EffectComposer.js"></script>
-<script src="vendor/three/MaskPass.js"></script>
-<script src="vendor/three/RenderPass.js"></script>
-<script src="vendor/three/ShaderPass.js"></script>
-<script src="vendor/three/UnrealBloomPass.js"></script>
-<script src="vendor/three/RoomEnvironment.js"></script>
-<script src="js/render/quality.js"></script>
-<script src="js/render/r3d.js"></script>
-<script src="assets/art-metadata.js"></script>
-<script src="js/render/assets.js"></script>
-<script src="js/map/enemy-systems.js"></script>
-<script src="js/battle/combat.js"></script>
-<script src="js/battle/scene.js"></script>
-<script src="js/map/tactics.js"></script>
-<script src="js/ui/ui.js"></script>
-<script src="js/ui/saves.js"></script>
-<script src="js/ui/touch.js"></script>
-<script src="js/ui/archive.js"></script>
-<script src="js/main.js"></script>
+<script type="application/x-iron-requiem" data-game-src="js/data/types.js"></script>
+<script type="application/x-iron-requiem" data-game-src="js/data/mechs.js"></script>
+<script type="application/x-iron-requiem" data-game-src="js/data/pilots.js"></script>
+<script type="application/x-iron-requiem" data-game-src="js/data/story.js"></script>
+<script type="application/x-iron-requiem" data-game-src="js/data/expansion.js"></script>
+<script type="application/x-iron-requiem" data-game-src="js/data/combos.js"></script>
+<script type="application/x-iron-requiem" data-game-src="js/data/enemy-deployments.js"></script>
+<script type="application/x-iron-requiem" data-game-src="assets/music/tracks.js"></script>
+<script type="application/x-iron-requiem" data-game-src="js/render/audio.js"></script>
+<script type="application/x-iron-requiem" data-game-src="js/render/mechart.js"></script>
+<script type="application/x-iron-requiem" data-game-src="vendor/three/three.min.js"></script>
+<script type="application/x-iron-requiem" data-game-src="vendor/three/CopyShader.js"></script>
+<script type="application/x-iron-requiem" data-game-src="vendor/three/LuminosityHighPassShader.js"></script>
+<script type="application/x-iron-requiem" data-game-src="vendor/three/EffectComposer.js"></script>
+<script type="application/x-iron-requiem" data-game-src="vendor/three/MaskPass.js"></script>
+<script type="application/x-iron-requiem" data-game-src="vendor/three/RenderPass.js"></script>
+<script type="application/x-iron-requiem" data-game-src="vendor/three/ShaderPass.js"></script>
+<script type="application/x-iron-requiem" data-game-src="vendor/three/UnrealBloomPass.js"></script>
+<script type="application/x-iron-requiem" data-game-src="vendor/three/RoomEnvironment.js"></script>
+<script type="application/x-iron-requiem" data-game-src="js/render/quality.js"></script>
+<script type="application/x-iron-requiem" data-game-src="js/render/r3d.js"></script>
+<script type="application/x-iron-requiem" data-game-src="assets/art-metadata.js"></script>
+<script type="application/x-iron-requiem" data-game-src="js/render/assets.js"></script>
+<script type="application/x-iron-requiem" data-game-src="js/map/enemy-systems.js"></script>
+<script type="application/x-iron-requiem" data-game-src="js/battle/combat.js"></script>
+<script type="application/x-iron-requiem" data-game-src="js/battle/scene.js"></script>
+<script type="application/x-iron-requiem" data-game-src="js/map/tactics.js"></script>
+<script type="application/x-iron-requiem" data-game-src="js/ui/ui.js"></script>
+<script type="application/x-iron-requiem" data-game-src="js/ui/saves.js"></script>
+<script type="application/x-iron-requiem" data-game-src="js/ui/touch.js"></script>
+<script type="application/x-iron-requiem" data-game-src="js/ui/archive.js"></script>
+<script type="application/x-iron-requiem" data-game-src="js/main.js"></script>
+<script src="js/launch.js" onerror="
+  const retry = document.createElement('script');
+  retry.src = 'js/launch.js?retry=' + Date.now();
+  retry.onerror = () => { document.querySelector('.tagline').textContent = 'Could not load the game launcher. Reload to retry.'; };
+  document.head.appendChild(retry);
+"></script>
