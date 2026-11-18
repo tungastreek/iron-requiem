@@ -1,0 +1,351 @@
+{
+  "status": "passed",
+  "completed": 53,
+  "errors": [],
+  "attacks": [
+    {
+      "id": "aegis",
+      "index": 0,
+      "name": "Rescue Shotgun",
+      "frames": 52
+    },
+    {
+      "id": "aegis",
+      "index": 1,
+      "name": "Anchor Cable",
+      "frames": 44
+    },
+    {
+      "id": "aegis",
+      "index": 2,
+      "name": "Shield Ram",
+      "frames": 44
+    },
+    {
+      "id": "aegis",
+      "index": 3,
+      "name": "Shelter Line",
+      "frames": 45
+    },
+    {
+      "id": "nautilus",
+      "index": 0,
+      "name": "Pressure Harpoon",
+      "frames": 44
+    },
+    {
+      "id": "nautilus",
+      "index": 1,
+      "name": "Crush Pincer",
+      "frames": 54
+    },
+    {
+      "id": "nautilus",
+      "index": 2,
+      "name": "Depth Charge",
+      "frames": 61
+    },
+    {
+      "id": "nautilus",
+      "index": 3,
+      "name": "Abyssal Bell",
+      "frames": 45
+    },
+    {
+      "id": "vesper",
+      "index": 0,
+      "name": "Tuning Ray",
+      "frames": 46
+    },
+    {
+      "id": "vesper",
+      "index": 1,
+      "name": "Ribbon Choir",
+      "frames": 55
+    },
+    {
+      "id": "vesper",
+      "index": 2,
+      "name": "Quiet Interval",
+      "frames": 45
+    },
+    {
+      "id": "vesper",
+      "index": 3,
+      "name": "Names Remembered",
+      "frames": 105
+    },
+    {
+      "id": "mastodon",
+      "index": 0,
+      "name": "Rivet Battery",
+      "frames": 52
+    },
+    {
+      "id": "mastodon",
+      "index": 1,
+      "name": "Seismic Shell",
+      "frames": 45
+    },
+    {
+      "id": "mastodon",
+      "index": 2,
+      "name": "Twin Rail Driver",
+      "frames": 49
+    },
+    {
+      "id": "mastodon",
+      "index": 3,
+      "name": "Bedrock Verdict",
+      "frames": 49
+    },
+    {
+      "id": "kestrel",
+      "index": 0,
+      "name": "Wing Needles",
+      "frames": 52
+    },
+    {
+      "id": "kestrel",
+      "index": 1,
+      "name": "Crosswind Beams",
+      "frames": 46
+    },
+    {
+      "id": "kestrel",
+      "index": 2,
+      "name": "Slipstream Cut",
+      "frames": 61
+    },
+    {
+      "id": "kestrel",
+      "index": 3,
+      "name": "Return Address",
+      "frames": 125
+    },
+    {
+      "id": "cinder",
+      "index": 0,
+      "name": "Piston Fist",
+      "frames": 44
+    },
+    {
+      "id": "cinder",
+      "index": 1,
+      "name": "Slag Lance",
+      "frames": 60
+    },
+    {
+      "id": "cinder",
+      "index": 2,
+      "name": "Furnace Vent",
+      "frames": 80
+    },
+    {
+      "id": "cinder",
+      "index": 3,
+      "name": "Second Shift",
+      "frames": 116
+    },
+    {
+      "id": "orpheus",
+      "index": 0,
+      "name": "Forked Edge",
+      "frames": 61
+    },
+    {
+      "id": "orpheus",
+      "index": 1,
+      "name": "Countermelody",
+      "frames": 45
+    },
+    {
+      "id": "orpheus",
+      "index": 2,
+      "name": "Broken Measure",
+      "frames": 49
+    },
+    {
+      "id": "orpheus",
+      "index": 3,
+      "name": "A Single Voice",
+      "frames": 111
+    },
+    {
+      "id": "palisade",
+      "index": 0,
+      "name": "Lance Carbine",
+      "frames": 46
+    },
+    {
+      "id": "palisade",
+      "index": 1,
+      "name": "Escort Rockets",
+      "frames": 61
+    },
+    {
+      "id": "palisade",
+      "index": 2,
+      "name": "Pennant Lance",
+      "frames": 44
+    },
+    {
+      "id": "palisade",
+      "index": 3,
+      "name": "Road to Dawn",
+      "frames": 45
+    },
+    {
+      "id": "mantle",
+      "index": 0,
+      "name": "Carapace Shear",
+      "frames": 46
+    },
+    {
+      "id": "mantle",
+      "index": 1,
+      "name": "Caustic Glob",
+      "frames": 60
+    },
+    {
+      "id": "leech",
+      "index": 0,
+      "name": "Ring Jaws",
+      "frames": 54
+    },
+    {
+      "id": "leech",
+      "index": 1,
+      "name": "Static Bile",
+      "frames": 45
+    },
+    {
+      "id": "chrysalis",
+      "index": 0,
+      "name": "Spore Lattice",
+      "frames": 52
+    },
+    {
+      "id": "chrysalis",
+      "index": 1,
+      "name": "Nursery Pulse",
+      "frames": 45
+    },
+    {
+      "id": "bellwether",
+      "index": 0,
+      "name": "Tuning Horn",
+      "frames": 44
+    },
+    {
+      "id": "bellwether",
+      "index": 1,
+      "name": "Valley Resonance",
+      "frames": 45
+    },
+    {
+      "id": "bellwether",
+      "index": 2,
+      "name": "Fault Chorus",
+      "frames": 52
+    },
+    {
+      "id": "bailiff",
+      "index": 0,
+      "name": "Riot Rotary",
+      "frames": 52
+    },
+    {
+      "id": "bailiff",
+      "index": 1,
+      "name": "Compliance Ram",
+      "frames": 44
+    },
+    {
+      "id": "bailiff",
+      "index": 2,
+      "name": "Lockdown Shell",
+      "frames": 45
+    },
+    {
+      "id": "marauder",
+      "index": 0,
+      "name": "Scrap Scatter",
+      "frames": 52
+    },
+    {
+      "id": "marauder",
+      "index": 1,
+      "name": "Salvage Swarm",
+      "frames": 61
+    },
+    {
+      "id": "marauder",
+      "index": 2,
+      "name": "Hot-Rod Lance",
+      "frames": 44
+    },
+    {
+      "id": "cantor",
+      "index": 0,
+      "name": "Choir Needle",
+      "frames": 46
+    },
+    {
+      "id": "cantor",
+      "index": 1,
+      "name": "Stolen Verse",
+      "frames": 45
+    },
+    {
+      "id": "cantor",
+      "index": 2,
+      "name": "Violet Benediction",
+      "frames": 49
+    },
+    {
+      "id": "nullmaw",
+      "index": 0,
+      "name": "Missing Edge",
+      "frames": 46
+    },
+    {
+      "id": "nullmaw",
+      "index": 1,
+      "name": "Unwritten Wake",
+      "frames": 49
+    },
+    {
+      "id": "nullmaw",
+      "index": 2,
+      "name": "No Return",
+      "frames": 45
+    }
+  ],
+  "soundCues": [
+    "whoosh",
+    "shot",
+    "hit",
+    "rail",
+    "rocket",
+    "boom",
+    "barrier",
+    "beam",
+    "dash",
+    "drill",
+    "missile",
+    "sonar",
+    "laser",
+    "cutin",
+    "choir",
+    "bigboom",
+    "cannon",
+    "charge",
+    "slash",
+    "fireball",
+    "shriek",
+    "spores",
+    "nullring"
+  ],
+  "limit": "No-op drawing surface: confirms timeline execution only; appearance, browser rendering and audio playback were not checked."
+}

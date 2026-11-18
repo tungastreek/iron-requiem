@@ -1,0 +1,116 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Iron Requiem</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,400;0,500;0,600;0,700;1,700&family=Saira:wght@400;500;600&family=Saira+Condensed:wght@700;800&display=swap">
+<link rel="stylesheet" href="css/style.css">
+
+<div id="app">
+  <!-- TITLE -->
+  <section id="title" class="screen">
+    <canvas id="titleCanvas"></canvas>
+    <canvas id="title3d" hidden></canvas>
+    <div class="titleInner">
+      <div class="logo"><span class="logo-a">IRON</span><span class="logo-b">REQUIEM</span></div>
+      <div class="tagline">A tactical mecha saga · Concord Year 0089</div>
+      <div class="tmenu">
+        <button id="btnNew" class="btn primary big">New Game</button>
+        <button id="btnContinue" class="btn big">Continue</button>
+        <button id="btnArchive" class="btn">Frame Archive</button>
+        <button id="btnTitleSettings" class="btn">Settings</button>
+      </div>
+      <p class="tfoot">Mouse or touch. Right-click / Esc cancels. Click during battle scenes to fast-forward; Esc skips.</p>
+    </div>
+  </section>
+
+  <!-- SETUP -->
+  <section id="setup" class="screen" hidden>
+    <div class="setupWrap">
+      <div class="eyebrow">New game</div>
+      <h2>Who pilots the Alteon?</h2>
+      <p class="muted">Your choices set the protagonist's name and portrait, and whether the prototype is a nimble Real robot or a heavy Super robot. The story is the same either way; how you fight changes.</p>
+      <div id="setupBody"></div>
+    </div>
+  </section>
+
+  <!-- STORY -->
+  <section id="story" class="screen" hidden>
+    <canvas id="storyBg"></canvas>
+    <div id="portL" class="port L"></div>
+    <div id="portR" class="port R"></div>
+    <div class="dlg" hidden>
+      <div class="name"></div>
+      <div class="text"></div>
+      <div class="next">▼</div>
+    </div>
+    <div class="choices" hidden></div>
+    <div class="storyCtl"><button id="btnLog" class="btn sm">Log</button><button id="btnAuto" class="btn sm">Auto</button><button id="btnSkip" class="btn sm">Skip</button></div>
+    <div id="logPanel" hidden></div>
+    <div id="titleCard" hidden></div>
+    <div id="storyFlash"></div>
+  </section>
+
+  <!-- MAP -->
+  <section id="mapScreen" class="screen" hidden>
+    <header id="mapTop">
+      <div id="mapTitle"></div>
+      <div id="mapTurn"></div>
+      <div id="mapPhase" class="phase"></div>
+      <div id="mapEnemies" class="muted"></div>
+      <div id="mapCredits" class="gold"></div>
+      <div class="mtBtns">
+        <button id="btnObj" class="btn sm">Objective</button>
+        <button id="btnThreat" class="btn sm" title="Show every tile enemies can hit next phase (T)">Threat</button>
+        <button id="btnMapMenu" class="btn sm">Menu</button>
+        <button id="btnEnd" class="btn sm primary">End Turn</button>
+      </div>
+    </header>
+    <div id="mapBody">
+      <div id="mapWrap"><canvas id="mapCanvas"></canvas></div>
+      <aside id="sidePanel"></aside>
+    </div>
+    <div id="actMenu" hidden></div>
+    <div id="wpnPanel" hidden></div>
+    <div id="forecast" hidden></div>
+    <div id="phaseBanner" hidden></div>
+  </section>
+
+  <!-- BATTLE -->
+  <section id="battle" class="screen" hidden>
+    <canvas id="battle3d"></canvas>
+    <canvas id="battleCanvas"></canvas>
+    <div class="battleHint">Click / Space: fast-forward · Esc: skip</div>
+  </section>
+
+  <!-- INTERMISSION -->
+  <section id="inter" class="screen" hidden></section>
+
+  <div id="modal" class="modal" hidden></div>
+  <div id="toast"></div>
+</div>
+<script src="js/data/types.js"></script>
+<script src="js/data/mechs.js"></script>
+<script src="js/data/pilots.js"></script>
+<script src="js/data/story.js"></script>
+<script src="js/data/expansion.js"></script>
+<script src="js/render/audio.js"></script>
+<script src="js/render/mechart.js"></script>
+<script src="vendor/three/three.min.js"></script>
+<script src="vendor/three/CopyShader.js"></script>
+<script src="vendor/three/LuminosityHighPassShader.js"></script>
+<script src="vendor/three/EffectComposer.js"></script>
+<script src="vendor/three/MaskPass.js"></script>
+<script src="vendor/three/RenderPass.js"></script>
+<script src="vendor/three/ShaderPass.js"></script>
+<script src="vendor/three/UnrealBloomPass.js"></script>
+<script src="vendor/three/RoomEnvironment.js"></script>
+<script src="js/render/r3d.js"></script>
+<script src="js/render/assets.js"></script>
+<script src="js/battle/combat.js"></script>
+<script src="js/battle/scene.js"></script>
+<script src="js/map/tactics.js"></script>
+<script src="js/ui/ui.js"></script>
+<script src="js/ui/archive.js"></script>
+<script src="js/main.js"></script>
+
+</body></html>

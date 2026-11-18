@@ -1,0 +1,902 @@
+[
+  {
+    "id": "alteon",
+    "prompt": "Create a game sprite sheet for an original mecha tactics game.\n\nART STYLE: high-quality anime mecha concept art, cel-shaded with subtle painterly texture, crisp dark ink linework, layered armor plates with panel lines, small mechanical details (bolts, vents, pistons, hazard markings), light wear and scratches, dramatic rim lighting from the upper left, rich but controlled colors. Consistent with 1990s\u20132000s Japanese mecha anime but modern in rendering quality.\n\nLAYOUT (strict): one 1536x1024 image divided into a 2x2 grid of equal cells. Every cell shows the SAME unit, identical design, colors and proportions, at the SAME scale and standing on the same ground line, facing RIGHT in a three-quarter side view, centered with generous empty margin so nothing touches the cell edges.\n- Top-left: idle stance.\n- Top-right: the same idle stance with a slight motion difference (breathing shift, sway, hover bob).\n- Bottom-left: attack pose (described below).\n- Bottom-right: hit reaction, recoiling from damage, a few sparks, armor slightly chipped.\n\nBACKGROUND (strict): a single flat solid charcoal color #2B2B2B in every cell. No gradient, no floor, no ground shadow, no environment, no text, no labels, no frame numbers, no watermark, no borders. No beams, explosions or speed lines (a small muzzle flash or a few sparks is fine in the attack frame only).\n\nUNIT:\nALTEON, a slender \"falcon knight\" humanoid mecha, about 18 m tall. White armor with royal blue (#2856C9) secondary plates and red/gold accents. Helmet shaped like a falcon's head: a sharp gold beak-like visor pointing forward, glowing cyan eye slit, swept-back blue head fins. A glowing cyan crystal core in the center of the chest. Two large layered mechanical wings on its back made of overlapping white and blue feather-blade plates with gold tips. Digitigrade legs ending in gold three-toed talon feet. Narrow waist with short armored skirt plates. Weapon: a long sleek photon sniper rifle with a cyan glowing scope.\nAttack frame: aiming the long rifle forward with both hands, wings spread wide behind it, braced on one talon foot.\n\nRender exactly 1536 by 1024 pixels. Four equally sized 768 by 512 cells, invisible grid, 32 pixel clear margins in each cell. No text even where unit description mentions stenciling or insignia. Keep flat #2B2B2B background. Hit reaction should convey damage through pose and chipped armor without floating sparks; special effects confined to attack cell.",
+    "path": "assets/units/alteon.png",
+    "size": [
+      1536,
+      1024
+    ]
+  },
+  {
+    "id": "alteonz",
+    "prompt": "Create a game sprite sheet for an original mecha tactics game.\n\nART STYLE: high-quality anime mecha concept art, cel-shaded with subtle painterly texture, crisp dark ink linework, layered armor plates with panel lines, small mechanical details (bolts, vents, pistons, hazard markings), light wear and scratches, dramatic rim lighting from the upper left, rich but controlled colors. Consistent with 1990s\u20132000s Japanese mecha anime but modern in rendering quality.\n\nLAYOUT (strict): one 1536x1024 image divided into a 2x2 grid of equal cells. Every cell shows the SAME unit, identical design, colors and proportions, at the SAME scale and standing on the same ground line, facing RIGHT in a three-quarter side view, centered with generous empty margin so nothing touches the cell edges.\n- Top-left: idle stance.\n- Top-right: the same idle stance with a slight motion difference (breathing shift, sway, hover bob).\n- Bottom-left: attack pose (described below).\n- Bottom-right: hit reaction, recoiling from damage, a few sparks, armor slightly chipped.\n\nBACKGROUND (strict): a single flat solid charcoal color #2B2B2B in every cell. No gradient, no floor, no ground shadow, no environment, no text, no labels, no frame numbers, no watermark, no borders. No beams, explosions or speed lines (a small muzzle flash or a few sparks is fine in the attack frame only).\n\nUNIT:\nALTEON ZERO, the awakened form of a falcon-knight mecha: same slender silhouette and falcon helmet, now pearl white with deep indigo (#3B2BD0) and gold. Its wings are no longer metal: six pairs of translucent glowing cyan light-feathers fan out behind it. A thin golden halo ring floats behind its head; a crown of five small gold blades replaces the head fins. A glowing diamond-shaped gem in the chest. Gold talon feet. Weapon: an elegant longsword with a glowing cyan edge.\nAttack frame: mid-slash with the sword sweeping upward, light-feather wings flared, body twisting forward.\n\nRender exactly 1536 by 1024 pixels. Four equally sized 768 by 512 cells, invisible grid, 32 pixel clear margins in each cell. No text even where unit description mentions stenciling or insignia. Keep flat #2B2B2B background. Hit reaction should convey damage through pose and chipped armor without floating sparks; special effects confined to attack cell.",
+    "path": "assets/units/alteonz.png",
+    "size": [
+      1536,
+      1024
+    ]
+  },
+  {
+    "id": "alteon_s",
+    "prompt": "Create a game sprite sheet for an original mecha tactics game.\n\nART STYLE: high-quality anime mecha concept art, cel-shaded with subtle painterly texture, crisp dark ink linework, layered armor plates with panel lines, small mechanical details (bolts, vents, pistons, hazard markings), light wear and scratches, dramatic rim lighting from the upper left, rich but controlled colors. Consistent with 1990s\u20132000s Japanese mecha anime but modern in rendering quality.\n\nLAYOUT (strict): one 1536x1024 image divided into a 2x2 grid of equal cells. Every cell shows the SAME unit, identical design, colors and proportions, at the SAME scale and standing on the same ground line, facing RIGHT in a three-quarter side view, centered with generous empty margin so nothing touches the cell edges.\n- Top-left: idle stance.\n- Top-right: the same idle stance with a slight motion difference (breathing shift, sway, hover bob).\n- Bottom-left: attack pose (described below).\n- Bottom-right: hit reaction, recoiling from damage, a few sparks, armor slightly chipped.\n\nBACKGROUND (strict): a single flat solid charcoal color #2B2B2B in every cell. No gradient, no floor, no ground shadow, no environment, no text, no labels, no frame numbers, no watermark, no borders. No beams, explosions or speed lines (a small muzzle flash or a few sparks is fine in the attack frame only).\n\nUNIT:\nALTEON GIGAS, a heavy super-robot humanoid mecha with a broad, powerful build. White armor with royal blue and red accents. Horned knight helmet with two large swept red horns, a grilled faceplate and glowing cyan eyes. Massive layered shoulder pauldrons, a glowing cyan circular core in the chest ringed in gold, oversized armored gauntlets with fin blades. A dark blue cape. Heavy armored boots.\nAttack frame: throwing a huge rocket punch: right fist thrust forward, body leaning in, cape whipping back.\n\nRender exactly 1536 by 1024 pixels. Four equally sized 768 by 512 cells, invisible grid, 32 pixel clear margins in each cell. No text even where unit description mentions stenciling or insignia. Keep flat #2B2B2B background. Hit reaction should convey damage through pose and chipped armor without floating sparks; special effects confined to attack cell.",
+    "path": "assets/units/alteon_s.png",
+    "size": [
+      1536,
+      1024
+    ]
+  },
+  {
+    "id": "alteonz_s",
+    "prompt": "Create a game sprite sheet for an original mecha tactics game.\n\nART STYLE: high-quality anime mecha concept art, cel-shaded with subtle painterly texture, crisp dark ink linework, layered armor plates with panel lines, small mechanical details (bolts, vents, pistons, hazard markings), light wear and scratches, dramatic rim lighting from the upper left, rich but controlled colors. Consistent with 1990s\u20132000s Japanese mecha anime but modern in rendering quality.\n\nLAYOUT (strict): one 1536x1024 image divided into a 2x2 grid of equal cells. Every cell shows the SAME unit, identical design, colors and proportions, at the SAME scale and standing on the same ground line, facing RIGHT in a three-quarter side view, centered with generous empty margin so nothing touches the cell edges.\n- Top-left: idle stance.\n- Top-right: the same idle stance with a slight motion difference (breathing shift, sway, hover bob).\n- Bottom-left: attack pose (described below).\n- Bottom-right: hit reaction, recoiling from damage, a few sparks, armor slightly chipped.\n\nBACKGROUND (strict): a single flat solid charcoal color #2B2B2B in every cell. No gradient, no floor, no ground shadow, no environment, no text, no labels, no frame numbers, no watermark, no borders. No beams, explosions or speed lines (a small muzzle flash or a few sparks is fine in the attack frame only).\n\nUNIT:\nALTEON ZERO GIGAS, the awakened heavy form: the same broad horned super robot now pearl white, indigo and gold, with a golden halo ring behind the head, a crown of gold blades on the helmet, a glowing diamond chest gem, and translucent cyan light-feather wings. Huge gold-trimmed gauntlets.\nAttack frame: both fists raised overhead crackling with light, wings flared.\n\nRender exactly 1536 by 1024 pixels. Four equally sized 768 by 512 cells, invisible grid, 32 pixel clear margins in each cell. No text even where unit description mentions stenciling or insignia. Keep flat #2B2B2B background. Hit reaction should convey damage through pose and chipped armor without floating sparks; special effects confined to attack cell.",
+    "path": "assets/units/alteonz_s.png",
+    "size": [
+      1536,
+      1024
+    ]
+  },
+  {
+    "id": "sylph",
+    "prompt": "Create a game sprite sheet for an original mecha tactics game.\n\nART STYLE: high-quality anime mecha concept art, cel-shaded with subtle painterly texture, crisp dark ink linework, layered armor plates with panel lines, small mechanical details (bolts, vents, pistons, hazard markings), light wear and scratches, dramatic rim lighting from the upper left, rich but controlled colors. Consistent with 1990s\u20132000s Japanese mecha anime but modern in rendering quality.\n\nLAYOUT (strict): one 1536x1024 image divided into a 2x2 grid of equal cells. Every cell shows the SAME unit, identical design, colors and proportions, at the SAME scale and standing on the same ground line, facing RIGHT in a three-quarter side view, centered with generous empty margin so nothing touches the cell edges.\n- Top-left: idle stance.\n- Top-right: the same idle stance with a slight motion difference (breathing shift, sway, hover bob).\n- Bottom-left: attack pose (described below).\n- Bottom-right: hit reaction, recoiling from damage, a few sparks, armor slightly chipped.\n\nBACKGROUND (strict): a single flat solid charcoal color #2B2B2B in every cell. No gradient, no floor, no ground shadow, no environment, no text, no labels, no frame numbers, no watermark, no borders. No beams, explosions or speed lines (a small muzzle flash or a few sparks is fine in the attack frame only).\n\nUNIT:\nSYLPH, a small, very fast \"jet harpy\" interceptor mecha. Slim feminine humanoid frame in white with teal (#14A3A3) and soft pink (#FF8FB3) accents. Sleek helmet with a single teal visor band and two swept antenna fins. Two jet-engine nacelles mounted on its back with forward-swept wings, teal glowing intakes. Reverse-jointed legs with small talon feet. A thin wire-claw on one forearm. Weapon: a compact beam pistol.\nAttack frame: diving forward at speed, firing the pistol, wings swept back, jets glowing.\n\nRender exactly 1536 by 1024 pixels. Four equally sized 768 by 512 cells, invisible grid, 32 pixel clear margins in each cell. No text even where unit description mentions stenciling or insignia. Keep flat #2B2B2B background. Hit reaction should convey damage through pose and chipped armor without floating sparks; special effects confined to attack cell.",
+    "path": "assets/units/sylph.png",
+    "size": [
+      1536,
+      1024
+    ]
+  },
+  {
+    "id": "bastion",
+    "prompt": "Create a game sprite sheet for an original mecha tactics game.\n\nART STYLE: high-quality anime mecha concept art, cel-shaded with subtle painterly texture, crisp dark ink linework, layered armor plates with panel lines, small mechanical details (bolts, vents, pistons, hazard markings), light wear and scratches, dramatic rim lighting from the upper left, rich but controlled colors. Consistent with 1990s\u20132000s Japanese mecha anime but modern in rendering quality.\n\nLAYOUT (strict): one 1536x1024 image divided into a 2x2 grid of equal cells. Every cell shows the SAME unit, identical design, colors and proportions, at the SAME scale and standing on the same ground line, facing RIGHT in a three-quarter side view, centered with generous empty margin so nothing touches the cell edges.\n- Top-left: idle stance.\n- Top-right: the same idle stance with a slight motion difference (breathing shift, sway, hover bob).\n- Bottom-left: attack pose (described below).\n- Bottom-right: hit reaction, recoiling from damage, a few sparks, armor slightly chipped.\n\nBACKGROUND (strict): a single flat solid charcoal color #2B2B2B in every cell. No gradient, no floor, no ground shadow, no environment, no text, no labels, no frame numbers, no watermark, no borders. No beams, explosions or speed lines (a small muzzle flash or a few sparks is fine in the attack frame only).\n\nUNIT:\nBASTION, a four-legged walking artillery tank. Boxy armored hull in faded olive drab with rust streaks and yellow/black hazard stripes; a cab at the front with three warm-yellow lit windows and a heavy bull-bar grille. Four thick armored legs with hydraulic pistons and wide stomping feet. A large rotating turret on top carrying one very long howitzer barrel with a muzzle brake. Deck clutter: ammo crates, a rolled tarp, yellow safety railings, a tall whip antenna. Old, reliable, heavily maintained.\nAttack frame: howitzer elevated and firing, a small muzzle flash, front legs braced wide, hull rocked back by recoil.\n\nRender exactly 1536 by 1024 pixels. Four equally sized 768 by 512 cells, invisible grid, 32 pixel clear margins in each cell. No text even where unit description mentions stenciling or insignia. Keep flat #2B2B2B background. Hit reaction should convey damage through pose and chipped armor without floating sparks; special effects confined to attack cell.",
+    "path": "assets/units/bastion.png",
+    "size": [
+      1536,
+      1024
+    ]
+  },
+  {
+    "id": "halcyon",
+    "prompt": "Create a game sprite sheet for an original mecha tactics game.\n\nART STYLE: high-quality anime mecha concept art, cel-shaded with subtle painterly texture, crisp dark ink linework, layered armor plates with panel lines, small mechanical details (bolts, vents, pistons, hazard markings), light wear and scratches, dramatic rim lighting from the upper left, rich but controlled colors. Consistent with 1990s\u20132000s Japanese mecha anime but modern in rendering quality.\n\nLAYOUT (strict): one 1536x1024 image divided into a 2x2 grid of equal cells. Every cell shows the SAME unit, identical design, colors and proportions, at the SAME scale and standing on the same ground line, facing RIGHT in a three-quarter side view, centered with generous empty margin so nothing touches the cell edges.\n- Top-left: idle stance.\n- Top-right: the same idle stance with a slight motion difference (breathing shift, sway, hover bob).\n- Bottom-left: attack pose (described below).\n- Bottom-right: hit reaction, recoiling from damage, a few sparks, armor slightly chipped.\n\nBACKGROUND (strict): a single flat solid charcoal color #2B2B2B in every cell. No gradient, no floor, no ground shadow, no environment, no text, no labels, no frame numbers, no watermark, no borders. No beams, explosions or speed lines (a small muzzle flash or a few sparks is fine in the attack frame only).\n\nUNIT:\nHALCYON, a sleek independent space battleship seen from the side, about 300 m long. Gray-white hull with dark blue lower plating and a single red stripe; a tall bridge tower toward the stern with a cyan-lit window band; two dorsal gun turrets; a long prow housing a main beam cannon; three glowing cyan engine nozzles at the back. An old military ship, unrepainted, with a faded government insignia.\nAttack frame: main prow cannon charging with a cyan glow at its tip, turrets turned toward the target.\n\nRender exactly 1536 by 1024 pixels. Four equally sized 768 by 512 cells, invisible grid, 32 pixel clear margins in each cell. No text even where unit description mentions stenciling or insignia. Keep flat #2B2B2B background. Hit reaction should convey damage through pose and chipped armor without floating sparks; special effects confined to attack cell.",
+    "path": "assets/units/halcyon.png",
+    "size": [
+      1536,
+      1024
+    ]
+  },
+  {
+    "id": "kaiser",
+    "prompt": "Create a game sprite sheet for an original mecha tactics game.\n\nART STYLE: high-quality anime mecha concept art, cel-shaded with subtle painterly texture, crisp dark ink linework, layered armor plates with panel lines, small mechanical details (bolts, vents, pistons, hazard markings), light wear and scratches, dramatic rim lighting from the upper left, rich but controlled colors. Consistent with 1990s\u20132000s Japanese mecha anime but modern in rendering quality.\n\nLAYOUT (strict): one 1536x1024 image divided into a 2x2 grid of equal cells. Every cell shows the SAME unit, identical design, colors and proportions, at the SAME scale and standing on the same ground line, facing RIGHT in a three-quarter side view, centered with generous empty margin so nothing touches the cell edges.\n- Top-left: idle stance.\n- Top-right: the same idle stance with a slight motion difference (breathing shift, sway, hover bob).\n- Bottom-left: attack pose (described below).\n- Bottom-right: hit reaction, recoiling from damage, a few sparks, armor slightly chipped.\n\nBACKGROUND (strict): a single flat solid charcoal color #2B2B2B in every cell. No gradient, no floor, no ground shadow, no environment, no text, no labels, no frame numbers, no watermark, no borders. No beams, explosions or speed lines (a small muzzle flash or a few sparks is fine in the attack frame only).\n\nUNIT:\nGAIA KAISER, a heroic \"lion king\" super robot: tall and massive. Black and crimson (#C8102E) armor with bright gold trim. The helmet is a lion's head: a mane of spiked gold and crimson plates radiating around the head, two short gold horns, glowing yellow eyes. A gold lion's face emblem on the chest with glowing eyes (the reactor). Huge armored gauntlets for rocket punches, broad spiked shoulders, a short crimson cape.\nAttack frame: firing a \"breast inferno\": standing wide, arms spread back, chest lion emblem blazing yellow-orange.\n\nRender exactly 1536 by 1024 pixels. Four equally sized 768 by 512 cells, invisible grid, 32 pixel clear margins in each cell. No text even where unit description mentions stenciling or insignia. Keep flat #2B2B2B background. Hit reaction should convey damage through pose and chipped armor without floating sparks; special effects confined to attack cell.",
+    "path": "assets/units/kaiser.png",
+    "size": [
+      1536,
+      1024
+    ]
+  },
+  {
+    "id": "talos",
+    "prompt": "Create a game sprite sheet for an original mecha tactics game.\n\nART STYLE: high-quality anime mecha concept art, cel-shaded with subtle painterly texture, crisp dark ink linework, layered armor plates with panel lines, small mechanical details (bolts, vents, pistons, hazard markings), light wear and scratches, dramatic rim lighting from the upper left, rich but controlled colors. Consistent with 1990s\u20132000s Japanese mecha anime but modern in rendering quality.\n\nLAYOUT (strict): one 1536x1024 image divided into a 2x2 grid of equal cells. Every cell shows the SAME unit, identical design, colors and proportions, at the SAME scale and standing on the same ground line, facing RIGHT in a three-quarter side view, centered with generous empty margin so nothing touches the cell edges.\n- Top-left: idle stance.\n- Top-right: the same idle stance with a slight motion difference (breathing shift, sway, hover bob).\n- Bottom-left: attack pose (described below).\n- Bottom-right: hit reaction, recoiling from damage, a few sparks, armor slightly chipped.\n\nBACKGROUND (strict): a single flat solid charcoal color #2B2B2B in every cell. No gradient, no floor, no ground shadow, no environment, no text, no labels, no frame numbers, no watermark, no borders. No beams, explosions or speed lines (a small muzzle flash or a few sparks is fine in the attack frame only).\n\nUNIT:\nTALOS, a long-legged \"heron\" sniper walker. An animal-like bipedal machine with no arms: a compact armored gunmetal body draped in a ragged olive camouflage cloak, two long thin digitigrade bird legs with three-toed feet, and a long segmented neck ending in a small sensor head with a green glowing eye. The heron's \"beak\" is a very long rail-gun barrel wrapped in green glowing magnetic coils. Tail fins at the back.\nAttack frame: neck lowered horizontal, rail-gun beak pointed straight ahead, legs crouched and braced.\n\nRender exactly 1536 by 1024 pixels. Four equally sized 768 by 512 cells, invisible grid, 32 pixel clear margins in each cell. No text even where unit description mentions stenciling or insignia. Keep flat #2B2B2B background. Hit reaction should convey damage through pose and chipped armor without floating sparks; special effects confined to attack cell.",
+    "path": "assets/units/talos.png",
+    "size": [
+      1536,
+      1024
+    ]
+  },
+  {
+    "id": "trinity",
+    "prompt": "Create a game sprite sheet for an original mecha tactics game.\n\nART STYLE: high-quality anime mecha concept art, cel-shaded with subtle painterly texture, crisp dark ink linework, layered armor plates with panel lines, small mechanical details (bolts, vents, pistons, hazard markings), light wear and scratches, dramatic rim lighting from the upper left, rich but controlled colors. Consistent with 1990s\u20132000s Japanese mecha anime but modern in rendering quality.\n\nLAYOUT (strict): one 1536x1024 image divided into a 2x2 grid of equal cells. Every cell shows the SAME unit, identical design, colors and proportions, at the SAME scale and standing on the same ground line, facing RIGHT in a three-quarter side view, centered with generous empty margin so nothing touches the cell edges.\n- Top-left: idle stance.\n- Top-right: the same idle stance with a slight motion difference (breathing shift, sway, hover bob).\n- Bottom-left: attack pose (described below).\n- Bottom-right: hit reaction, recoiling from damage, a few sparks, armor slightly chipped.\n\nBACKGROUND (strict): a single flat solid charcoal color #2B2B2B in every cell. No gradient, no floor, no ground shadow, no environment, no text, no labels, no frame numbers, no watermark, no borders. No beams, explosions or speed lines (a small muzzle flash or a few sparks is fine in the attack frame only).\n\nUNIT:\nTRINITY ARC, a giant excavator-titan built for underground war. A humanoid upper torso in bright construction orange with black/yellow hazard stripes mounted on a wide base with two heavy tank treads. One arm ends in a huge spiral drill; the other is a hydraulic excavator boom with a toothed bucket, raised high. A cab with cyan-lit windows, a small head with a cyan visor, a roll cage with three work floodlights on top. Dirty, scraped, mud on the treads.\nAttack frame: drill arm thrust forward and spinning, bucket arm raised behind, treads gripping.\n\nRender exactly 1536 by 1024 pixels. Four equally sized 768 by 512 cells, invisible grid, 32 pixel clear margins in each cell. No text even where unit description mentions stenciling or insignia. Keep flat #2B2B2B background. Hit reaction should convey damage through pose and chipped armor without floating sparks; special effects confined to attack cell.",
+    "path": "assets/units/trinity.png",
+    "size": [
+      1536,
+      1024
+    ]
+  },
+  {
+    "id": "noctis",
+    "prompt": "Create a game sprite sheet for an original mecha tactics game.\n\nART STYLE: high-quality anime mecha concept art, cel-shaded with subtle painterly texture, crisp dark ink linework, layered armor plates with panel lines, small mechanical details (bolts, vents, pistons, hazard markings), light wear and scratches, dramatic rim lighting from the upper left, rich but controlled colors. Consistent with 1990s\u20132000s Japanese mecha anime but modern in rendering quality.\n\nLAYOUT (strict): one 1536x1024 image divided into a 2x2 grid of equal cells. Every cell shows the SAME unit, identical design, colors and proportions, at the SAME scale and standing on the same ground line, facing RIGHT in a three-quarter side view, centered with generous empty margin so nothing touches the cell edges.\n- Top-left: idle stance.\n- Top-right: the same idle stance with a slight motion difference (breathing shift, sway, hover bob).\n- Bottom-left: attack pose (described below).\n- Bottom-right: hit reaction, recoiling from damage, a few sparks, armor slightly chipped.\n\nBACKGROUND (strict): a single flat solid charcoal color #2B2B2B in every cell. No gradient, no floor, no ground shadow, no environment, no text, no labels, no frame numbers, no watermark, no borders. No beams, explosions or speed lines (a small muzzle flash or a few sparks is fine in the attack frame only).\n\nUNIT:\nNOCTIS, a graceful \"moth\" psy-frame. Very slender humanoid in dark plum (#20172E) and violet (#6C3BD1) with white accents. An insect-like elongated helmet with large glowing lavender compound eyes and two long feathery antennae. Two pairs of large translucent moth wings with violet eye-spot patterns. A small diamond gem in the chest. Around it float four small crystal \"bits\" (remote weapons). Weapon: a slim beam rifle.\nAttack frame: one hand raised commanding the floating crystal bits forward, wings fully open.\n\nRender exactly 1536 by 1024 pixels. Four equally sized 768 by 512 cells, invisible grid, 32 pixel clear margins in each cell. No text even where unit description mentions stenciling or insignia. Keep flat #2B2B2B background. Hit reaction should convey damage through pose and chipped armor without floating sparks; special effects confined to attack cell.",
+    "path": "assets/units/noctis.png",
+    "size": [
+      1536,
+      1024
+    ]
+  },
+  {
+    "id": "carmine",
+    "prompt": "Create a game sprite sheet for an original mecha tactics game.\n\nART STYLE: high-quality anime mecha concept art, cel-shaded with subtle painterly texture, crisp dark ink linework, layered armor plates with panel lines, small mechanical details (bolts, vents, pistons, hazard markings), light wear and scratches, dramatic rim lighting from the upper left, rich but controlled colors. Consistent with 1990s\u20132000s Japanese mecha anime but modern in rendering quality.\n\nLAYOUT (strict): one 1536x1024 image divided into a 2x2 grid of equal cells. Every cell shows the SAME unit, identical design, colors and proportions, at the SAME scale and standing on the same ground line, facing RIGHT in a three-quarter side view, centered with generous empty margin so nothing touches the cell edges.\n- Top-left: idle stance.\n- Top-right: the same idle stance with a slight motion difference (breathing shift, sway, hover bob).\n- Bottom-left: attack pose (described below).\n- Bottom-right: hit reaction, recoiling from damage, a few sparks, armor slightly chipped.\n\nBACKGROUND (strict): a single flat solid charcoal color #2B2B2B in every cell. No gradient, no floor, no ground shadow, no environment, no text, no labels, no frame numbers, no watermark, no borders. No beams, explosions or speed lines (a small muzzle flash or a few sparks is fine in the attack frame only).\n\nUNIT:\nCARMINE HOUND, a robotic crimson wolf: an animal-shaped mecha on four legs. Glossy crimson (#A3121D) armor plates over a black frame with gold accents. A sleek wolf head with swept armored ears, red glowing eyes and a jaw with metal fangs. A row of short gold spine fins along its back, a long beam lance mounted along its spine, and a segmented tail ending in a glowing orange heat blade. Sharp gold claws.\nAttack frame: lunging forward mid-leap, jaws open, tail blade swinging.\n\nRender exactly 1536 by 1024 pixels. Four equally sized 768 by 512 cells, invisible grid, 32 pixel clear margins in each cell. No text even where unit description mentions stenciling or insignia. Keep flat #2B2B2B background. Hit reaction should convey damage through pose and chipped armor without floating sparks; special effects confined to attack cell.",
+    "path": "assets/units/carmine.png",
+    "size": [
+      1536,
+      1024
+    ]
+  },
+  {
+    "id": "seraphyne",
+    "prompt": "Create a game sprite sheet for an original mecha tactics game.\n\nART STYLE: high-quality anime mecha concept art, cel-shaded with subtle painterly texture, crisp dark ink linework, layered armor plates with panel lines, small mechanical details (bolts, vents, pistons, hazard markings), light wear and scratches, dramatic rim lighting from the upper left, rich but controlled colors. Consistent with 1990s\u20132000s Japanese mecha anime but modern in rendering quality.\n\nLAYOUT (strict): one 1536x1024 image divided into a 2x2 grid of equal cells. Every cell shows the SAME unit, identical design, colors and proportions, at the SAME scale and standing on the same ground line, facing RIGHT in a three-quarter side view, centered with generous empty margin so nothing touches the cell edges.\n- Top-left: idle stance.\n- Top-right: the same idle stance with a slight motion difference (breathing shift, sway, hover bob).\n- Bottom-left: attack pose (described below).\n- Bottom-right: hit reaction, recoiling from damage, a few sparks, armor slightly chipped.\n\nBACKGROUND (strict): a single flat solid charcoal color #2B2B2B in every cell. No gradient, no floor, no ground shadow, no environment, no text, no labels, no frame numbers, no watermark, no borders. No beams, explosions or speed lines (a small muzzle flash or a few sparks is fine in the attack frame only).\n\nUNIT:\nSERAPHYNE, a flying \"sky manta\" with a knight fused to it. A wide graceful manta-ray body in pearl white and deep violet (#5A2D91) with gold trim; broad rippling wings edged with glowing lavender lines and glowing spots; a long whip tail with a gold stinger blade. Rising from the front of the manta is the upper body of a slender knight with a crown of three gold horn-fins, holding a long gold trident.\nAttack frame: the manta banking forward, wings curled, the knight thrusting the trident ahead.\n\nRender exactly 1536 by 1024 pixels. Four equally sized 768 by 512 cells, invisible grid, 32 pixel clear margins in each cell. No text even where unit description mentions stenciling or insignia. Keep flat #2B2B2B background. Hit reaction should convey damage through pose and chipped armor without floating sparks; special effects confined to attack cell.",
+    "path": "assets/units/seraphyne.png",
+    "size": [
+      1536,
+      1024
+    ]
+  },
+  {
+    "id": "crawler",
+    "prompt": "Create a game sprite sheet for an original mecha tactics game.\n\nART STYLE: high-quality anime mecha concept art, cel-shaded with subtle painterly texture, crisp dark ink linework, layered armor plates with panel lines, small mechanical details (bolts, vents, pistons, hazard markings), light wear and scratches, dramatic rim lighting from the upper left, rich but controlled colors. Consistent with 1990s\u20132000s Japanese mecha anime but modern in rendering quality.\n\nLAYOUT (strict): one 1536x1024 image divided into a 2x2 grid of equal cells. Every cell shows the SAME unit, identical design, colors and proportions, at the SAME scale and standing on the same ground line, facing RIGHT in a three-quarter side view, centered with generous empty margin so nothing touches the cell edges.\n- Top-left: idle stance.\n- Top-right: the same idle stance with a slight motion difference (breathing shift, sway, hover bob).\n- Bottom-left: attack pose (described below).\n- Bottom-right: hit reaction, recoiling from damage, a few sparks, armor slightly chipped.\n\nBACKGROUND (strict): a single flat solid charcoal color #2B2B2B in every cell. No gradient, no floor, no ground shadow, no environment, no text, no labels, no frame numbers, no watermark, no borders. No beams, explosions or speed lines (a small muzzle flash or a few sparks is fine in the attack frame only).\n\nUNIT:\nOUROBOR CRAWLER, a dog-sized-to-tank-sized biomechanical insect: segmented plum (#3B2A3F) and wine-red chitin body, eight jointed legs, a head with mandibles and glowing yellow-green nodes, exposed glowing sinew between plates. Wet and iridescent.\nAttack frame: rearing up with mandibles open, front legs raised to strike.\n\nRender exactly 1536 by 1024 pixels. Four equally sized 768 by 512 cells, invisible grid, 32 pixel clear margins in each cell. No text even where unit description mentions stenciling or insignia. Keep flat #2B2B2B background. Hit reaction should convey damage through pose and chipped armor without floating sparks; special effects confined to attack cell.",
+    "path": "assets/units/crawler.png",
+    "size": [
+      1536,
+      1024
+    ]
+  },
+  {
+    "id": "wyrmling",
+    "prompt": "Create a game sprite sheet for an original mecha tactics game.\n\nART STYLE: high-quality anime mecha concept art, cel-shaded with subtle painterly texture, crisp dark ink linework, layered armor plates with panel lines, small mechanical details (bolts, vents, pistons, hazard markings), light wear and scratches, dramatic rim lighting from the upper left, rich but controlled colors. Consistent with 1990s\u20132000s Japanese mecha anime but modern in rendering quality.\n\nLAYOUT (strict): one 1536x1024 image divided into a 2x2 grid of equal cells. Every cell shows the SAME unit, identical design, colors and proportions, at the SAME scale and standing on the same ground line, facing RIGHT in a three-quarter side view, centered with generous empty margin so nothing touches the cell edges.\n- Top-left: idle stance.\n- Top-right: the same idle stance with a slight motion difference (breathing shift, sway, hover bob).\n- Bottom-left: attack pose (described below).\n- Bottom-right: hit reaction, recoiling from damage, a few sparks, armor slightly chipped.\n\nBACKGROUND (strict): a single flat solid charcoal color #2B2B2B in every cell. No gradient, no floor, no ground shadow, no environment, no text, no labels, no frame numbers, no watermark, no borders. No beams, explosions or speed lines (a small muzzle flash or a few sparks is fine in the attack frame only).\n\nUNIT:\nOUROBOR WYRMLING, a flying biomechanical serpent: long segmented body in plum and wine red, two pairs of thin translucent membrane wings, a narrow head with a glowing yellow-green eye and a split jaw. Glowing nodes along its spine.\nAttack frame: coiled and lunging forward, jaw open in a shriek.\n\nRender exactly 1536 by 1024 pixels. Four equally sized 768 by 512 cells, invisible grid, 32 pixel clear margins in each cell. No text even where unit description mentions stenciling or insignia. Keep flat #2B2B2B background. Hit reaction should convey damage through pose and chipped armor without floating sparks; special effects confined to attack cell.",
+    "path": "assets/units/wyrmling.png",
+    "size": [
+      1536,
+      1024
+    ]
+  },
+  {
+    "id": "behemoth",
+    "prompt": "Create a game sprite sheet for an original mecha tactics game.\n\nART STYLE: high-quality anime mecha concept art, cel-shaded with subtle painterly texture, crisp dark ink linework, layered armor plates with panel lines, small mechanical details (bolts, vents, pistons, hazard markings), light wear and scratches, dramatic rim lighting from the upper left, rich but controlled colors. Consistent with 1990s\u20132000s Japanese mecha anime but modern in rendering quality.\n\nLAYOUT (strict): one 1536x1024 image divided into a 2x2 grid of equal cells. Every cell shows the SAME unit, identical design, colors and proportions, at the SAME scale and standing on the same ground line, facing RIGHT in a three-quarter side view, centered with generous empty margin so nothing touches the cell edges.\n- Top-left: idle stance.\n- Top-right: the same idle stance with a slight motion difference (breathing shift, sway, hover bob).\n- Bottom-left: attack pose (described below).\n- Bottom-right: hit reaction, recoiling from damage, a few sparks, armor slightly chipped.\n\nBACKGROUND (strict): a single flat solid charcoal color #2B2B2B in every cell. No gradient, no floor, no ground shadow, no environment, no text, no labels, no frame numbers, no watermark, no borders. No beams, explosions or speed lines (a small muzzle flash or a few sparks is fine in the attack frame only).\n\nUNIT:\nOUROBOR BEHEMOTH, a huge armored biomechanical beast like a beetle crossed with a rhinoceros: thick dark plum chitin, rows of yellow spines along its back, six massive legs, a heavy head with crushing jaws, glowing yellow sacs on its flanks.\nAttack frame: head lowered, charging, jaws open, spines raised.\n\nRender exactly 1536 by 1024 pixels. Four equally sized 768 by 512 cells, invisible grid, 32 pixel clear margins in each cell. No text even where unit description mentions stenciling or insignia. Keep flat #2B2B2B background. Hit reaction should convey damage through pose and chipped armor without floating sparks; special effects confined to attack cell.",
+    "path": "assets/units/behemoth.png",
+    "size": [
+      1536,
+      1024
+    ]
+  },
+  {
+    "id": "hivemother",
+    "prompt": "Create a game sprite sheet for an original mecha tactics game.\n\nART STYLE: high-quality anime mecha concept art, cel-shaded with subtle painterly texture, crisp dark ink linework, layered armor plates with panel lines, small mechanical details (bolts, vents, pistons, hazard markings), light wear and scratches, dramatic rim lighting from the upper left, rich but controlled colors. Consistent with 1990s\u20132000s Japanese mecha anime but modern in rendering quality.\n\nLAYOUT (strict): one 1536x1024 image divided into a 2x2 grid of equal cells. Every cell shows the SAME unit, identical design, colors and proportions, at the SAME scale and standing on the same ground line, facing RIGHT in a three-quarter side view, centered with generous empty margin so nothing touches the cell edges.\n- Top-left: idle stance.\n- Top-right: the same idle stance with a slight motion difference (breathing shift, sway, hover bob).\n- Bottom-left: attack pose (described below).\n- Bottom-right: hit reaction, recoiling from damage, a few sparks, armor slightly chipped.\n\nBACKGROUND (strict): a single flat solid charcoal color #2B2B2B in every cell. No gradient, no floor, no ground shadow, no environment, no text, no labels, no frame numbers, no watermark, no borders. No beams, explosions or speed lines (a small muzzle flash or a few sparks is fine in the attack frame only).\n\nUNIT:\nHIVE MOTHER, a colossal biomechanical matriarch: a swollen spherical body of dark plum flesh banded with ribbed chitin, a single enormous glowing yellow eye, dozens of tentacles below and thinner tendrils above tipped with glowing pods. Eggs pulse under translucent skin.\nAttack frame: tentacles lashing forward, eye blazing.\n\nRender exactly 1536 by 1024 pixels. Four equally sized 768 by 512 cells, invisible grid, 32 pixel clear margins in each cell. No text even where unit description mentions stenciling or insignia. Keep flat #2B2B2B background. Hit reaction should convey damage through pose and chipped armor without floating sparks; special effects confined to attack cell.",
+    "path": "assets/units/hivemother.png",
+    "size": [
+      1536,
+      1024
+    ]
+  },
+  {
+    "id": "prime",
+    "prompt": "Create a game sprite sheet for an original mecha tactics game.\n\nART STYLE: high-quality anime mecha concept art, cel-shaded with subtle painterly texture, crisp dark ink linework, layered armor plates with panel lines, small mechanical details (bolts, vents, pistons, hazard markings), light wear and scratches, dramatic rim lighting from the upper left, rich but controlled colors. Consistent with 1990s\u20132000s Japanese mecha anime but modern in rendering quality.\n\nLAYOUT (strict): one 1536x1024 image divided into a 2x2 grid of equal cells. Every cell shows the SAME unit, identical design, colors and proportions, at the SAME scale and standing on the same ground line, facing RIGHT in a three-quarter side view, centered with generous empty margin so nothing touches the cell edges.\n- Top-left: idle stance.\n- Top-right: the same idle stance with a slight motion difference (breathing shift, sway, hover bob).\n- Bottom-left: attack pose (described below).\n- Bottom-right: hit reaction, recoiling from damage, a few sparks, armor slightly chipped.\n\nBACKGROUND (strict): a single flat solid charcoal color #2B2B2B in every cell. No gradient, no floor, no ground shadow, no environment, no text, no labels, no frame numbers, no watermark, no borders. No beams, explosions or speed lines (a small muzzle flash or a few sparks is fine in the attack frame only).\n\nUNIT:\nOUROBOR PRIME, an ancient guardian colossus: a massive rounded body of dark indigo stone-like chitin veined with teal light, a crown of tall pale crystal spires on top, one great teal eye, roots and tentacles below. Majestic rather than monstrous.\nAttack frame: crown spires glowing, roots surging forward.\n\nRender exactly 1536 by 1024 pixels. Four equally sized 768 by 512 cells, invisible grid, 32 pixel clear margins in each cell. No text even where unit description mentions stenciling or insignia. Keep flat #2B2B2B background. Hit reaction should convey damage through pose and chipped armor without floating sparks; special effects confined to attack cell.",
+    "path": "assets/units/prime.png",
+    "size": [
+      1536,
+      1024
+    ]
+  },
+  {
+    "id": "lancer",
+    "prompt": "Create a game sprite sheet for an original mecha tactics game.\n\nART STYLE: high-quality anime mecha concept art, cel-shaded with subtle painterly texture, crisp dark ink linework, layered armor plates with panel lines, small mechanical details (bolts, vents, pistons, hazard markings), light wear and scratches, dramatic rim lighting from the upper left, rich but controlled colors. Consistent with 1990s\u20132000s Japanese mecha anime but modern in rendering quality.\n\nLAYOUT (strict): one 1536x1024 image divided into a 2x2 grid of equal cells. Every cell shows the SAME unit, identical design, colors and proportions, at the SAME scale and standing on the same ground line, facing RIGHT in a three-quarter side view, centered with generous empty margin so nothing touches the cell edges.\n- Top-left: idle stance.\n- Top-right: the same idle stance with a slight motion difference (breathing shift, sway, hover bob).\n- Bottom-left: attack pose (described below).\n- Bottom-right: hit reaction, recoiling from damage, a few sparks, armor slightly chipped.\n\nBACKGROUND (strict): a single flat solid charcoal color #2B2B2B in every cell. No gradient, no floor, no ground shadow, no environment, no text, no labels, no frame numbers, no watermark, no borders. No beams, explosions or speed lines (a small muzzle flash or a few sparks is fine in the attack frame only).\n\nUNIT:\nLANCER GM-7, a mass-produced military humanoid mecha: blocky, practical, gunmetal gray with navy panels and warning-yellow stripes and stenciled unit numbers. A rounded helmet with a single red mono-eye in a visor slot and a short antenna. A tall riot tower-shield on the left arm with a red sensor slit. Weapon: an assault rifle.\nAttack frame: firing the rifle over the top of the shield, crouched behind it.\n\nRender exactly 1536 by 1024 pixels. Four equally sized 768 by 512 cells, invisible grid, 32 pixel clear margins in each cell. No text even where unit description mentions stenciling or insignia. Keep flat #2B2B2B background. Hit reaction should convey damage through pose and chipped armor without floating sparks; special effects confined to attack cell.",
+    "path": "assets/units/lancer.png",
+    "size": [
+      1536,
+      1024
+    ]
+  },
+  {
+    "id": "warden",
+    "prompt": "Create a game sprite sheet for an original mecha tactics game.\n\nART STYLE: high-quality anime mecha concept art, cel-shaded with subtle painterly texture, crisp dark ink linework, layered armor plates with panel lines, small mechanical details (bolts, vents, pistons, hazard markings), light wear and scratches, dramatic rim lighting from the upper left, rich but controlled colors. Consistent with 1990s\u20132000s Japanese mecha anime but modern in rendering quality.\n\nLAYOUT (strict): one 1536x1024 image divided into a 2x2 grid of equal cells. Every cell shows the SAME unit, identical design, colors and proportions, at the SAME scale and standing on the same ground line, facing RIGHT in a three-quarter side view, centered with generous empty margin so nothing touches the cell edges.\n- Top-left: idle stance.\n- Top-right: the same idle stance with a slight motion difference (breathing shift, sway, hover bob).\n- Bottom-left: attack pose (described below).\n- Bottom-right: hit reaction, recoiling from damage, a few sparks, armor slightly chipped.\n\nBACKGROUND (strict): a single flat solid charcoal color #2B2B2B in every cell. No gradient, no floor, no ground shadow, no environment, no text, no labels, no frame numbers, no watermark, no borders. No beams, explosions or speed lines (a small muzzle flash or a few sparks is fine in the attack frame only).\n\nUNIT:\nWARDEN HX, a six-legged armored crab walker: a wide flat gunmetal carapace with navy armor plates and yellow hazard stripes, two eye-stalks with red lights, six pointed jointed legs, two big pincer claws, and two box missile pods on its back with grids of red-lit launch tubes.\nAttack frame: missile pods tilted up firing, claws raised.\n\nRender exactly 1536 by 1024 pixels. Four equally sized 768 by 512 cells, invisible grid, 32 pixel clear margins in each cell. No text even where unit description mentions stenciling or insignia. Keep flat #2B2B2B background. Hit reaction should convey damage through pose and chipped armor without floating sparks; special effects confined to attack cell.",
+    "path": "assets/units/warden.png",
+    "size": [
+      1536,
+      1024
+    ]
+  },
+  {
+    "id": "cruiser",
+    "prompt": "Create a game sprite sheet for an original mecha tactics game.\n\nART STYLE: high-quality anime mecha concept art, cel-shaded with subtle painterly texture, crisp dark ink linework, layered armor plates with panel lines, small mechanical details (bolts, vents, pistons, hazard markings), light wear and scratches, dramatic rim lighting from the upper left, rich but controlled colors. Consistent with 1990s\u20132000s Japanese mecha anime but modern in rendering quality.\n\nLAYOUT (strict): one 1536x1024 image divided into a 2x2 grid of equal cells. Every cell shows the SAME unit, identical design, colors and proportions, at the SAME scale and standing on the same ground line, facing RIGHT in a three-quarter side view, centered with generous empty margin so nothing touches the cell edges.\n- Top-left: idle stance.\n- Top-right: the same idle stance with a slight motion difference (breathing shift, sway, hover bob).\n- Bottom-left: attack pose (described below).\n- Bottom-right: hit reaction, recoiling from damage, a few sparks, armor slightly chipped.\n\nBACKGROUND (strict): a single flat solid charcoal color #2B2B2B in every cell. No gradient, no floor, no ground shadow, no environment, no text, no labels, no frame numbers, no watermark, no borders. No beams, explosions or speed lines (a small muzzle flash or a few sparks is fine in the attack frame only).\n\nUNIT:\nCONCORD CRUISER, a military space warship seen from the side: a long angular gunmetal hull with navy and yellow markings, a stepped bridge tower, three gun turrets, torpedo bays along the side, red running lights, glowing engines at the stern.\nAttack frame: turrets firing, a torpedo bay open.\n\nRender exactly 1536 by 1024 pixels. Four equally sized 768 by 512 cells, invisible grid, 32 pixel clear margins in each cell. No text even where unit description mentions stenciling or insignia. Keep flat #2B2B2B background. Hit reaction should convey damage through pose and chipped armor without floating sparks; special effects confined to attack cell.",
+    "path": "assets/units/cruiser.png",
+    "size": [
+      1536,
+      1024
+    ]
+  },
+  {
+    "id": "executor",
+    "prompt": "Create a game sprite sheet for an original mecha tactics game.\n\nART STYLE: high-quality anime mecha concept art, cel-shaded with subtle painterly texture, crisp dark ink linework, layered armor plates with panel lines, small mechanical details (bolts, vents, pistons, hazard markings), light wear and scratches, dramatic rim lighting from the upper left, rich but controlled colors. Consistent with 1990s\u20132000s Japanese mecha anime but modern in rendering quality.\n\nLAYOUT (strict): one 1536x1024 image divided into a 2x2 grid of equal cells. Every cell shows the SAME unit, identical design, colors and proportions, at the SAME scale and standing on the same ground line, facing RIGHT in a three-quarter side view, centered with generous empty margin so nothing touches the cell edges.\n- Top-left: idle stance.\n- Top-right: the same idle stance with a slight motion difference (breathing shift, sway, hover bob).\n- Bottom-left: attack pose (described below).\n- Bottom-right: hit reaction, recoiling from damage, a few sparks, armor slightly chipped.\n\nBACKGROUND (strict): a single flat solid charcoal color #2B2B2B in every cell. No gradient, no floor, no ground shadow, no environment, no text, no labels, no frame numbers, no watermark, no borders. No beams, explosions or speed lines (a small muzzle flash or a few sparks is fine in the attack frame only).\n\nUNIT:\nEXECUTOR, a Concord commander's custom humanoid in a samurai style: dark navy-gray armor with white and gold trim, a kabuto-like helmet with a gold crescent crest and a wide layered neck guard, glowing red eyes behind a dark faceplate, a long dark cape, layered skirt armor. Weapon: a long katana with a glowing red edge.\nAttack frame: a fast iaido draw-slash, blade extended, cape flaring.\n\nRender exactly 1536 by 1024 pixels. Four equally sized 768 by 512 cells, invisible grid, 32 pixel clear margins in each cell. No text even where unit description mentions stenciling or insignia. Keep flat #2B2B2B background. Hit reaction should convey damage through pose and chipped armor without floating sparks; special effects confined to attack cell.",
+    "path": "assets/units/executor.png",
+    "size": [
+      1536,
+      1024
+    ]
+  },
+  {
+    "id": "sovereign",
+    "prompt": "Create a game sprite sheet for an original mecha tactics game.\n\nART STYLE: high-quality anime mecha concept art, cel-shaded with subtle painterly texture, crisp dark ink linework, layered armor plates with panel lines, small mechanical details (bolts, vents, pistons, hazard markings), light wear and scratches, dramatic rim lighting from the upper left, rich but controlled colors. Consistent with 1990s\u20132000s Japanese mecha anime but modern in rendering quality.\n\nLAYOUT (strict): one 1536x1024 image divided into a 2x2 grid of equal cells. Every cell shows the SAME unit, identical design, colors and proportions, at the SAME scale and standing on the same ground line, facing RIGHT in a three-quarter side view, centered with generous empty margin so nothing touches the cell edges.\n- Top-left: idle stance.\n- Top-right: the same idle stance with a slight motion difference (breathing shift, sway, hover bob).\n- Bottom-left: attack pose (described below).\n- Bottom-right: hit reaction, recoiling from damage, a few sparks, armor slightly chipped.\n\nBACKGROUND (strict): a single flat solid charcoal color #2B2B2B in every cell. No gradient, no floor, no ground shadow, no environment, no text, no labels, no frame numbers, no watermark, no borders. No beams, explosions or speed lines (a small muzzle flash or a few sparks is fine in the attack frame only).\n\nUNIT:\nSOVEREIGN, a colossal four-legged \"cathedral fortress\" walker: an ivory-white and gold armored hull carrying gothic towers with gold spires, crimson banners hanging from them, and a twin-barreled heavy cannon turret at the front. Thick armored legs. Imperial, intimidating, immaculate.\nAttack frame: twin cannons glowing purple-red as they charge, front legs braced.\n\nRender exactly 1536 by 1024 pixels. Four equally sized 768 by 512 cells, invisible grid, 32 pixel clear margins in each cell. No text even where unit description mentions stenciling or insignia. Keep flat #2B2B2B background. Hit reaction should convey damage through pose and chipped armor without floating sparks; special effects confined to attack cell.",
+    "path": "assets/units/sovereign.png",
+    "size": [
+      1536,
+      1024
+    ]
+  },
+  {
+    "id": "zephyr",
+    "prompt": "Create a game sprite sheet for an original mecha tactics game.\n\nART STYLE: high-quality anime mecha concept art, cel-shaded with subtle painterly texture, crisp dark ink linework, layered armor plates with panel lines, small mechanical details (bolts, vents, pistons, hazard markings), light wear and scratches, dramatic rim lighting from the upper left, rich but controlled colors. Consistent with 1990s\u20132000s Japanese mecha anime but modern in rendering quality.\n\nLAYOUT (strict): one 1536x1024 image divided into a 2x2 grid of equal cells. Every cell shows the SAME unit, identical design, colors and proportions, at the SAME scale and standing on the same ground line, facing RIGHT in a three-quarter side view, centered with generous empty margin so nothing touches the cell edges.\n- Top-left: idle stance.\n- Top-right: the same idle stance with a slight motion difference (breathing shift, sway, hover bob).\n- Bottom-left: attack pose (described below).\n- Bottom-right: hit reaction, recoiling from damage, a few sparks, armor slightly chipped.\n\nBACKGROUND (strict): a single flat solid charcoal color #2B2B2B in every cell. No gradient, no floor, no ground shadow, no environment, no text, no labels, no frame numbers, no watermark, no borders. No beams, explosions or speed lines (a small muzzle flash or a few sparks is fine in the attack frame only).\n\nUNIT:\nZEPHYR FS, a repurposed colony-diver work mecha: bulky olive green armor with rust stains, a large round brass helmet with a single glowing yellow porthole, two brass air tanks and coiled hoses on its back, heavy crab-pincer claw hands, wide flipper feet, a life ring strapped to its side. Patched and welded.\nAttack frame: lunging forward, claw snapping open.\n\nRender exactly 1536 by 1024 pixels. Four equally sized 768 by 512 cells, invisible grid, 32 pixel clear margins in each cell. No text even where unit description mentions stenciling or insignia. Keep flat #2B2B2B background. Hit reaction should convey damage through pose and chipped armor without floating sparks; special effects confined to attack cell.",
+    "path": "assets/units/zephyr.png",
+    "size": [
+      1536,
+      1024
+    ]
+  },
+  {
+    "id": "tyrant",
+    "prompt": "Create a game sprite sheet for an original mecha tactics game.\n\nART STYLE: high-quality anime mecha concept art, cel-shaded with subtle painterly texture, crisp dark ink linework, layered armor plates with panel lines, small mechanical details (bolts, vents, pistons, hazard markings), light wear and scratches, dramatic rim lighting from the upper left, rich but controlled colors. Consistent with 1990s\u20132000s Japanese mecha anime but modern in rendering quality.\n\nLAYOUT (strict): one 1536x1024 image divided into a 2x2 grid of equal cells. Every cell shows the SAME unit, identical design, colors and proportions, at the SAME scale and standing on the same ground line, facing RIGHT in a three-quarter side view, centered with generous empty margin so nothing touches the cell edges.\n- Top-left: idle stance.\n- Top-right: the same idle stance with a slight motion difference (breathing shift, sway, hover bob).\n- Bottom-left: attack pose (described below).\n- Bottom-right: hit reaction, recoiling from damage, a few sparks, armor slightly chipped.\n\nBACKGROUND (strict): a single flat solid charcoal color #2B2B2B in every cell. No gradient, no floor, no ground shadow, no environment, no text, no labels, no frame numbers, no watermark, no borders. No beams, explosions or speed lines (a small muzzle flash or a few sparks is fine in the attack frame only).\n\nUNIT:\nTYRANT, a giant \"turtle fortress\" tank: a domed hexagonal-plated shell in dark olive with brass trim, a turtle-like armored head at the front with glowing amber eyes, heavy tank treads, a twin long-barrel cannon turret on top, and a small watchtower with a hanging green banner.\nAttack frame: twin cannons fired, head pulled slightly back, treads digging in.\n\nRender exactly 1536 by 1024 pixels. Four equally sized 768 by 512 cells, invisible grid, 32 pixel clear margins in each cell. No text even where unit description mentions stenciling or insignia. Keep flat #2B2B2B background. Hit reaction should convey damage through pose and chipped armor without floating sparks; special effects confined to attack cell.",
+    "path": "assets/units/tyrant.png",
+    "size": [
+      1536,
+      1024
+    ]
+  },
+  {
+    "id": "shard",
+    "prompt": "Create a game sprite sheet for an original mecha tactics game.\n\nART STYLE: high-quality anime mecha concept art, cel-shaded with subtle painterly texture, crisp dark ink linework, layered armor plates with panel lines, small mechanical details (bolts, vents, pistons, hazard markings), light wear and scratches, dramatic rim lighting from the upper left, rich but controlled colors. Consistent with 1990s\u20132000s Japanese mecha anime but modern in rendering quality.\n\nLAYOUT (strict): one 1536x1024 image divided into a 2x2 grid of equal cells. Every cell shows the SAME unit, identical design, colors and proportions, at the SAME scale and standing on the same ground line, facing RIGHT in a three-quarter side view, centered with generous empty margin so nothing touches the cell edges.\n- Top-left: idle stance.\n- Top-right: the same idle stance with a slight motion difference (breathing shift, sway, hover bob).\n- Bottom-left: attack pose (described below).\n- Bottom-right: hit reaction, recoiling from damage, a few sparks, armor slightly chipped.\n\nBACKGROUND (strict): a single flat solid charcoal color #2B2B2B in every cell. No gradient, no floor, no ground shadow, no environment, no text, no labels, no frame numbers, no watermark, no borders. No beams, explosions or speed lines (a small muzzle flash or a few sparks is fine in the attack frame only).\n\nUNIT:\nVAEL SHARD, a floating \"jellyfish\" drone: a translucent violet bell-shaped body, a gold crown ring with spikes hovering above it, a single glowing lavender eye, and six blade-like tentacles hanging below with gold tips. A small glowing halo ring beneath.\nAttack frame: tentacles flared outward, eye blazing.\n\nRender exactly 1536 by 1024 pixels. Four equally sized 768 by 512 cells, invisible grid, 32 pixel clear margins in each cell. No text even where unit description mentions stenciling or insignia. Keep flat #2B2B2B background. Hit reaction should convey damage through pose and chipped armor without floating sparks; special effects confined to attack cell.",
+    "path": "assets/units/shard.png",
+    "size": [
+      1536,
+      1024
+    ]
+  },
+  {
+    "id": "knight",
+    "prompt": "Create a game sprite sheet for an original mecha tactics game.\n\nART STYLE: high-quality anime mecha concept art, cel-shaded with subtle painterly texture, crisp dark ink linework, layered armor plates with panel lines, small mechanical details (bolts, vents, pistons, hazard markings), light wear and scratches, dramatic rim lighting from the upper left, rich but controlled colors. Consistent with 1990s\u20132000s Japanese mecha anime but modern in rendering quality.\n\nLAYOUT (strict): one 1536x1024 image divided into a 2x2 grid of equal cells. Every cell shows the SAME unit, identical design, colors and proportions, at the SAME scale and standing on the same ground line, facing RIGHT in a three-quarter side view, centered with generous empty margin so nothing touches the cell edges.\n- Top-left: idle stance.\n- Top-right: the same idle stance with a slight motion difference (breathing shift, sway, hover bob).\n- Bottom-left: attack pose (described below).\n- Bottom-right: hit reaction, recoiling from damage, a few sparks, armor slightly chipped.\n\nBACKGROUND (strict): a single flat solid charcoal color #2B2B2B in every cell. No gradient, no floor, no ground shadow, no environment, no text, no labels, no frame numbers, no watermark, no borders. No beams, explosions or speed lines (a small muzzle flash or a few sparks is fine in the attack frame only).\n\nUNIT:\nVAEL KNIGHT, an impossibly slender angelic humanoid: pearl white armor with violet and gold, a crowned helmet with a lavender visor glow, a thin gold halo behind the head, wings of translucent violet light-feathers, a flowing skirt armor. Weapon: a long gold lance.\nAttack frame: lance thrust forward, wings swept back.\n\nRender exactly 1536 by 1024 pixels. Four equally sized 768 by 512 cells, invisible grid, 32 pixel clear margins in each cell. No text even where unit description mentions stenciling or insignia. Keep flat #2B2B2B background. Hit reaction should convey damage through pose and chipped armor without floating sparks; special effects confined to attack cell.",
+    "path": "assets/units/knight.png",
+    "size": [
+      1536,
+      1024
+    ]
+  },
+  {
+    "id": "herald",
+    "prompt": "Create a game sprite sheet for an original mecha tactics game.\n\nART STYLE: high-quality anime mecha concept art, cel-shaded with subtle painterly texture, crisp dark ink linework, layered armor plates with panel lines, small mechanical details (bolts, vents, pistons, hazard markings), light wear and scratches, dramatic rim lighting from the upper left, rich but controlled colors. Consistent with 1990s\u20132000s Japanese mecha anime but modern in rendering quality.\n\nLAYOUT (strict): one 1536x1024 image divided into a 2x2 grid of equal cells. Every cell shows the SAME unit, identical design, colors and proportions, at the SAME scale and standing on the same ground line, facing RIGHT in a three-quarter side view, centered with generous empty margin so nothing touches the cell edges.\n- Top-left: idle stance.\n- Top-right: the same idle stance with a slight motion difference (breathing shift, sway, hover bob).\n- Bottom-left: attack pose (described below).\n- Bottom-right: hit reaction, recoiling from damage, a few sparks, armor slightly chipped.\n\nBACKGROUND (strict): a single flat solid charcoal color #2B2B2B in every cell. No gradient, no floor, no ground shadow, no environment, no text, no labels, no frame numbers, no watermark, no borders. No beams, explosions or speed lines (a small muzzle flash or a few sparks is fine in the attack frame only).\n\nUNIT:\nIXION, THE HERALD, an angelic Vael archon: tall, white and violet, with gold trim. Behind it, three pairs of wing-like solar panels with gold frames and dark blue cell grids fan out, ringed by a glowing violet halo. A crowned, masked helmet. A long white cape. Weapon: a long gold spear.\nAttack frame: spear raised overhead, solar wings fully fanned and glowing.\n\nRender exactly 1536 by 1024 pixels. Four equally sized 768 by 512 cells, invisible grid, 32 pixel clear margins in each cell. No text even where unit description mentions stenciling or insignia. Keep flat #2B2B2B background. Hit reaction should convey damage through pose and chipped armor without floating sparks; special effects confined to attack cell.",
+    "path": "assets/units/herald.png",
+    "size": [
+      1536,
+      1024
+    ]
+  },
+  {
+    "id": "aurelion",
+    "prompt": "Create a game sprite sheet for an original mecha tactics game.\n\nART STYLE: high-quality anime mecha concept art, cel-shaded with subtle painterly texture, crisp dark ink linework, layered armor plates with panel lines, small mechanical details (bolts, vents, pistons, hazard markings), light wear and scratches, dramatic rim lighting from the upper left, rich but controlled colors. Consistent with 1990s\u20132000s Japanese mecha anime but modern in rendering quality.\n\nLAYOUT (strict): one 1536x1024 image divided into a 2x2 grid of equal cells. Every cell shows the SAME unit, identical design, colors and proportions, at the SAME scale and standing on the same ground line, facing RIGHT in a three-quarter side view, centered with generous empty margin so nothing touches the cell edges.\n- Top-left: idle stance.\n- Top-right: the same idle stance with a slight motion difference (breathing shift, sway, hover bob).\n- Bottom-left: attack pose (described below).\n- Bottom-right: hit reaction, recoiling from damage, a few sparks, armor slightly chipped.\n\nBACKGROUND (strict): a single flat solid charcoal color #2B2B2B in every cell. No gradient, no floor, no ground shadow, no environment, no text, no labels, no frame numbers, no watermark, no borders. No beams, explosions or speed lines (a small muzzle flash or a few sparks is fine in the attack frame only).\n\nUNIT:\nAURELION, the Vael Emperor: a massive regal knight in pale gold-white and deep violet, with layered heavy armor, a tall crowned helmet, several concentric gold halos behind it, crimson banners hanging from its back, a large kite shield bearing a gold star, and a long ornate spear. Translucent golden light-feather wings.\nAttack frame: spear thrust forward from behind the shield, halos blazing.\n\nRender exactly 1536 by 1024 pixels. Four equally sized 768 by 512 cells, invisible grid, 32 pixel clear margins in each cell. No text even where unit description mentions stenciling or insignia. Keep flat #2B2B2B background. Hit reaction should convey damage through pose and chipped armor without floating sparks; special effects confined to attack cell.",
+    "path": "assets/units/aurelion.png",
+    "size": [
+      1536,
+      1024
+    ]
+  },
+  {
+    "id": "hollow",
+    "prompt": "Create a game sprite sheet for an original mecha tactics game.\n\nART STYLE: high-quality anime mecha concept art, cel-shaded with subtle painterly texture, crisp dark ink linework, layered armor plates with panel lines, small mechanical details (bolts, vents, pistons, hazard markings), light wear and scratches, dramatic rim lighting from the upper left, rich but controlled colors. Consistent with 1990s\u20132000s Japanese mecha anime but modern in rendering quality.\n\nLAYOUT (strict): one 1536x1024 image divided into a 2x2 grid of equal cells. Every cell shows the SAME unit, identical design, colors and proportions, at the SAME scale and standing on the same ground line, facing RIGHT in a three-quarter side view, centered with generous empty margin so nothing touches the cell edges.\n- Top-left: idle stance.\n- Top-right: the same idle stance with a slight motion difference (breathing shift, sway, hover bob).\n- Bottom-left: attack pose (described below).\n- Bottom-right: hit reaction, recoiling from damage, a few sparks, armor slightly chipped.\n\nBACKGROUND (strict): a single flat solid charcoal color #2B2B2B in every cell. No gradient, no floor, no ground shadow, no environment, no text, no labels, no frame numbers, no watermark, no borders. No beams, explosions or speed lines (a small muzzle flash or a few sparks is fine in the attack frame only).\n\nUNIT:\nTHE HOLLOW, an avatar of entropy: a perfect black sphere ringed by a thin white glowing outline and a faint violet aura, with one enormous white eye at its center, and black crystal shards with white edges orbiting it. Minimal, eerie, unsettling.\nAttack frame: the eye wide open, orbiting shards flung outward.\n\nRender exactly 1536 by 1024 pixels. Four equally sized 768 by 512 cells, invisible grid, 32 pixel clear margins in each cell. No text even where unit description mentions stenciling or insignia. Keep flat #2B2B2B background. Hit reaction should convey damage through pose and chipped armor without floating sparks; special effects confined to attack cell.",
+    "path": "assets/units/hollow.png",
+    "size": [
+      1536,
+      1024
+    ]
+  },
+  {
+    "id": "rei",
+    "path": "assets/portraits/rei.png",
+    "prompt": "Create a character portrait sheet for an original mecha anime game.\n\nART STYLE: modern anime illustration, clean confident linework, soft cel shading with painterly texture, muted but rich palette, cinematic rim light. Grounded, mature character design, not chibi.\n\nLAYOUT (strict): one 1024x1024 image divided into a 2x2 grid of equal cells. Every cell shows the SAME character, head and shoulders, three-quarter view facing RIGHT, identical crop, size and outfit.\n- Top-left: neutral expression.\n- Top-right: angry / determined.\n- Bottom-left: smiling.\n- Bottom-right: shocked / hurt.\n\nBACKGROUND (strict): a single flat solid deep navy #101A33 in every cell. No text, no labels, no watermark, no borders.\n\nCHARACTER:\nRei Kasuga, 18, Japanese young man, messy spiky black hair, cyan-blue eyes, thoughtful and a little haunted, white-and-royal-blue pilot suit with a high collar.",
+    "size": [
+      1024,
+      1024
+    ]
+  },
+  {
+    "id": "rina",
+    "path": "assets/portraits/rina.png",
+    "prompt": "Create a character portrait sheet for an original mecha anime game.\n\nART STYLE: modern anime illustration, clean confident linework, soft cel shading with painterly texture, muted but rich palette, cinematic rim light. Grounded, mature character design, not chibi.\n\nLAYOUT (strict): one 1024x1024 image divided into a 2x2 grid of equal cells. Every cell shows the SAME character, head and shoulders, three-quarter view facing RIGHT, identical crop, size and outfit.\n- Top-left: neutral expression.\n- Top-right: angry / determined.\n- Bottom-left: smiling.\n- Bottom-right: shocked / hurt.\n\nBACKGROUND (strict): a single flat solid deep navy #101A33 in every cell. No text, no labels, no watermark, no borders.\n\nCHARACTER:\nRina Kasuga, 18, Japanese young woman, long straight black hair, cyan-blue eyes, thoughtful and a little haunted, white-and-royal-blue pilot suit with a high collar.",
+    "size": [
+      1024,
+      1024
+    ]
+  },
+  {
+    "id": "mira",
+    "path": "assets/portraits/mira.png",
+    "prompt": "Create a character portrait sheet for an original mecha anime game.\n\nART STYLE: modern anime illustration, clean confident linework, soft cel shading with painterly texture, muted but rich palette, cinematic rim light. Grounded, mature character design, not chibi.\n\nLAYOUT (strict): one 1024x1024 image divided into a 2x2 grid of equal cells. Every cell shows the SAME character, head and shoulders, three-quarter view facing RIGHT, identical crop, size and outfit.\n- Top-left: neutral expression.\n- Top-right: angry / determined.\n- Bottom-left: smiling.\n- Bottom-right: shocked / hurt.\n\nBACKGROUND (strict): a single flat solid deep navy #101A33 in every cell. No text, no labels, no watermark, no borders.\n\nCHARACTER:\nMira Solenne, 18, young woman, orange hair in a high ponytail, teal eyes, bright and sharp-tongued with grief underneath, white-and-teal flight suit with harness straps.",
+    "size": [
+      1024,
+      1024
+    ]
+  },
+  {
+    "id": "gunnar",
+    "path": "assets/portraits/gunnar.png",
+    "prompt": "Create a character portrait sheet for an original mecha anime game.\n\nART STYLE: modern anime illustration, clean confident linework, soft cel shading with painterly texture, muted but rich palette, cinematic rim light. Grounded, mature character design, not chibi.\n\nLAYOUT (strict): one 1024x1024 image divided into a 2x2 grid of equal cells. Every cell shows the SAME character, head and shoulders, three-quarter view facing RIGHT, identical crop, size and outfit.\n- Top-left: neutral expression.\n- Top-right: angry / determined.\n- Bottom-left: smiling.\n- Bottom-right: shocked / hurt.\n\nBACKGROUND (strict): a single flat solid deep navy #101A33 in every cell. No text, no labels, no watermark, no borders.\n\nCHARACTER:\nGunnar Holt, late 50s, big Scandinavian veteran, gray short hair and gray beard, pale blue eyes, warm crow's feet, olive military jacket with old patches.",
+    "size": [
+      1024,
+      1024
+    ]
+  },
+  {
+    "id": "ilse",
+    "path": "assets/portraits/ilse.png",
+    "prompt": "Create a character portrait sheet for an original mecha anime game.\n\nART STYLE: modern anime illustration, clean confident linework, soft cel shading with painterly texture, muted but rich palette, cinematic rim light. Grounded, mature character design, not chibi.\n\nLAYOUT (strict): one 1024x1024 image divided into a 2x2 grid of equal cells. Every cell shows the SAME character, head and shoulders, three-quarter view facing RIGHT, identical crop, size and outfit.\n- Top-left: neutral expression.\n- Top-right: angry / determined.\n- Bottom-left: smiling.\n- Bottom-right: shocked / hurt.\n\nBACKGROUND (strict): a single flat solid deep navy #101A33 in every cell. No text, no labels, no watermark, no borders.\n\nCHARACTER:\nCaptain Ilse Varga, late 40s, stern woman with a silver-gray bob, violet eyes, a thin scar across her cheek, dark navy captain's uniform with gold trim and an earpiece.",
+    "size": [
+      1024,
+      1024
+    ]
+  },
+  {
+    "id": "brann",
+    "path": "assets/portraits/brann.png",
+    "prompt": "Create a character portrait sheet for an original mecha anime game.\n\nART STYLE: modern anime illustration, clean confident linework, soft cel shading with painterly texture, muted but rich palette, cinematic rim light. Grounded, mature character design, not chibi.\n\nLAYOUT (strict): one 1024x1024 image divided into a 2x2 grid of equal cells. Every cell shows the SAME character, head and shoulders, three-quarter view facing RIGHT, identical crop, size and outfit.\n- Top-left: neutral expression.\n- Top-right: angry / determined.\n- Bottom-left: smiling.\n- Bottom-right: shocked / hurt.\n\nBACKGROUND (strict): a single flat solid deep navy #101A33 in every cell. No text, no labels, no watermark, no borders.\n\nCHARACTER:\nBrann Okonkwo, 19, Nigerian young man, wild black hair, amber eyes, loud hot-blooded grin, black-and-crimson pilot jacket with grease stains, goggles around his neck.",
+    "size": [
+      1024,
+      1024
+    ]
+  },
+  {
+    "id": "odessa",
+    "path": "assets/portraits/odessa.png",
+    "prompt": "Create a character portrait sheet for an original mecha anime game.\n\nART STYLE: modern anime illustration, clean confident linework, soft cel shading with painterly texture, muted but rich palette, cinematic rim light. Grounded, mature character design, not chibi.\n\nLAYOUT (strict): one 1024x1024 image divided into a 2x2 grid of equal cells. Every cell shows the SAME character, head and shoulders, three-quarter view facing RIGHT, identical crop, size and outfit.\n- Top-left: neutral expression.\n- Top-right: angry / determined.\n- Bottom-left: smiling.\n- Bottom-right: shocked / hurt.\n\nBACKGROUND (strict): a single flat solid deep navy #101A33 in every cell. No text, no labels, no watermark, no borders.\n\nCHARACTER:\nOdessa Rhee, mid 30s, woman with white undercut hair, black eyepatch over one eye, green visible eye, calm and dry, charcoal sniper suit with a gray hood.",
+    "size": [
+      1024,
+      1024
+    ]
+  },
+  {
+    "id": "jin",
+    "path": "assets/portraits/jin.png",
+    "prompt": "Create a character portrait sheet for an original mecha anime game.\n\nART STYLE: modern anime illustration, clean confident linework, soft cel shading with painterly texture, muted but rich palette, cinematic rim light. Grounded, mature character design, not chibi.\n\nLAYOUT (strict): one 1024x1024 image divided into a 2x2 grid of equal cells. Every cell shows the SAME character, head and shoulders, three-quarter view facing RIGHT, identical crop, size and outfit.\n- Top-left: neutral expression.\n- Top-right: angry / determined.\n- Bottom-left: smiling.\n- Bottom-right: shocked / hurt.\n\nBACKGROUND (strict): a single flat solid deep navy #101A33 in every cell. No text, no labels, no watermark, no borders.\n\nCHARACTER:\nJin Mao, 20, Chinese young man, slicked-back black hair, green eyes, stoic leader, cream-and-forest-green work pilot suit.",
+    "size": [
+      1024,
+      1024
+    ]
+  },
+  {
+    "id": "tessa",
+    "path": "assets/portraits/tessa.png",
+    "prompt": "Create a character portrait sheet for an original mecha anime game.\n\nART STYLE: modern anime illustration, clean confident linework, soft cel shading with painterly texture, muted but rich palette, cinematic rim light. Grounded, mature character design, not chibi.\n\nLAYOUT (strict): one 1024x1024 image divided into a 2x2 grid of equal cells. Every cell shows the SAME character, head and shoulders, three-quarter view facing RIGHT, identical crop, size and outfit.\n- Top-left: neutral expression.\n- Top-right: angry / determined.\n- Bottom-left: smiling.\n- Bottom-right: shocked / hurt.\n\nBACKGROUND (strict): a single flat solid deep navy #101A33 in every cell. No text, no labels, no watermark, no borders.\n\nCHARACTER:\nTessa Vaughn, 19, freckled young woman, copper-red hair in a braid, round glasses, blue eyes, cheerful engineer, cream suit with orange hazard patches.",
+    "size": [
+      1024,
+      1024
+    ]
+  },
+  {
+    "id": "dash",
+    "path": "assets/portraits/dash.png",
+    "prompt": "Create a character portrait sheet for an original mecha anime game.\n\nART STYLE: modern anime illustration, clean confident linework, soft cel shading with painterly texture, muted but rich palette, cinematic rim light. Grounded, mature character design, not chibi.\n\nLAYOUT (strict): one 1024x1024 image divided into a 2x2 grid of equal cells. Every cell shows the SAME character, head and shoulders, three-quarter view facing RIGHT, identical crop, size and outfit.\n- Top-left: neutral expression.\n- Top-right: angry / determined.\n- Bottom-left: smiling.\n- Bottom-right: shocked / hurt.\n\nBACKGROUND (strict): a single flat solid deep navy #101A33 in every cell. No text, no labels, no watermark, no borders.\n\nCHARACTER:\nDash Moreau, 19, young man, spiky bleached-yellow hair, brown skin, orange eyes, an earring, reckless grin, cream suit with red stripes.",
+    "size": [
+      1024,
+      1024
+    ]
+  },
+  {
+    "id": "yuna",
+    "path": "assets/portraits/yuna.png",
+    "prompt": "Create a character portrait sheet for an original mecha anime game.\n\nART STYLE: modern anime illustration, clean confident linework, soft cel shading with painterly texture, muted but rich palette, cinematic rim light. Grounded, mature character design, not chibi.\n\nLAYOUT (strict): one 1024x1024 image divided into a 2x2 grid of equal cells. Every cell shows the SAME character, head and shoulders, three-quarter view facing RIGHT, identical crop, size and outfit.\n- Top-left: neutral expression.\n- Top-right: angry / determined.\n- Bottom-left: smiling.\n- Bottom-right: shocked / hurt.\n\nBACKGROUND (strict): a single flat solid deep navy #101A33 in every cell. No text, no labels, no watermark, no borders.\n\nCHARACTER:\nYuna Ishara, 17, gentle young woman, long pale lavender-silver hair, violet eyes, a thin gold circlet with a violet gem, dark plum psy-pilot bodysuit.",
+    "size": [
+      1024,
+      1024
+    ]
+  },
+  {
+    "id": "lucien",
+    "path": "assets/portraits/lucien.png",
+    "prompt": "Create a character portrait sheet for an original mecha anime game.\n\nART STYLE: modern anime illustration, clean confident linework, soft cel shading with painterly texture, muted but rich palette, cinematic rim light. Grounded, mature character design, not chibi.\n\nLAYOUT (strict): one 1024x1024 image divided into a 2x2 grid of equal cells. Every cell shows the SAME character, head and shoulders, three-quarter view facing RIGHT, identical crop, size and outfit.\n- Top-left: neutral expression.\n- Top-right: angry / determined.\n- Bottom-left: smiling.\n- Bottom-right: shocked / hurt.\n\nBACKGROUND (strict): a single flat solid deep navy #101A33 in every cell. No text, no labels, no watermark, no borders.\n\nCHARACTER:\nLucien Ash, late 20s, handsome man, long pale-blond hair, red eyes, proud and tired, crimson-and-black officer's coat with gold epaulettes.",
+    "size": [
+      1024,
+      1024
+    ]
+  },
+  {
+    "id": "sera",
+    "path": "assets/portraits/sera.png",
+    "prompt": "Create a character portrait sheet for an original mecha anime game.\n\nART STYLE: modern anime illustration, clean confident linework, soft cel shading with painterly texture, muted but rich palette, cinematic rim light. Grounded, mature character design, not chibi.\n\nLAYOUT (strict): one 1024x1024 image divided into a 2x2 grid of equal cells. Every cell shows the SAME character, head and shoulders, three-quarter view facing RIGHT, identical crop, size and outfit.\n- Top-left: neutral expression.\n- Top-right: angry / determined.\n- Bottom-left: smiling.\n- Bottom-right: shocked / hurt.\n\nBACKGROUND (strict): a single flat solid deep navy #101A33 in every cell. No text, no labels, no watermark, no borders.\n\nCHARACTER:\nSeraphyne, ageless posthuman woman, long white hair, gold eyes, pale lavender skin, two small elegant horns, violet-and-white ceremonial armor, otherworldly calm.",
+    "size": [
+      1024,
+      1024
+    ]
+  },
+  {
+    "id": "solenne",
+    "path": "assets/portraits/solenne.png",
+    "prompt": "Create a character portrait sheet for an original mecha anime game.\n\nART STYLE: modern anime illustration, clean confident linework, soft cel shading with painterly texture, muted but rich palette, cinematic rim light. Grounded, mature character design, not chibi.\n\nLAYOUT (strict): one 1024x1024 image divided into a 2x2 grid of equal cells. Every cell shows the SAME character, head and shoulders, three-quarter view facing RIGHT, identical crop, size and outfit.\n- Top-left: neutral expression.\n- Top-right: angry / determined.\n- Bottom-left: smiling.\n- Bottom-right: shocked / hurt.\n\nBACKGROUND (strict): a single flat solid deep navy #101A33 in every cell. No text, no labels, no watermark, no borders.\n\nCHARACTER:\nCommander Hal Solenne, 50s, kind square-jawed man, short graying brown hair, short beard, teal eyes, navy base-commander uniform with yellow rank stripes.",
+    "size": [
+      1024,
+      1024
+    ]
+  },
+  {
+    "id": "okonkwo",
+    "path": "assets/portraits/okonkwo.png",
+    "prompt": "Create a character portrait sheet for an original mecha anime game.\n\nART STYLE: modern anime illustration, clean confident linework, soft cel shading with painterly texture, muted but rich palette, cinematic rim light. Grounded, mature character design, not chibi.\n\nLAYOUT (strict): one 1024x1024 image divided into a 2x2 grid of equal cells. Every cell shows the SAME character, head and shoulders, three-quarter view facing RIGHT, identical crop, size and outfit.\n- Top-left: neutral expression.\n- Top-right: angry / determined.\n- Bottom-left: smiling.\n- Bottom-right: shocked / hurt.\n\nBACKGROUND (strict): a single flat solid deep navy #101A33 in every cell. No text, no labels, no watermark, no borders.\n\nCHARACTER:\nProfessor Ade Okonkwo, 70s, Nigerian elder, bald, white beard, round glasses, warm amber eyes, white lab coat over a red sweater.",
+    "size": [
+      1024,
+      1024
+    ]
+  },
+  {
+    "id": "pell",
+    "path": "assets/portraits/pell.png",
+    "prompt": "Create a character portrait sheet for an original mecha anime game.\n\nART STYLE: modern anime illustration, clean confident linework, soft cel shading with painterly texture, muted but rich palette, cinematic rim light. Grounded, mature character design, not chibi.\n\nLAYOUT (strict): one 1024x1024 image divided into a 2x2 grid of equal cells. Every cell shows the SAME character, head and shoulders, three-quarter view facing RIGHT, identical crop, size and outfit.\n- Top-left: neutral expression.\n- Top-right: angry / determined.\n- Bottom-left: smiling.\n- Bottom-right: shocked / hurt.\n\nBACKGROUND (strict): a single flat solid deep navy #101A33 in every cell. No text, no labels, no watermark, no borders.\n\nCHARACTER:\nPell, 20s, bridge operator, purple bob haircut, cyan eyes behind a transparent cyan visor, headset, navy crew uniform.",
+    "size": [
+      1024,
+      1024
+    ]
+  },
+  {
+    "id": "kroll",
+    "path": "assets/portraits/kroll.png",
+    "prompt": "Create a character portrait sheet for an original mecha anime game.\n\nART STYLE: modern anime illustration, clean confident linework, soft cel shading with painterly texture, muted but rich palette, cinematic rim light. Grounded, mature character design, not chibi.\n\nLAYOUT (strict): one 1024x1024 image divided into a 2x2 grid of equal cells. Every cell shows the SAME character, head and shoulders, three-quarter view facing RIGHT, identical crop, size and outfit.\n- Top-left: neutral expression.\n- Top-right: angry / determined.\n- Bottom-left: smiling.\n- Bottom-right: shocked / hurt.\n\nBACKGROUND (strict): a single flat solid deep navy #101A33 in every cell. No text, no labels, no watermark, no borders.\n\nCHARACTER:\nAdmiral Viktor Kroll, 60s, severe man with slicked silver hair, cold gray eyes, a scar on his brow, ivory admiral's uniform with gold braid and medals.",
+    "size": [
+      1024,
+      1024
+    ]
+  },
+  {
+    "id": "draike",
+    "path": "assets/portraits/draike.png",
+    "prompt": "Create a character portrait sheet for an original mecha anime game.\n\nART STYLE: modern anime illustration, clean confident linework, soft cel shading with painterly texture, muted but rich palette, cinematic rim light. Grounded, mature character design, not chibi.\n\nLAYOUT (strict): one 1024x1024 image divided into a 2x2 grid of equal cells. Every cell shows the SAME character, head and shoulders, three-quarter view facing RIGHT, identical crop, size and outfit.\n- Top-left: neutral expression.\n- Top-right: angry / determined.\n- Bottom-left: smiling.\n- Bottom-right: shocked / hurt.\n\nBACKGROUND (strict): a single flat solid deep navy #101A33 in every cell. No text, no labels, no watermark, no borders.\n\nCHARACTER:\nColonel Rhys Draike, 40s, hard-faced man with a dark undercut, red-tinted cybernetic eyes, dark navy uniform with yellow insignia.",
+    "size": [
+      1024,
+      1024
+    ]
+  },
+  {
+    "id": "vasse",
+    "path": "assets/portraits/vasse.png",
+    "prompt": "Create a character portrait sheet for an original mecha anime game.\n\nART STYLE: modern anime illustration, clean confident linework, soft cel shading with painterly texture, muted but rich palette, cinematic rim light. Grounded, mature character design, not chibi.\n\nLAYOUT (strict): one 1024x1024 image divided into a 2x2 grid of equal cells. Every cell shows the SAME character, head and shoulders, three-quarter view facing RIGHT, identical crop, size and outfit.\n- Top-left: neutral expression.\n- Top-right: angry / determined.\n- Bottom-left: smiling.\n- Bottom-right: shocked / hurt.\n\nBACKGROUND (strict): a single flat solid deep navy #101A33 in every cell. No text, no labels, no watermark, no borders.\n\nCHARACTER:\nGeneral Ostrom Vasse, 60s, bald bearded man, burn scars, fierce orange eyes, olive revolutionary greatcoat with rust-orange armband.",
+    "size": [
+      1024,
+      1024
+    ]
+  },
+  {
+    "id": "ixion",
+    "path": "assets/portraits/ixion.png",
+    "prompt": "Create a character portrait sheet for an original mecha anime game.\n\nART STYLE: modern anime illustration, clean confident linework, soft cel shading with painterly texture, muted but rich palette, cinematic rim light. Grounded, mature character design, not chibi.\n\nLAYOUT (strict): one 1024x1024 image divided into a 2x2 grid of equal cells. Every cell shows the SAME character, head and shoulders, three-quarter view facing RIGHT, identical crop, size and outfit.\n- Top-left: neutral expression.\n- Top-right: angry / determined.\n- Bottom-left: smiling.\n- Bottom-right: shocked / hurt.\n\nBACKGROUND (strict): a single flat solid deep navy #101A33 in every cell. No text, no labels, no watermark, no borders.\n\nCHARACTER:\nIxion, Vael herald, tall posthuman with long pale violet hair, a smooth white mask covering the upper face with glowing lavender eye slits, white-and-violet robes.",
+    "size": [
+      1024,
+      1024
+    ]
+  },
+  {
+    "id": "aurelion",
+    "path": "assets/portraits/aurelion.png",
+    "prompt": "Create a character portrait sheet for an original mecha anime game.\n\nART STYLE: modern anime illustration, clean confident linework, soft cel shading with painterly texture, muted but rich palette, cinematic rim light. Grounded, mature character design, not chibi.\n\nLAYOUT (strict): one 1024x1024 image divided into a 2x2 grid of equal cells. Every cell shows the SAME character, head and shoulders, three-quarter view facing RIGHT, identical crop, size and outfit.\n- Top-left: neutral expression.\n- Top-right: angry / determined.\n- Bottom-left: smiling.\n- Bottom-right: shocked / hurt.\n\nBACKGROUND (strict): a single flat solid deep navy #101A33 in every cell. No text, no labels, no watermark, no borders.\n\nCHARACTER:\nAurelion, Vael emperor, ageless and beautiful, long golden hair, glowing gold eyes, a gold circlet, deep violet and gold regal robes, sorrowful.",
+    "size": [
+      1024,
+      1024
+    ]
+  },
+  {
+    "id": "soren",
+    "path": "assets/portraits/soren.png",
+    "prompt": "Create a character portrait sheet for an original mecha anime game.\n\nART STYLE: modern anime illustration, clean confident linework, soft cel shading with painterly texture, muted but rich palette, cinematic rim light. Grounded, mature character design, not chibi.\n\nLAYOUT (strict): one 1024x1024 image divided into a 2x2 grid of equal cells. Every cell shows the SAME character, head and shoulders, three-quarter view facing RIGHT, identical crop, size and outfit.\n- Top-left: neutral expression.\n- Top-right: angry / determined.\n- Bottom-left: smiling.\n- Bottom-right: shocked / hurt.\n\nBACKGROUND (strict): a single flat solid deep navy #101A33 in every cell. No text, no labels, no watermark, no borders.\n\nCHARACTER:\nDr. Soren Kasuga, 50s, gentle scientist, short gray-blue hair, glasses, cyan eyes like his child's, white coat, slightly translucent and glowing at the edges as if made of light.",
+    "size": [
+      1024,
+      1024
+    ]
+  },
+  {
+    "id": "grunt_c",
+    "path": "assets/portraits/grunt_c.png",
+    "prompt": "Create a character portrait sheet for an original mecha anime game.\n\nART STYLE: modern anime illustration, clean confident linework, soft cel shading with painterly texture, muted but rich palette, cinematic rim light. Grounded, mature character design, not chibi.\n\nLAYOUT (strict): one 1024x1024 image divided into a 2x2 grid of equal cells. Every cell shows the SAME character, head and shoulders, three-quarter view facing RIGHT, identical crop, size and outfit.\n- Top-left: neutral expression.\n- Top-right: angry / determined.\n- Bottom-left: smiling.\n- Bottom-right: shocked / hurt.\n\nBACKGROUND (strict): a single flat solid deep navy #101A33 in every cell. No text, no labels, no watermark, no borders.\n\nCHARACTER:\nAnonymous Concord soldier pilot, face mostly hidden by a gray helmet with a cyan visor, gunmetal flight suit.",
+    "size": [
+      1024,
+      1024
+    ]
+  },
+  {
+    "id": "grunt_f",
+    "path": "assets/portraits/grunt_f.png",
+    "prompt": "Create a character portrait sheet for an original mecha anime game.\n\nART STYLE: modern anime illustration, clean confident linework, soft cel shading with painterly texture, muted but rich palette, cinematic rim light. Grounded, mature character design, not chibi.\n\nLAYOUT (strict): one 1024x1024 image divided into a 2x2 grid of equal cells. Every cell shows the SAME character, head and shoulders, three-quarter view facing RIGHT, identical crop, size and outfit.\n- Top-left: neutral expression.\n- Top-right: angry / determined.\n- Bottom-left: smiling.\n- Bottom-right: shocked / hurt.\n\nBACKGROUND (strict): a single flat solid deep navy #101A33 in every cell. No text, no labels, no watermark, no borders.\n\nCHARACTER:\nAnonymous Free States rebel pilot, worn olive helmet with an amber visor, patched green flight suit.",
+    "size": [
+      1024,
+      1024
+    ]
+  },
+  {
+    "id": "vael",
+    "path": "assets/portraits/vael.png",
+    "prompt": "Create a character portrait sheet for an original mecha anime game.\n\nART STYLE: modern anime illustration, clean confident linework, soft cel shading with painterly texture, muted but rich palette, cinematic rim light. Grounded, mature character design, not chibi.\n\nLAYOUT (strict): one 1024x1024 image divided into a 2x2 grid of equal cells. Every cell shows the SAME character, head and shoulders, three-quarter view facing RIGHT, identical crop, size and outfit.\n- Top-left: neutral expression.\n- Top-right: angry / determined.\n- Bottom-left: smiling.\n- Bottom-right: shocked / hurt.\n\nBACKGROUND (strict): a single flat solid deep navy #101A33 in every cell. No text, no labels, no watermark, no borders.\n\nCHARACTER:\nAnonymous Vael knight, white crystalline mask with violet eye glow, pale violet hair, ornate white armor collar.",
+    "size": [
+      1024,
+      1024
+    ]
+  },
+  {
+    "id": "base",
+    "path": "assets/backgrounds/base.png",
+    "prompt": "Create a background painting for a visual-novel scene in an original mecha anime game.\n\nART STYLE: cinematic anime background art, painterly, detailed but soft-edged, strong atmospheric perspective, moody lighting, rich color, matching high-end 1990s-2000s mecha anime backgrounds with modern rendering.\n\nCOMPOSITION (strict): 1536x1024 landscape. NO people, NO characters, NO robots in the foreground, NO text, NO watermark. Keep the left and right thirds and the bottom quarter relatively low-detail (characters and a dialogue box will be placed there). Interest and light concentrated in the upper middle.\n\nSCENE:\nKestrel military base at dusk in a mountain valley: hangars, runway lights, radar dishes, warm orange sunset behind snowy peaks, calm before disaster.",
+    "size": [
+      1536,
+      1024
+    ]
+  },
+  {
+    "id": "fire",
+    "path": "assets/backgrounds/fire.png",
+    "prompt": "Create a background painting for a visual-novel scene in an original mecha anime game.\n\nART STYLE: cinematic anime background art, painterly, detailed but soft-edged, strong atmospheric perspective, moody lighting, rich color, matching high-end 1990s-2000s mecha anime backgrounds with modern rendering.\n\nCOMPOSITION (strict): 1536x1024 landscape. NO people, NO characters, NO robots in the foreground, NO text, NO watermark. Keep the left and right thirds and the bottom quarter relatively low-detail (characters and a dialogue box will be placed there). Interest and light concentrated in the upper middle.\n\nSCENE:\nThe same mountain military base burning at night: collapsed hangars, a cracked runway split open by a glowing fissure, orange fire and black smoke under a red sky.",
+    "size": [
+      1536,
+      1024
+    ]
+  },
+  {
+    "id": "hangar",
+    "path": "assets/backgrounds/hangar.png",
+    "prompt": "Create a background painting for a visual-novel scene in an original mecha anime game.\n\nART STYLE: cinematic anime background art, painterly, detailed but soft-edged, strong atmospheric perspective, moody lighting, rich color, matching high-end 1990s-2000s mecha anime backgrounds with modern rendering.\n\nCOMPOSITION (strict): 1536x1024 landscape. NO people, NO characters, NO robots in the foreground, NO text, NO watermark. Keep the left and right thirds and the bottom quarter relatively low-detail (characters and a dialogue box will be placed there). Interest and light concentrated in the upper middle.\n\nSCENE:\nInterior of a giant mecha hangar at night: steel gantries, work lights, cables, a tall white humanoid mecha silhouette in a maintenance cradle far in the background, cool blue lighting.",
+    "size": [
+      1536,
+      1024
+    ]
+  },
+  {
+    "id": "bridge",
+    "path": "assets/backgrounds/bridge.png",
+    "prompt": "Create a background painting for a visual-novel scene in an original mecha anime game.\n\nART STYLE: cinematic anime background art, painterly, detailed but soft-edged, strong atmospheric perspective, moody lighting, rich color, matching high-end 1990s-2000s mecha anime backgrounds with modern rendering.\n\nCOMPOSITION (strict): 1536x1024 landscape. NO people, NO characters, NO robots in the foreground, NO text, NO watermark. Keep the left and right thirds and the bottom quarter relatively low-detail (characters and a dialogue box will be placed there). Interest and light concentrated in the upper middle.\n\nSCENE:\nThe command bridge of a battleship: curved windows showing stars, holographic tactical displays in cyan, a captain's chair seen from behind, dim blue lighting.",
+    "size": [
+      1536,
+      1024
+    ]
+  },
+  {
+    "id": "sky",
+    "path": "assets/backgrounds/sky.png",
+    "prompt": "Create a background painting for a visual-novel scene in an original mecha anime game.\n\nART STYLE: cinematic anime background art, painterly, detailed but soft-edged, strong atmospheric perspective, moody lighting, rich color, matching high-end 1990s-2000s mecha anime backgrounds with modern rendering.\n\nCOMPOSITION (strict): 1536x1024 landscape. NO people, NO characters, NO robots in the foreground, NO text, NO watermark. Keep the left and right thirds and the bottom quarter relatively low-detail (characters and a dialogue box will be placed there). Interest and light concentrated in the upper middle.\n\nSCENE:\nHigh above green countryside: bright blue sky, towering white clouds, rolling hills far below, sense of speed and freedom.",
+    "size": [
+      1536,
+      1024
+    ]
+  },
+  {
+    "id": "lab",
+    "path": "assets/backgrounds/lab.png",
+    "prompt": "Create a background painting for a visual-novel scene in an original mecha anime game.\n\nART STYLE: cinematic anime background art, painterly, detailed but soft-edged, strong atmospheric perspective, moody lighting, rich color, matching high-end 1990s-2000s mecha anime backgrounds with modern rendering.\n\nCOMPOSITION (strict): 1536x1024 landscape. NO people, NO characters, NO robots in the foreground, NO text, NO watermark. Keep the left and right thirds and the bottom quarter relatively low-detail (characters and a dialogue box will be placed there). Interest and light concentrated in the upper middle.\n\nSCENE:\nA robotics lab carved into a cliff in the African Rift Valley: warm amber lighting, workbenches, blueprints, fossils in glass cases, a huge red-and-black robot silhouette behind a hangar door.",
+    "size": [
+      1536,
+      1024
+    ]
+  },
+  {
+    "id": "elevator",
+    "path": "assets/backgrounds/elevator.png",
+    "prompt": "Create a background painting for a visual-novel scene in an original mecha anime game.\n\nART STYLE: cinematic anime background art, painterly, detailed but soft-edged, strong atmospheric perspective, moody lighting, rich color, matching high-end 1990s-2000s mecha anime backgrounds with modern rendering.\n\nCOMPOSITION (strict): 1536x1024 landscape. NO people, NO characters, NO robots in the foreground, NO text, NO watermark. Keep the left and right thirds and the bottom quarter relatively low-detail (characters and a dialogue box will be placed there). Interest and light concentrated in the upper middle.\n\nSCENE:\nBase of a space elevator: a colossal tower rising from a coastal city into the clouds and beyond, cyan light rings climbing it, golden afternoon light.",
+    "size": [
+      1536,
+      1024
+    ]
+  },
+  {
+    "id": "space",
+    "path": "assets/backgrounds/space.png",
+    "prompt": "Create a background painting for a visual-novel scene in an original mecha anime game.\n\nART STYLE: cinematic anime background art, painterly, detailed but soft-edged, strong atmospheric perspective, moody lighting, rich color, matching high-end 1990s-2000s mecha anime backgrounds with modern rendering.\n\nCOMPOSITION (strict): 1536x1024 landscape. NO people, NO characters, NO robots in the foreground, NO text, NO watermark. Keep the left and right thirds and the bottom quarter relatively low-detail (characters and a dialogue box will be placed there). Interest and light concentrated in the upper middle.\n\nSCENE:\nLow Earth orbit: the blue curve of Earth below, a field of stars, a distant moon, scattered satellite debris glinting.",
+    "size": [
+      1536,
+      1024
+    ]
+  },
+  {
+    "id": "colony",
+    "path": "assets/backgrounds/colony.png",
+    "prompt": "Create a background painting for a visual-novel scene in an original mecha anime game.\n\nART STYLE: cinematic anime background art, painterly, detailed but soft-edged, strong atmospheric perspective, moody lighting, rich color, matching high-end 1990s-2000s mecha anime backgrounds with modern rendering.\n\nCOMPOSITION (strict): 1536x1024 landscape. NO people, NO characters, NO robots in the foreground, NO text, NO watermark. Keep the left and right thirds and the bottom quarter relatively low-detail (characters and a dialogue box will be placed there). Interest and light concentrated in the upper middle.\n\nSCENE:\nInside the view of an O'Neill space colony cylinder: a long rotating habitat with city lights along its inner surface, seen from outside through the dark, docking lights.",
+    "size": [
+      1536,
+      1024
+    ]
+  },
+  {
+    "id": "hive",
+    "path": "assets/backgrounds/hive.png",
+    "prompt": "Create a background painting for a visual-novel scene in an original mecha anime game.\n\nART STYLE: cinematic anime background art, painterly, detailed but soft-edged, strong atmospheric perspective, moody lighting, rich color, matching high-end 1990s-2000s mecha anime backgrounds with modern rendering.\n\nCOMPOSITION (strict): 1536x1024 landscape. NO people, NO characters, NO robots in the foreground, NO text, NO watermark. Keep the left and right thirds and the bottom quarter relatively low-detail (characters and a dialogue box will be placed there). Interest and light concentrated in the upper middle.\n\nSCENE:\nA vast underground organic cavern: walls of ribbed flesh and chitin, glowing yellow-green nodes, sinewy pillars, wet reflections, deep reddish darkness.",
+    "size": [
+      1536,
+      1024
+    ]
+  },
+  {
+    "id": "vael",
+    "path": "assets/backgrounds/vael.png",
+    "prompt": "Create a background painting for a visual-novel scene in an original mecha anime game.\n\nART STYLE: cinematic anime background art, painterly, detailed but soft-edged, strong atmospheric perspective, moody lighting, rich color, matching high-end 1990s-2000s mecha anime backgrounds with modern rendering.\n\nCOMPOSITION (strict): 1536x1024 landscape. NO people, NO characters, NO robots in the foreground, NO text, NO watermark. Keep the left and right thirds and the bottom quarter relatively low-detail (characters and a dialogue box will be placed there). Interest and light concentrated in the upper middle.\n\nSCENE:\nAn alien cathedral-ship of light in space: enormous concentric rings of violet and white light, crystalline spires, a core of absolute black, stars around it.",
+    "size": [
+      1536,
+      1024
+    ]
+  },
+  {
+    "id": "ice",
+    "path": "assets/backgrounds/ice.png",
+    "prompt": "Create a background painting for a visual-novel scene in an original mecha anime game.\n\nART STYLE: cinematic anime background art, painterly, detailed but soft-edged, strong atmospheric perspective, moody lighting, rich color, matching high-end 1990s-2000s mecha anime backgrounds with modern rendering.\n\nCOMPOSITION (strict): 1536x1024 landscape. NO people, NO characters, NO robots in the foreground, NO text, NO watermark. Keep the left and right thirds and the bottom quarter relatively low-detail (characters and a dialogue box will be placed there). Interest and light concentrated in the upper middle.\n\nSCENE:\nAntarctic ice shelf split open by a gigantic crevasse: deep blue ice walls, a glowing crystal mountain far below, pale sky, blowing snow.",
+    "size": [
+      1536,
+      1024
+    ]
+  },
+  {
+    "id": "void",
+    "path": "assets/backgrounds/void.png",
+    "prompt": "Create a background painting for a visual-novel scene in an original mecha anime game.\n\nART STYLE: cinematic anime background art, painterly, detailed but soft-edged, strong atmospheric perspective, moody lighting, rich color, matching high-end 1990s-2000s mecha anime backgrounds with modern rendering.\n\nCOMPOSITION (strict): 1536x1024 landscape. NO people, NO characters, NO robots in the foreground, NO text, NO watermark. Keep the left and right thirds and the bottom quarter relatively low-detail (characters and a dialogue box will be placed there). Interest and light concentrated in the upper middle.\n\nSCENE:\nA sky where the stars are going out: a perfect black sphere eclipsing the heavens with a thin white rim of light, everything around it fading to grey.",
+    "size": [
+      1536,
+      1024
+    ]
+  },
+  {
+    "id": "dawn",
+    "path": "assets/backgrounds/dawn.png",
+    "prompt": "Create a background painting for a visual-novel scene in an original mecha anime game.\n\nART STYLE: cinematic anime background art, painterly, detailed but soft-edged, strong atmospheric perspective, moody lighting, rich color, matching high-end 1990s-2000s mecha anime backgrounds with modern rendering.\n\nCOMPOSITION (strict): 1536x1024 landscape. NO people, NO characters, NO robots in the foreground, NO text, NO watermark. Keep the left and right thirds and the bottom quarter relatively low-detail (characters and a dialogue box will be placed there). Interest and light concentrated in the upper middle.\n\nSCENE:\nA peaceful dawn over a healed world: golden sunrise over the sea and green hills, glowing crystal flowers blooming in meadows, gentle hopeful light.",
+    "size": [
+      1536,
+      1024
+    ]
+  },
+  {
+    "id": "ruins",
+    "path": "assets/backgrounds/ruins.png",
+    "prompt": "Create a background painting for a visual-novel scene in an original mecha anime game.\n\nART STYLE: cinematic anime background art, painterly, detailed but soft-edged, strong atmospheric perspective, moody lighting, rich color, matching high-end 1990s-2000s mecha anime backgrounds with modern rendering.\n\nCOMPOSITION (strict): 1536x1024 landscape. NO people, NO characters, NO robots in the foreground, NO text, NO watermark. Keep the left and right thirds and the bottom quarter relatively low-detail (characters and a dialogue box will be placed there). Interest and light concentrated in the upper middle.\n\nSCENE:\nA ruined city after a battle: broken skyscrapers, rubble, smoke drifting, dusty brown light filtering through clouds.",
+    "size": [
+      1536,
+      1024
+    ]
+  },
+  {
+    "id": "city",
+    "path": "assets/backgrounds/city.png",
+    "prompt": "Create a background painting for a visual-novel scene in an original mecha anime game.\n\nART STYLE: cinematic anime background art, painterly, detailed but soft-edged, strong atmospheric perspective, moody lighting, rich color, matching high-end 1990s-2000s mecha anime backgrounds with modern rendering.\n\nCOMPOSITION (strict): 1536x1024 landscape. NO people, NO characters, NO robots in the foreground, NO text, NO watermark. Keep the left and right thirds and the bottom quarter relatively low-detail (characters and a dialogue box will be placed there). Interest and light concentrated in the upper middle.\n\nSCENE:\nA modern megacity in daylight: glass towers, elevated highways, a calm blue sky, seen from a high balcony.",
+    "size": [
+      1536,
+      1024
+    ]
+  },
+  {
+    "id": "city",
+    "path": "assets/battle/city.png",
+    "prompt": "Create a wide battle backdrop for a 2D mecha battle scene in an original anime game.\n\nART STYLE: painterly anime background art, cinematic, strong depth and atmosphere, matching high-end mecha anime.\n\nCOMPOSITION (strict): 1536x1024. The horizon line sits at about 62% of the image height. The ground in the lower part is open and fairly flat with no objects in the middle area (two giant robots will stand there). Landmarks and silhouettes go along the horizon and in the sky. Horizontally balanced so the image can be panned left and right. NO robots, NO people, NO text, NO watermark.\n\nSETTING:\nA daytime megacity: glass towers on the horizon, a wide empty multi-lane highway plaza in the foreground, light haze.",
+    "size": [
+      1536,
+      1024
+    ]
+  },
+  {
+    "id": "fire",
+    "path": "assets/battle/fire.png",
+    "prompt": "Create a wide battle backdrop for a 2D mecha battle scene in an original anime game.\n\nART STYLE: painterly anime background art, cinematic, strong depth and atmosphere, matching high-end mecha anime.\n\nCOMPOSITION (strict): 1536x1024. The horizon line sits at about 62% of the image height. The ground in the lower part is open and fairly flat with no objects in the middle area (two giant robots will stand there). Landmarks and silhouettes go along the horizon and in the sky. Horizontally balanced so the image can be panned left and right. NO robots, NO people, NO text, NO watermark.\n\nSETTING:\nA burning military base at night: hangars and towers ablaze on the horizon, red sky, smoke, a cracked runway in the foreground.",
+    "size": [
+      1536,
+      1024
+    ]
+  },
+  {
+    "id": "ruins",
+    "path": "assets/battle/ruins.png",
+    "prompt": "Create a wide battle backdrop for a 2D mecha battle scene in an original anime game.\n\nART STYLE: painterly anime background art, cinematic, strong depth and atmosphere, matching high-end mecha anime.\n\nCOMPOSITION (strict): 1536x1024. The horizon line sits at about 62% of the image height. The ground in the lower part is open and fairly flat with no objects in the middle area (two giant robots will stand there). Landmarks and silhouettes go along the horizon and in the sky. Horizontally balanced so the image can be panned left and right. NO robots, NO people, NO text, NO watermark.\n\nSETTING:\nA ruined research facility in a dry valley: broken buildings and cliffs on the horizon, dusty orange light, rubble-strewn flat ground.",
+    "size": [
+      1536,
+      1024
+    ]
+  },
+  {
+    "id": "sky",
+    "path": "assets/battle/sky.png",
+    "prompt": "Create a wide battle backdrop for a 2D mecha battle scene in an original anime game.\n\nART STYLE: painterly anime background art, cinematic, strong depth and atmosphere, matching high-end mecha anime.\n\nCOMPOSITION (strict): 1536x1024. The horizon line sits at about 62% of the image height. The ground in the lower part is open and fairly flat with no objects in the middle area (two giant robots will stand there). Landmarks and silhouettes go along the horizon and in the sky. Horizontally balanced so the image can be panned left and right. NO robots, NO people, NO text, NO watermark.\n\nSETTING:\nHigh altitude above clouds over a coastline: blue sky, a sea of white clouds forming the \"ground\", distant cliffs.",
+    "size": [
+      1536,
+      1024
+    ]
+  },
+  {
+    "id": "elevator",
+    "path": "assets/battle/elevator.png",
+    "prompt": "Create a wide battle backdrop for a 2D mecha battle scene in an original anime game.\n\nART STYLE: painterly anime background art, cinematic, strong depth and atmosphere, matching high-end mecha anime.\n\nCOMPOSITION (strict): 1536x1024. The horizon line sits at about 62% of the image height. The ground in the lower part is open and fairly flat with no objects in the middle area (two giant robots will stand there). Landmarks and silhouettes go along the horizon and in the sky. Horizontally balanced so the image can be panned left and right. NO robots, NO people, NO text, NO watermark.\n\nSETTING:\nThe base of a space elevator: the colossal tower rising on the horizon into the sky with cyan light rings, a coastal plaza in the foreground.",
+    "size": [
+      1536,
+      1024
+    ]
+  },
+  {
+    "id": "space",
+    "path": "assets/battle/space.png",
+    "prompt": "Create a wide battle backdrop for a 2D mecha battle scene in an original anime game.\n\nART STYLE: painterly anime background art, cinematic, strong depth and atmosphere, matching high-end mecha anime.\n\nCOMPOSITION (strict): 1536x1024. The horizon line sits at about 62% of the image height. The ground in the lower part is open and fairly flat with no objects in the middle area (two giant robots will stand there). Landmarks and silhouettes go along the horizon and in the sky. Horizontally balanced so the image can be panned left and right. NO robots, NO people, NO text, NO watermark.\n\nSETTING:\nEarth orbit: Earth's curve filling the lower third, stars above, distant warships as tiny lights.",
+    "size": [
+      1536,
+      1024
+    ]
+  },
+  {
+    "id": "colony",
+    "path": "assets/battle/colony.png",
+    "prompt": "Create a wide battle backdrop for a 2D mecha battle scene in an original anime game.\n\nART STYLE: painterly anime background art, cinematic, strong depth and atmosphere, matching high-end mecha anime.\n\nCOMPOSITION (strict): 1536x1024. The horizon line sits at about 62% of the image height. The ground in the lower part is open and fairly flat with no objects in the middle area (two giant robots will stand there). Landmarks and silhouettes go along the horizon and in the sky. Horizontally balanced so the image can be panned left and right. NO robots, NO people, NO text, NO watermark.\n\nSETTING:\nSpace near a giant colony cylinder that stretches across the horizon, stars, drifting debris.",
+    "size": [
+      1536,
+      1024
+    ]
+  },
+  {
+    "id": "hive",
+    "path": "assets/battle/hive.png",
+    "prompt": "Create a wide battle backdrop for a 2D mecha battle scene in an original anime game.\n\nART STYLE: painterly anime background art, cinematic, strong depth and atmosphere, matching high-end mecha anime.\n\nCOMPOSITION (strict): 1536x1024. The horizon line sits at about 62% of the image height. The ground in the lower part is open and fairly flat with no objects in the middle area (two giant robots will stand there). Landmarks and silhouettes go along the horizon and in the sky. Horizontally balanced so the image can be panned left and right. NO robots, NO people, NO text, NO watermark.\n\nSETTING:\nAn underground organic cavern: ribbed flesh walls and sinew pillars on the far side, glowing yellow-green nodes, a wide wet chitin floor.",
+    "size": [
+      1536,
+      1024
+    ]
+  },
+  {
+    "id": "vael",
+    "path": "assets/battle/vael.png",
+    "prompt": "Create a wide battle backdrop for a 2D mecha battle scene in an original anime game.\n\nART STYLE: painterly anime background art, cinematic, strong depth and atmosphere, matching high-end mecha anime.\n\nCOMPOSITION (strict): 1536x1024. The horizon line sits at about 62% of the image height. The ground in the lower part is open and fairly flat with no objects in the middle area (two giant robots will stand there). Landmarks and silhouettes go along the horizon and in the sky. Horizontally balanced so the image can be panned left and right. NO robots, NO people, NO text, NO watermark.\n\nSETTING:\nSpace before an alien ship of light: concentric violet-white rings and crystal spires across the horizon, stars.",
+    "size": [
+      1536,
+      1024
+    ]
+  },
+  {
+    "id": "ice",
+    "path": "assets/battle/ice.png",
+    "prompt": "Create a wide battle backdrop for a 2D mecha battle scene in an original anime game.\n\nART STYLE: painterly anime background art, cinematic, strong depth and atmosphere, matching high-end mecha anime.\n\nCOMPOSITION (strict): 1536x1024. The horizon line sits at about 62% of the image height. The ground in the lower part is open and fairly flat with no objects in the middle area (two giant robots will stand there). Landmarks and silhouettes go along the horizon and in the sky. Horizontally balanced so the image can be panned left and right. NO robots, NO people, NO text, NO watermark.\n\nSETTING:\nAn Antarctic ice field: blue ice cliffs and a glowing crystal mountain on the horizon, flat snow and ice foreground, pale sky.",
+    "size": [
+      1536,
+      1024
+    ]
+  },
+  {
+    "id": "void",
+    "path": "assets/battle/void.png",
+    "prompt": "Create a wide battle backdrop for a 2D mecha battle scene in an original anime game.\n\nART STYLE: painterly anime background art, cinematic, strong depth and atmosphere, matching high-end mecha anime.\n\nCOMPOSITION (strict): 1536x1024. The horizon line sits at about 62% of the image height. The ground in the lower part is open and fairly flat with no objects in the middle area (two giant robots will stand there). Landmarks and silhouettes go along the horizon and in the sky. Horizontally balanced so the image can be panned left and right. NO robots, NO people, NO text, NO watermark.\n\nSETTING:\nA dying sky: a huge black sphere with a white rim on the horizon, stars fading, a cracked grey plain.",
+    "size": [
+      1536,
+      1024
+    ]
+  },
+  {
+    "id": "ev_ashfall",
+    "path": "assets/events/ev_ashfall.png",
+    "prompt": "Create a background painting for a visual-novel scene in an original mecha anime game.\n\nART STYLE: cinematic anime background art, painterly, detailed but soft-edged, strong atmospheric perspective, moody lighting, rich color, matching high-end 1990s-2000s mecha anime backgrounds with modern rendering.\n\nCOMPOSITION (strict): 1536x1024 landscape. NO text, NO watermark. People and mechs are allowed. Keep bottom quarter calm for dialogue.\n\nSCENE:\nThe runway of a mountain base splitting open at dusk; glowing insect-like biomechanical creatures climbing out of the fissure; a white falcon-winged mecha in a hangar doorway, eyes lighting up.",
+    "size": [
+      1536,
+      1024
+    ]
+  },
+  {
+    "id": "ev_tower",
+    "path": "assets/events/ev_tower.png",
+    "prompt": "Create a background painting for a visual-novel scene in an original mecha anime game.\n\nART STYLE: cinematic anime background art, painterly, detailed but soft-edged, strong atmospheric perspective, moody lighting, rich color, matching high-end 1990s-2000s mecha anime backgrounds with modern rendering.\n\nCOMPOSITION (strict): 1536x1024 landscape. NO text, NO watermark. People and mechs are allowed. Keep bottom quarter calm for dialogue.\n\nSCENE:\nA base command tower collapsing in flames at night; a small teal-and-white jet mecha in the foreground, reaching toward it.",
+    "size": [
+      1536,
+      1024
+    ]
+  },
+  {
+    "id": "ev_kaiser",
+    "path": "assets/events/ev_kaiser.png",
+    "prompt": "Create a background painting for a visual-novel scene in an original mecha anime game.\n\nART STYLE: cinematic anime background art, painterly, detailed but soft-edged, strong atmospheric perspective, moody lighting, rich color, matching high-end 1990s-2000s mecha anime backgrounds with modern rendering.\n\nCOMPOSITION (strict): 1536x1024 landscape. NO text, NO watermark. People and mechs are allowed. Keep bottom quarter calm for dialogue.\n\nSCENE:\nA huge black-and-crimson lion-maned super robot rising from a cliffside lab hangar, gold eyes blazing, sparks and steam, dramatic low angle.",
+    "size": [
+      1536,
+      1024
+    ]
+  },
+  {
+    "id": "ev_mural",
+    "path": "assets/events/ev_mural.png",
+    "prompt": "Create a background painting for a visual-novel scene in an original mecha anime game.\n\nART STYLE: cinematic anime background art, painterly, detailed but soft-edged, strong atmospheric perspective, moody lighting, rich color, matching high-end 1990s-2000s mecha anime backgrounds with modern rendering.\n\nCOMPOSITION (strict): 1536x1024 landscape. NO text, NO watermark. People and mechs are allowed. Keep bottom quarter calm for dialogue.\n\nSCENE:\nA vast crystal cathedral deep underground, walls covered in moving murals of light showing ancient humans leaving Earth in ships of light; tiny mechs at the bottom for scale.",
+    "size": [
+      1536,
+      1024
+    ]
+  },
+  {
+    "id": "ev_okonkwo",
+    "path": "assets/events/ev_okonkwo.png",
+    "prompt": "Create a background painting for a visual-novel scene in an original mecha anime game.\n\nART STYLE: cinematic anime background art, painterly, detailed but soft-edged, strong atmospheric perspective, moody lighting, rich color, matching high-end 1990s-2000s mecha anime backgrounds with modern rendering.\n\nCOMPOSITION (strict): 1536x1024 landscape. NO text, NO watermark. People and mechs are allowed. Keep bottom quarter calm for dialogue.\n\nSCENE:\nA collapsing cavern, a small battered survey vehicle pushing a giant crimson robot out of the way as rocks fall; dust and light beams.",
+    "size": [
+      1536,
+      1024
+    ]
+  },
+  {
+    "id": "ev_zero",
+    "path": "assets/events/ev_zero.png",
+    "prompt": "Create a background painting for a visual-novel scene in an original mecha anime game.\n\nART STYLE: cinematic anime background art, painterly, detailed but soft-edged, strong atmospheric perspective, moody lighting, rich color, matching high-end 1990s-2000s mecha anime backgrounds with modern rendering.\n\nCOMPOSITION (strict): 1536x1024 landscape. NO text, NO watermark. People and mechs are allowed. Keep bottom quarter calm for dialogue.\n\nSCENE:\nA falcon-winged mecha in space bursting with light, its armor rebuilding itself into pearl and gold, wings becoming translucent cyan light-feathers, a golden halo forming.",
+    "size": [
+      1536,
+      1024
+    ]
+  },
+  {
+    "id": "ev_reach",
+    "path": "assets/events/ev_reach.png",
+    "prompt": "Create a background painting for a visual-novel scene in an original mecha anime game.\n\nART STYLE: cinematic anime background art, painterly, detailed but soft-edged, strong atmospheric perspective, moody lighting, rich color, matching high-end 1990s-2000s mecha anime backgrounds with modern rendering.\n\nCOMPOSITION (strict): 1536x1024 landscape. NO text, NO watermark. People and mechs are allowed. Keep bottom quarter calm for dialogue.\n\nSCENE:\nOver a glowing crystal mountain in Antarctic ice, a radiant falcon-winged mecha extends a hand toward a towering gold-and-violet emperor knight with many halos, who lowers his spear.",
+    "size": [
+      1536,
+      1024
+    ]
+  },
+  {
+    "id": "ev_dawn",
+    "path": "assets/events/ev_dawn.png",
+    "prompt": "Create a background painting for a visual-novel scene in an original mecha anime game.\n\nART STYLE: cinematic anime background art, painterly, detailed but soft-edged, strong atmospheric perspective, moody lighting, rich color, matching high-end 1990s-2000s mecha anime backgrounds with modern rendering.\n\nCOMPOSITION (strict): 1536x1024 landscape. NO text, NO watermark. People and mechs are allowed. Keep bottom quarter calm for dialogue.\n\nSCENE:\nSunrise over a healed world; glowing crystal blooms across green hills; mechas of every faction standing together on a cliff, seen from behind, looking at the dawn.",
+    "size": [
+      1536,
+      1024
+    ]
+  },
+  {
+    "id": "tiles_earth",
+    "path": "assets/tiles/tiles_earth.png",
+    "prompt": "Create a tileset sheet for a tactical strategy game map, viewed straight from above (orthographic top-down, slight soft shading as if lit from the upper left).\n\nART STYLE: painterly hand-painted game tiles, rich but readable, gentle detail, consistent lighting across all tiles, like a high-quality tactics RPG.\n\nLAYOUT (strict): 1024x1024 image, a 4x4 grid of 16 square tiles of 256x256. Each tile fills its square completely edge to edge; no borders, no gaps, no background between tiles, no text, no grid lines. Each tile's edges should tile seamlessly with itself.\n\nTILES, in reading order (left to right, top to bottom):\n1 grass plains A, 2 grass plains B, 3 dense forest (tree canopies), 4 forest edge with clearings,\n5 rocky mountain peak with snow cap, 6 rocky hills, 7 city block (rooftops, streets), 8 city block with a plaza,\n9 ruins and rubble, 10 cracked asphalt with debris, 11 river water, 12 shallow coastal water,\n13 military base pad (hexagonal landing pad with cyan lights), 14 base hangar roof, 15 dirt road, 16 impassable cliff wall.\n",
+    "size": [
+      1024,
+      1024
+    ]
+  },
+  {
+    "id": "tiles_snow",
+    "path": "assets/tiles/tiles_snow.png",
+    "prompt": "Create a tileset sheet for a tactical strategy game map, viewed straight from above (orthographic top-down, slight soft shading as if lit from the upper left).\n\nART STYLE: painterly hand-painted game tiles, rich but readable, gentle detail, consistent lighting across all tiles, like a high-quality tactics RPG.\n\nLAYOUT (strict): 1024x1024 image, a 4x4 grid of 16 square tiles of 256x256. Each tile fills its square completely edge to edge; no borders, no gaps, no background between tiles, no text, no grid lines. Each tile's edges should tile seamlessly with itself.\n\nTILES, in reading order (left to right, top to bottom):\n1 snow plains A, 2 snow plains B, 3 snowy pine forest, 4 frozen trees,\n5 icy mountain peak, 6 ice ridge, 7 snow-covered research station roofs, 8 station landing pad with cyan lights,\n9 ice rubble, 10 cracked ice sheet, 11 dark arctic water, 12 thin ice over water,\n13 blue glacier crevasse edge, 14 glowing crystal outcrop, 15 tracked snow path, 16 impassable ice cliff.\n",
+    "size": [
+      1024,
+      1024
+    ]
+  },
+  {
+    "id": "tiles_hive",
+    "path": "assets/tiles/tiles_hive.png",
+    "prompt": "Create a tileset sheet for a tactical strategy game map, viewed straight from above (orthographic top-down, slight soft shading as if lit from the upper left).\n\nART STYLE: painterly hand-painted game tiles, rich but readable, gentle detail, consistent lighting across all tiles, like a high-quality tactics RPG.\n\nLAYOUT (strict): 1024x1024 image, a 4x4 grid of 16 square tiles of 256x256. Each tile fills its square completely edge to edge; no borders, no gaps, no background between tiles, no text, no grid lines. Each tile's edges should tile seamlessly with itself.\n\nTILES, in reading order (left to right, top to bottom):\n1 organic floor A (wet purple chitin), 2 organic floor B, 3 sinew growths, 4 egg cluster,\n5 chitin spire mound, 6 rib ridge, 7 fossilized ruins in flesh, 8 glowing yellow-green node pool,\n9 bone rubble, 10 cracked chitin, 11 acidic fluid pool, 12 shallow bile,\n13 crystal chamber floor with light murals, 14 crystal pillar base, 15 worn tunnel path, 16 impassable flesh wall.\n",
+    "size": [
+      1024,
+      1024
+    ]
+  },
+  {
+    "id": "tiles_space",
+    "path": "assets/tiles/tiles_space.png",
+    "prompt": "Create a tileset sheet for a tactical strategy game map, viewed straight from above (orthographic top-down, slight soft shading as if lit from the upper left).\n\nART STYLE: painterly hand-painted game tiles, rich but readable, gentle detail, consistent lighting across all tiles, like a high-quality tactics RPG.\n\nLAYOUT (strict): 1024x1024 image, a 4x4 grid of 16 square tiles of 256x256. Each tile fills its square completely edge to edge; no borders, no gaps, no background between tiles, no text, no grid lines. Each tile's edges should tile seamlessly with itself.\n\nTILES, in reading order (left to right, top to bottom):\n1 open space A (stars on black), 2 open space B, 3 asteroid debris field, 4 dense debris,\n5 large asteroid, 6 wreckage of a ship, 7 colony hull plating with lit windows, 8 colony docking pad with cyan lights,\n9 floating scrap, 10 solar panel array, 11 nebula gas (blue), 12 nebula gas (violet),\n13 Vael light lattice (glowing violet diamond grid), 14 Vael crystal, 15 space station corridor roof, 16 impassable hull bulkhead.\n",
+    "size": [
+      1024,
+      1024
+    ]
+  },
+  {
+    "id": "icons_skills",
+    "path": "assets/icons/icons_skills.png",
+    "prompt": "Create a sheet of game UI icons for an original sci-fi mecha tactics game.\n\nART STYLE: polished painted game icons, each a single bold emblem inside a rounded-square metal badge with a thin gold-and-steel bezel, subtle inner glow in the icon's theme color, crisp silhouette readable at small size, consistent lighting from the upper left, matching high-end anime mecha UI.\n\nLAYOUT (strict): 1024x1024 image, a 4x4 grid of 16 icons, each centered in its 256x256 cell with ~24px margin. Background between and around badges is a single flat solid charcoal #2B2B2B. NO text, NO letters, NO numbers, NO watermark.\n\nICONS, in reading order (left to right, top to bottom):\n1 Combat Drills: crossed sword and rifle (red glow),\n2 Exploit Weakness: cracked shield with a target reticle (orange glow),\n3 Prevail: a battered fist rising through flames (red glow),\n4 Reinforced Cockpit: armored cockpit hatch with rivets (blue glow),\n5 Steel Nerves: a calm heartbeat line over a steel plate (blue glow),\n6 Iron Will: an anvil with a rising spark (blue glow),\n7 Guardian: a tower shield with radiant wings (blue glow),\n8 Deep Focus: a glowing eye inside concentric rings (green glow),\n9 Support Attack: two mech silhouettes back to back (green glow),\n10 Afflict: a dripping dagger with a status rune (green glow),\n11 Overdrive: an engine core bursting with energy (green glow),\n12 Offense branch emblem: a sword (red),\n13 Defense branch emblem: a shield (blue),\n14 Resonance branch emblem: a four-pointed star (green),\n15 Skill point: a glowing hexagonal chip (gold),\n16 Locked: a heavy padlock (grey).\n",
+    "size": [
+      1024,
+      1024
+    ]
+  },
+  {
+    "id": "icons_capstones",
+    "path": "assets/icons/icons_capstones.png",
+    "prompt": "Create a sheet of game UI icons for an original sci-fi mecha tactics game.\n\nART STYLE: polished painted game icons, each a single bold emblem inside a rounded-square metal badge with a thin gold-and-steel bezel, subtle inner glow in the icon's theme color, crisp silhouette readable at small size, consistent lighting from the upper left, matching high-end anime mecha UI.\n\nLAYOUT (strict): 1024x1024 image, a 4x4 grid of 16 icons, each centered in its 256x256 cell with ~24px margin. Background between and around badges is a single flat solid charcoal #2B2B2B. NO text, NO letters, NO numbers, NO watermark.\n\nICONS, in reading order (left to right, top to bottom):\n1 Aurora Resonance: a crystal core radiating light-feathers (cyan),\n2 Sky Dancer: a swept wing with motion trails (teal),\n3 Saturation Fire: a rain of shells (amber),\n4 Fleet Command: a battleship bow with a command star (gold),\n5 Burning Soul: a lion head made of fire (crimson),\n6 Dead Eye: a sniper scope crosshair with a single eye (green),\n7 Triple Heart: three interlocked gears with a heart (orange),\n8 Choir: a crescent moon with sound waves (violet),\n9 Crimson Fury: a wolf fang with red flames (crimson),\n10 Starborn: a dragon wing around a star (violet-gold),\n11 Supply Cache: an open military crate with credits (gold),\n12 Buried Part: a mechanical gear half buried in soil (steel),\n13 Aurora Shard: a floating cyan crystal shard (cyan),\n14 Repair Crate: a crate with a wrench and a cross (green),\n15 Resonance Node: a glowing pillar of light from the ground (violet),\n16 Ambush: a red warning triangle with claws (red).\n",
+    "size": [
+      1024,
+      1024
+    ]
+  },
+  {
+    "id": "icons_spirits",
+    "path": "assets/icons/icons_spirits.png",
+    "prompt": "Create a sheet of game UI icons for an original sci-fi mecha tactics game.\n\nART STYLE: polished painted game icons, each a single bold emblem inside a rounded-square metal badge with a thin gold-and-steel bezel, subtle inner glow in the icon's theme color, crisp silhouette readable at small size, consistent lighting from the upper left, matching high-end anime mecha UI.\n\nLAYOUT (strict): 1024x1024 image, a 4x4 grid of 16 icons, each centered in its 256x256 cell with ~24px margin. Background between and around badges is a single flat solid charcoal #2B2B2B. NO text, NO letters, NO numbers, NO watermark.\n\nICONS, in reading order (left to right, top to bottom):\n1 Focus: an eye with a lens flare, 2 Strike: an arrow hitting a bullseye, 3 Alert: a dodging silhouette with afterimages, 4 Valor: a flaming fist,\n5 Iron Wall: a fortress wall, 6 Guts: a heart with a bandage cross, 7 Zeal: a lightning-fast double arrow, 8 Ardor: a rising flame,\n9 Accel: a winged boot, 10 Mend: hands holding a green light, 11 Rally: a raised banner, 12 Fortune: a gold coin with a star,\n13 Insight: an open book with a glowing page, 14 Resolve: a radiant sun over a sword, 15 Cleanse: a water droplet with sparkles, 16 Spirit Points: a glowing lotus.\n",
+    "size": [
+      1024,
+      1024
+    ]
+  },
+  {
+    "id": "icons_parts",
+    "path": "assets/icons/icons_parts.png",
+    "prompt": "Create a sheet of game UI icons for an original sci-fi mecha tactics game.\n\nART STYLE: polished painted game icons, each a single bold emblem inside a rounded-square metal badge with a thin gold-and-steel bezel, subtle inner glow in the icon's theme color, crisp silhouette readable at small size, consistent lighting from the upper left, matching high-end anime mecha UI.\n\nLAYOUT (strict): 1024x1024 image, a 4x4 grid of 16 icons, each centered in its 256x256 cell with ~24px margin. Background between and around badges is a single flat solid charcoal #2B2B2B. NO text, NO letters, NO numbers, NO watermark.\n\nICONS, in reading order (left to right, top to bottom):\n1 Thruster Pack: twin rocket nozzles with blue flame, 2 Ceramic Plating: a stack of white armor tiles, 3 Targeting Array: a sensor dish with a reticle, 4 Reactor Cell: a glowing cylindrical power cell,\n5 Nanite Repair Unit: a swarm of tiny glowing nanites around a wrench, 6 Resonance Lens: a crystal lens refracting light, 7 Purity Nanocoat: a shimmering shield droplet, 8 Apsaras Engine: an ornate winged engine,\n9 Burn status: flame, 10 Shock status: lightning bolt, 11 Armor Break status: shattered plate, 12 Slow status: a gear frozen in ice,\n13 Jammed status: a static-filled target reticle, 14 Credits: a stack of gold coins, 15 Bonus objective: a gold star medal, 16 Unknown secret: a glowing question-mark-shaped crystal (no letters, a crystal shaped like a hook and dot).\n",
+    "size": [
+      1024,
+      1024
+    ]
+  },
+  {
+    "id": "icons_types",
+    "path": "assets/icons/icons_types.png",
+    "prompt": "Create a sheet of game UI icons for an original sci-fi mecha tactics game.\n\nART STYLE: polished painted game icons, each a single bold emblem inside a rounded-square metal badge with a thin gold-and-steel bezel, subtle inner glow in the icon's theme color, crisp silhouette readable at small size, consistent lighting from the upper left, matching high-end anime mecha UI.\n\nLAYOUT (strict): 1024x1024 image, a 4x4 grid of 16 icons, each centered in its 256x256 cell with ~24px margin. Background between and around badges is a single flat solid charcoal #2B2B2B. NO text, NO letters, NO numbers, NO watermark.\n\nICONS, in reading order (left to right, top to bottom):\n1 Kinetic: a bullet with impact rings (khaki), 2 Beam: a straight cyan laser beam, 3 Plasma: an orange plasma orb, 4 Blade: a gleaming sword edge (white),\n5 Explosive: a missile with a blast (yellow), 6 Graviton: a black sphere warping a grid (purple), 7 Spirit: a glowing green feather, 8 Heavy Plate armor: a thick riveted plate (bronze),\n9 Light Frame armor: a slim angular frame (light blue), 10 Beam Coat armor: a plate with a refracting film (mint), 11 Biomass armor: chitin with a glowing vein (lime), 12 Void Body armor: a crystalline void shard (violet),\n13 Ship Hull armor: a ship hull section (grey), 14 HP: a green heart-shaped armor plate, 15 EN: a blue energy cell, 16 Will: a flame-shaped crest (gold).\n",
+    "size": [
+      1024,
+      1024
+    ]
+  },
+  {
+    "id": "title",
+    "path": "assets/key/title.png",
+    "prompt": "Key art for an original mecha anime game. A slender white-and-blue \"falcon knight\" mecha with gold beak-like visor and layered feather-blade wings (ALTEON, design from the unit sheet) hovers in Earth orbit, wings spread, a glowing cyan core in its chest; behind it the vast violet ring-ship of an alien fleet and the blue curve of Earth. Cinematic painterly anime style, dramatic rim light. The LEFT THIRD of the image is calm dark space with only faint stars (the title and menu go there). NO text, NO logo, NO watermark.\n",
+    "size": [
+      1536,
+      1024
+    ]
+  }
+]

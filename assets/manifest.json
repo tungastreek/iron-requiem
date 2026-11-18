@@ -1,0 +1,638 @@
+[
+  {
+    "path": "assets/backgrounds/base.png",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "b6d8df06c026a31251240812a5297ff6e2ae59a353a152e0cc74cc04665763c7"
+  },
+  {
+    "path": "assets/backgrounds/bridge.png",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "12e8b11778edb55a19340930172ed11e09d2e6b8466561b81539dacdb22644c9"
+  },
+  {
+    "path": "assets/backgrounds/city.png",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "4787d81df37fc4aa0a862d2ce359008cf246213b625fe570526cd53dee1d6081"
+  },
+  {
+    "path": "assets/backgrounds/colony.png",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "1b009fb1168b35e1b4f065502f8487e68dd39c242f1e144824660cdfaf0183cb"
+  },
+  {
+    "path": "assets/backgrounds/dawn.png",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "5f4d9cf7c856af6fb68e4877f4909d2628a9b5961cd20959bbb633b804fa2e15"
+  },
+  {
+    "path": "assets/backgrounds/elevator.png",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "9ef7b674589dcf61c87991c819fe261b1b13bd9a124ed15eef5b0e797f6c784a"
+  },
+  {
+    "path": "assets/backgrounds/fire.png",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "bf1afd8476a9e68e36444049c07aea3f2c0d8c1430773575f8cc9f05dad29949"
+  },
+  {
+    "path": "assets/backgrounds/hangar.png",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "be633f243b886e97b95aa8d4e4295bda2a145a258f20b428dfb3fa825db7507d"
+  },
+  {
+    "path": "assets/backgrounds/hive.png",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "bd5638b89a65962e9d48acdd177a409299856fc258ff74edcf9ce9c14a7e5656"
+  },
+  {
+    "path": "assets/backgrounds/ice.png",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "3be3393fe178f7ffebce519f7adc8026453af3f94e0bc05c49d5a1defe445a76"
+  },
+  {
+    "path": "assets/backgrounds/lab.png",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "e2944670a5189cce12eec36b98dcc84f787c91432a426ada06fd620d5ba1d509"
+  },
+  {
+    "path": "assets/backgrounds/ruins.png",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "32203fc1d5c9abde1a64cd970bdfbdf7b92335e3ec6c410497f7d24771bb7c77"
+  },
+  {
+    "path": "assets/backgrounds/sky.png",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "4538c9311ec9faa154d166915c91380ea6935a6f6036cbfeec53e6b62476b99e"
+  },
+  {
+    "path": "assets/backgrounds/space.png",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "87e9fc4ff4f4f3f5ac00c245e31aea73217fd331f321959f6f6cd5d768f70dae"
+  },
+  {
+    "path": "assets/backgrounds/vael.png",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "fd698baac483f2ad38b8b42c6eea7a54722c07395f857b3db6a854249d6b9615"
+  },
+  {
+    "path": "assets/backgrounds/void.png",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "cc60933ffbf2314a91e5b8d3ce3da367422979b5e5ca9233802c9b3cffe956b3"
+  },
+  {
+    "path": "assets/battle/city.png",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "345f7afefddf198e461e110dc18a88324c50b179597b29e48beedc08a53a3917"
+  },
+  {
+    "path": "assets/battle/colony.png",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "6d7cfe6cacd74d31981e99429376e2d9cb967c9334c5d20f96517ec740b3ad58"
+  },
+  {
+    "path": "assets/battle/elevator.png",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "c62e85de05ab0a00a189adc32daad89e7aafbb83c34c3bae6eaf79e6e8e7b98b"
+  },
+  {
+    "path": "assets/battle/fire.png",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "74fe4b3950c5c9fbeff2dc10fb1a4222fce50d2af53c17ee867488fcf0e45c37"
+  },
+  {
+    "path": "assets/battle/hive.png",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "9f73665d1ab74279fb0d019febd4d062672bd0f684644f90abf7523c3d059484"
+  },
+  {
+    "path": "assets/battle/ice.png",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "3438338e9b7363445a056a45c5d80796d1c79290995cdf60aee02ee540437f8d"
+  },
+  {
+    "path": "assets/battle/ruins.png",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "175c8bbcd1f1cc545570082f656b648af5fd53eed601481c0784b3fdda3de018"
+  },
+  {
+    "path": "assets/battle/sky.png",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "7060eae97b8cb72674fb8cd8fd44a584bdec2b5e2e23731aea4dbe0d79dc94b5"
+  },
+  {
+    "path": "assets/battle/space.png",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "d04b837340b78eba216a634b0d426e0c1031757f75a2c0eb63e6c8581b1294ff"
+  },
+  {
+    "path": "assets/battle/vael.png",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "704840f821047724180091403403402fef5fccee5031ed7eab72c4ffbbb0f572"
+  },
+  {
+    "path": "assets/battle/void.png",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "46bebdc1faef9f0c249322af2f4eae3e92f71c38a0421b37795bcefc5f36d142"
+  },
+  {
+    "path": "assets/events/ev_ashfall.png",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "696e517ddee68f7de78d35138759a884c331d1c302812a1b186829a060629010"
+  },
+  {
+    "path": "assets/events/ev_dawn.png",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "adb06a1e3f4015f440b8a2816d908f2d3a75456c22708a8e5e4b0126e3ac07e7"
+  },
+  {
+    "path": "assets/events/ev_kaiser.png",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "cbb3738674665506268e0d18370e8be54c8ab3afa64241f5c0316ac6d9849913"
+  },
+  {
+    "path": "assets/events/ev_mural.png",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "8849970cbccc65d6b9cae10c8dfa695522a144f16ded6981321918b74769d1bc"
+  },
+  {
+    "path": "assets/events/ev_okonkwo.png",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "bef0272fb2e5658b8acf6f226562691ae37d2601a57982d3582f0cefe42d4dd4"
+  },
+  {
+    "path": "assets/events/ev_reach.png",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "0584c35b940b83f88141b963e5a7b1addf37a58bf2daf5819f9782663706d02d"
+  },
+  {
+    "path": "assets/events/ev_tower.png",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "3724dca1296d8eace4deec3299a308ec09668adb645724ec74e5e08e39c4849d"
+  },
+  {
+    "path": "assets/events/ev_zero.png",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "91f7e40e88a29f5b3284f78a3d1d46218f0e2977309015ed46681d2cfe1bbb9b"
+  },
+  {
+    "path": "assets/icons/icons_capstones.png",
+    "width": 1024,
+    "height": 1024,
+    "sha256": "7700d0b0cac5c62b7e9fa30dcf8a8d4a53134e32054d179d1019c22ea7b73def"
+  },
+  {
+    "path": "assets/icons/icons_parts.png",
+    "width": 1024,
+    "height": 1024,
+    "sha256": "0aa9223b27d60350c479bbe005ef5d959c2f8aa028634637f920fa9b9153e4da"
+  },
+  {
+    "path": "assets/icons/icons_skills.png",
+    "width": 1024,
+    "height": 1024,
+    "sha256": "a02db8d0e0caf163fd83a08f89816518e6a096a30aaac86347c4b115826707fe"
+  },
+  {
+    "path": "assets/icons/icons_spirits.png",
+    "width": 1024,
+    "height": 1024,
+    "sha256": "99cbed566e2cd61c7b81054d33e208f4cf43aeb0e5fae2238d9abc8196f0a83a"
+  },
+  {
+    "path": "assets/icons/icons_types.png",
+    "width": 1024,
+    "height": 1024,
+    "sha256": "ba03dc6080b958c06863f99d2686f6cd72c548a847bcb949be287b515d7ce660"
+  },
+  {
+    "path": "assets/key/title.png",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "979b63eec2cadeca9bc393016639948eb0695e0dd28589e29f41891815fb400c"
+  },
+  {
+    "path": "assets/portraits/aurelion.png",
+    "width": 1024,
+    "height": 1024,
+    "sha256": "91cc5cdfb00ebf5c0faf5458869fe90d1ce582297454223ddbd90a35942cc815"
+  },
+  {
+    "path": "assets/portraits/brann.png",
+    "width": 1024,
+    "height": 1024,
+    "sha256": "3a2bb64c65126050531d8be6b28cdcab292f3cf541a0c9e72df15ef061237da7"
+  },
+  {
+    "path": "assets/portraits/dash.png",
+    "width": 1024,
+    "height": 1024,
+    "sha256": "212484e7a64f128157ca953c758790ec671abd02557ac727bb88e93aa8e351ec"
+  },
+  {
+    "path": "assets/portraits/draike.png",
+    "width": 1024,
+    "height": 1024,
+    "sha256": "26c500e2a6f921d13e770296e5c35f7aab4a26d2b8f2c847b26baaef83cf3151"
+  },
+  {
+    "path": "assets/portraits/grunt_c.png",
+    "width": 1024,
+    "height": 1024,
+    "sha256": "3371f3c030c7d99f17e4fdcac636d8d4064da6225751201fcf627b8a9492b6a2"
+  },
+  {
+    "path": "assets/portraits/grunt_f.png",
+    "width": 1024,
+    "height": 1024,
+    "sha256": "524ece536cf1a0625c2060e99527c5b94228fdd09277f60be37f8e1fda7cd296"
+  },
+  {
+    "path": "assets/portraits/gunnar.png",
+    "width": 1024,
+    "height": 1024,
+    "sha256": "bd009646cecb201b4fa67eadce65d373602aacc4fdcd32ad49173b6c9cf7ee28"
+  },
+  {
+    "path": "assets/portraits/ilse.png",
+    "width": 1024,
+    "height": 1024,
+    "sha256": "1cc199b3d80b875ec2caa284346a15028f88309e5604160630f299de42da993d"
+  },
+  {
+    "path": "assets/portraits/ixion.png",
+    "width": 1024,
+    "height": 1024,
+    "sha256": "1e8f51e170527c214ceea0a11889131c5a2524a97747c99027805eb47d632833"
+  },
+  {
+    "path": "assets/portraits/jin.png",
+    "width": 1024,
+    "height": 1024,
+    "sha256": "b9585d9b76bb21fa32edbfb251a2cc735fee0a748f4b575fef5eb93ff72c2542"
+  },
+  {
+    "path": "assets/portraits/kroll.png",
+    "width": 1024,
+    "height": 1024,
+    "sha256": "e409db222f935e373ae826440472195f8779641347ff878fd5876dcaf32bd69b"
+  },
+  {
+    "path": "assets/portraits/lucien.png",
+    "width": 1024,
+    "height": 1024,
+    "sha256": "1c7ed6f0017c7343c3835353702042a4f8e11ddb72f6c6db2e3f196b50083f0b"
+  },
+  {
+    "path": "assets/portraits/mira.png",
+    "width": 1024,
+    "height": 1024,
+    "sha256": "34c57e17077d08352a35088870aca958c4e54553fa2b5fad40baebb100f6f5f7"
+  },
+  {
+    "path": "assets/portraits/odessa.png",
+    "width": 1024,
+    "height": 1024,
+    "sha256": "9dda28f9f3d63e7bbdd79cfcb0ebcab3740ad11d1aaae09e36d0f1f64afdf87e"
+  },
+  {
+    "path": "assets/portraits/okonkwo.png",
+    "width": 1024,
+    "height": 1024,
+    "sha256": "68c4a967dee9ad28921834cd8b80c96eb393e200f92cc603f8d41de6f70444bf"
+  },
+  {
+    "path": "assets/portraits/pell.png",
+    "width": 1024,
+    "height": 1024,
+    "sha256": "5553afc941af3bd5e7dabb30e62985f8b728b3842ef97861d1e01d8a53581323"
+  },
+  {
+    "path": "assets/portraits/portraits-outriders.png",
+    "width": 1254,
+    "height": 1254,
+    "sha256": "1c94c5819785be0fad7fc3ae1efeacdda9df3e596ee3147132195975afab678a"
+  },
+  {
+    "path": "assets/portraits/portraits-relief.png",
+    "width": 1254,
+    "height": 1254,
+    "sha256": "c02fdef5101ae61cb74e811540db2606e69cf79944d6a8c60a195227f0c24816"
+  },
+  {
+    "path": "assets/portraits/rei.png",
+    "width": 1024,
+    "height": 1024,
+    "sha256": "fe35e7062fb8b6a3e3a50eb40590a21e958a2083914f2da1f80a39ae35088a39"
+  },
+  {
+    "path": "assets/portraits/rina.png",
+    "width": 1024,
+    "height": 1024,
+    "sha256": "f912f5dcb58c414b6320280b1546c121b7dc4110deb553adedcc58d628fec4f0"
+  },
+  {
+    "path": "assets/portraits/sera.png",
+    "width": 1024,
+    "height": 1024,
+    "sha256": "339c4907cf23f1102dcfa1eac0eb9e5287bf1808650660fb096d15d97d808f83"
+  },
+  {
+    "path": "assets/portraits/solenne.png",
+    "width": 1024,
+    "height": 1024,
+    "sha256": "07aed942e82f4552fe1e717e31a4c46e0dd887abd59c9d85bcfd40a52d7cba99"
+  },
+  {
+    "path": "assets/portraits/soren.png",
+    "width": 1024,
+    "height": 1024,
+    "sha256": "3c379d284a9e71bd39edfe612449d08d141c5aff7c7ddca8349c1b0443c8c5af"
+  },
+  {
+    "path": "assets/portraits/tessa.png",
+    "width": 1024,
+    "height": 1024,
+    "sha256": "6726b0ef8b50563b971a028ac88c602cd432bbb6c92bb79588af125255da04d3"
+  },
+  {
+    "path": "assets/portraits/vael.png",
+    "width": 1024,
+    "height": 1024,
+    "sha256": "3538e69e279f39512a772605f54b63190e94b0336b092ae2c8fa2e28cfbfdd8b"
+  },
+  {
+    "path": "assets/portraits/vasse.png",
+    "width": 1024,
+    "height": 1024,
+    "sha256": "b9d1c540a306d7b03d05b4c21b3ce9480b4cc27e64147132cc346391fa626f1c"
+  },
+  {
+    "path": "assets/portraits/yuna.png",
+    "width": 1024,
+    "height": 1024,
+    "sha256": "56acee7377be7fdfcb788d1dc8cb05b56cde62ff8f693678fb7307f5887c2e69"
+  },
+  {
+    "path": "assets/tiles/tiles_earth.png",
+    "width": 1024,
+    "height": 1024,
+    "sha256": "a5d73e52694e0b99d9e5b24f2c43b65ff5f8351489ec6a9cb326d1d1c8a51829"
+  },
+  {
+    "path": "assets/tiles/tiles_hive.png",
+    "width": 1024,
+    "height": 1024,
+    "sha256": "2cfcb9f8da8430046df32e28621a320d5cfb2156514c0948c64288ec350c2551"
+  },
+  {
+    "path": "assets/tiles/tiles_snow.png",
+    "width": 1024,
+    "height": 1024,
+    "sha256": "68cf3166af588e87374c8d2725cd5a4a4e566796614d4ef29453c5456d3df691"
+  },
+  {
+    "path": "assets/tiles/tiles_space.png",
+    "width": 1024,
+    "height": 1024,
+    "sha256": "c4e87e6d9ff8d0f2c8a496a7f6c20ab9414451bc80ae86387cd89be32bb11ef2"
+  },
+  {
+    "path": "assets/units/allied-outriders.png",
+    "width": 1254,
+    "height": 1254,
+    "sha256": "6e1232d979dde552c5a516ddb4a58b2c3bcd19f685aaea4962bea15fc8ef7e0a"
+  },
+  {
+    "path": "assets/units/allied-vanguard.png",
+    "width": 1254,
+    "height": 1254,
+    "sha256": "f9a7d89f1dcb75a22e3cdfc2f3b054602c2ed8ab57cd8ae457de185d360c5d93"
+  },
+  {
+    "path": "assets/units/alteon.png",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "8d895e24e17990a7007d5f6dbf09aad78cdb9d73d2bbe834eab1691962e87bfd"
+  },
+  {
+    "path": "assets/units/alteon_s.png",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "d9169f403e0ceb6250144004b2dc18d3492f88578370d2b27e0dd6bcb1817b90"
+  },
+  {
+    "path": "assets/units/alteonz.png",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "1dc631b84f624b6665553c7a9088037b38a4b48dd9ff33f4375886f9ce8201aa"
+  },
+  {
+    "path": "assets/units/alteonz_s.png",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "c87bb35fad93c56ae2fb0249dca3775cd162dc81e85e61b66182b5995aff4106"
+  },
+  {
+    "path": "assets/units/aurelion.png",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "6b90d61127950d2e87a26473cd82ef34ba744cf2baf8fce510eed8fb573ee359"
+  },
+  {
+    "path": "assets/units/bastion.png",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "9771f11b964772e38c0c7cbc953b7e7eb8f9b47d3d093b651cc87d3442cdc6e2"
+  },
+  {
+    "path": "assets/units/behemoth.png",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "d556f70f1e86567a4be591c43f4f6ed6d9cfdb16c64737b439b94c027ffb6143"
+  },
+  {
+    "path": "assets/units/carmine.png",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "1a547f08330526043f92f420d76e8706d03d3b588790c0f2e5950dba1ce83fff"
+  },
+  {
+    "path": "assets/units/crawler.png",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "15fb93c82ac563fb6ed45811fa6b2a268579f585ae7c7b4e07c9563c9245645d"
+  },
+  {
+    "path": "assets/units/cruiser.png",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "88d764898864baa7194292b33075db54176ace54abf6da8f310e209f8dd3192f"
+  },
+  {
+    "path": "assets/units/enemy-brood.png",
+    "width": 1254,
+    "height": 1254,
+    "sha256": "4244dfbc1a857aa7789bdad4ab7523ca4985e5d7e2b975416e2cb59b8b2a80cb"
+  },
+  {
+    "path": "assets/units/enemy-legions.png",
+    "width": 1254,
+    "height": 1254,
+    "sha256": "0dde2f1fbbf27f2c320e9237bc4323d44f5b917be6d4f4b1dc7ee7ebef5b57b2"
+  },
+  {
+    "path": "assets/units/executor.png",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "d0513868ff84e057b7b50ed33bd42f8baedf2a7a40d15a27f9ede5240a5908f5"
+  },
+  {
+    "path": "assets/units/halcyon.png",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "75e1ab29b74e2917e4766285d5f077166128e74faf611997d18931b91eae3bca"
+  },
+  {
+    "path": "assets/units/herald.png",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "45a2db9a3c17548c1f4e72a285f3b7c6a57862ca3f3d6b53d9f98e27a94f2a49"
+  },
+  {
+    "path": "assets/units/hivemother.png",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "7337ea8c150135b74e0791b04bda8b0271a128e426121d7aace420572e49b019"
+  },
+  {
+    "path": "assets/units/hollow.png",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "7a88cf669bedac239b1a68e8d9581ea08c4a6fecf296714b41a8832778b35681"
+  },
+  {
+    "path": "assets/units/kaiser.png",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "c84023bc89bee819d1acea227213ff2a1bc55f0e0f12914d0993f17871653891"
+  },
+  {
+    "path": "assets/units/knight.png",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "d4db11372873011da0d3aefe320c6cb6c782466cc1f9be290b6d238794c664a4"
+  },
+  {
+    "path": "assets/units/lancer.png",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "ef332cc4ca7c37061c9d9feb72b2e06e6babde6475a03ee7237710b2ef946eba"
+  },
+  {
+    "path": "assets/units/noctis.png",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "5bf917c306fee824e548ff8c43f1600ddc4c32d88ed23309f89cc6dd3bba218d"
+  },
+  {
+    "path": "assets/units/prime.png",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "68f23c8bce8964af6662c06c58e6afd14aff52ca8974f234f10edb47475b7bea"
+  },
+  {
+    "path": "assets/units/seraphyne.png",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "2612103cc0c8dad15f3a31b1187f8a3b35e0df4cd3f7a58dac720c000096db66"
+  },
+  {
+    "path": "assets/units/shard.png",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "7d975a95fb64a9ad610f8010b56b7f60c499e9999de6b97b8d22767985c06e23"
+  },
+  {
+    "path": "assets/units/sovereign.png",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "ada03b19d7bee9eddb631877d10d6f19da586af23d15890363cbf5856428e86b"
+  },
+  {
+    "path": "assets/units/sylph.png",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "77c69995df66647baeceb8b54fe86efdda26c52fd10c4b3fc5b62d89439dd88d"
+  },
+  {
+    "path": "assets/units/talos.png",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "eab73f790954f47fdb88bb6f874e417aa203b2cf02e0430d4d3bb8d9617f748d"
+  },
+  {
+    "path": "assets/units/trinity.png",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "469302e8e494a86d6f85547680dd8098c301c74449b5025abe5ba33e5ac5b4f0"
+  },
+  {
+    "path": "assets/units/tyrant.png",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "bf5d7334f9b960bfcca43ed994d7f436986520f8c109084897b5f750919edfa8"
+  },
+  {
+    "path": "assets/units/warden.png",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "6e117354782b526bf1adb87a9f1da2d330a6911145643ef3c13b4f773514f8e5"
+  },
+  {
+    "path": "assets/units/wyrmling.png",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "a687bb6dac762e39a76588f841d8dc81faf50b73884f48716255c269bbbfb039"
+  },
+  {
+    "path": "assets/units/zephyr.png",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "934019b2361ec00815c8d9233ce63339f3be2fbb9e686bf0a418e267bb38fcf3"
+  }
+]
