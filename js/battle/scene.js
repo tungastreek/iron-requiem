@@ -28,7 +28,8 @@ const SCENE = (() => {
   function setPose(a, name, dur = 160) { a.poseName = name; a.poseFrom = Object.assign({}, a.pose); a.poseTo = ART.POSES[name]; a.poseStart = now; a.poseDur = dur; }
 
   // ---------- particles ----------
-  function P(o) { parts.push(Object.assign({ x: 0, y: 0, vx: 0, vy: 0, life: 600, age: 0, size: 4, col: '#fff', type: 'glow', drag: 0.98, grav: 0, rot: 0, vr: 0, em: true }, o)); }
+  let particleSerial=0;
+  function P(o) { if(typeof QUALITY!=='undefined'&&!QUALITY.keepParticle(particleSerial++))return;parts.push(Object.assign({ x: 0, y: 0, vx: 0, vy: 0, life: 600, age: 0, size: 4, col: '#fff', type: 'glow', drag: 0.98, grav: 0, rot: 0, vr: 0, em: true }, o)); }
   function sparks(x, y, n, col, spd = 9, life = 450) { for (let i = 0; i < n; i++) { const a = Math.random() * Math.PI * 2, s = spd * (0.3 + Math.random()); P({ x, y, vx: Math.cos(a) * s, vy: Math.sin(a) * s, life: life * (0.5 + Math.random()), size: 2 + Math.random() * 2, col, type: 'spark', drag: 0.93, grav: 0.15 }); } }
   function explosion(x, y, sz = 1, col = '#ffb347') {
     P({ x, y, size: 80 * sz, life: 260, col: '#ffffff', type: 'glow', drag: 1 });
@@ -137,7 +138,7 @@ const SCENE = (() => {
   function anchor(a, key) {
     if (use3D && a.anchors3d) return (a.anchors3d[key === 'core' ? 'core' : key === 'head' ? 'head' : 'hand']).slice();
     const an = a.anchors || { coreX: 0, coreY: -70, handX: 30, handY: -60, headY: -110 };
-    const lx = key === 'core' ? an.coreX : key === 'head' ? 6 : an.handX;
+    const lx = key === 'core' ? an.coreX : key === 'head' ? (an.headX??6) : an.handX;
     const ly = key === 'core' ? an.coreY : key === 'head' ? an.headY + 10 : an.handY;
     return [a.x + a.ox + a.dir * lx * a.scale, a.y + a.oy + ly * a.scale];
   }
@@ -149,12 +150,15 @@ const SCENE = (() => {
     if (a.spr) {
       // painted sprite: idle A/B at ~3 fps, attack frame while attacking, hit frame while recoiling
       const fi = HIT_POSES.includes(a.poseName) ? 3 : ATTACK_POSES.includes(a.poseName) ? 2 : (Math.floor(t * 3 + (a.side === 'L' ? 0 : 0.5)) % 2);
-      const f = a.spr.frames[fi] || a.spr.frames[0], s = a.sprScale, w = f.width * s, h = f.height * s;
-      const hover = a.fly ? -28 + Math.sin(t * 2.2) * 6 : 0, breathe = 1 + Math.sin(t * 2.4) * 0.008;
+      const meta=a.spr.meta||{},f = a.spr.frames[fi] || a.spr.frames[0], s = a.sprScale*(meta.scale||1), w = f.width * s, h = f.height * s;
+      const hover = (meta.fly??a.fly) ? -28 + Math.sin(t * 2.2) * 6 : 0, breathe = 1 + Math.sin(t * 2.4) * 0.008;
       c.translate(450, 700 + hover); c.scale(1, breathe);
-      c.drawImage(f, -w / 2, -h * a.spr.ground, w, h);
+      const paint=typeof ENEMIES!=='undefined'?ENEMIES.paint(a.u):null;
+      if(paint){c.filter=paint.filter||'none';c.shadowColor=paint.color;c.shadowBlur=paint.glow;if(paint.aura&&Math.floor(t*30)%3===0)P({x:a.x+(Math.random()-.5)*w,y:a.y-Math.random()*h,vx:0,vy:-1,life:700,size:8,col:paint.color,type:'glow',drag:.99});}
+      if(meta.facesLeft)c.scale(-1,1);c.drawImage(f, -w / 2, -h * a.spr.ground, w, h);if(meta.facesLeft)c.scale(-1,1);c.filter='none';c.shadowBlur=0;
       a.scale = 1; const gh = h * a.spr.ground;
       a.anchors = { coreX: 0, coreY: -gh * 0.52 + hover, handX: w * 0.38, handY: -gh * 0.6 + hover, headY: -gh * 0.9 + hover };
+      if(meta.anchors){const point=(p)=>[(p[0]-.5)*w*(meta.facesLeft?-1:1),(p[1]-a.spr.ground)*h+hover],core=meta.anchors.core&&point(meta.anchors.core),muzzle=meta.anchors.muzzle&&point(meta.anchors.muzzle),head=meta.anchors.head&&point(meta.anchors.head);if(core){a.anchors.coreX=core[0];a.anchors.coreY=core[1];}if(muzzle){a.anchors.handX=muzzle[0];a.anchors.handY=muzzle[1];}if(head){a.anchors.headX=head[0];a.anchors.headY=head[1];}}
       if (use3D) { ctx.save(); ctx.fillStyle = 'rgba(0,0,0,0.35)'; ctx.beginPath(); ctx.ellipse(a.x + a.ox, GROUND + 4, w * 0.32, 10, 0, 0, Math.PI * 2); ctx.fill(); ctx.restore(); }
     } else {
       c.translate(450, 700); c.scale(a.scale, a.scale);
@@ -174,6 +178,7 @@ const SCENE = (() => {
   function frame(ts) {
     if (!running) return;
     const realDt = Math.min(50, ts - (last || ts)); last = ts;
+    if(realDt>0&&typeof QUALITY!=='undefined')QUALITY.observe(realDt,'battle');
     let dt = realDt * timeScale; if (skipAll) dt = 1000;
     if (hitstop > 0) { hitstop -= realDt; dt *= 0.05; }
     now += dt;
@@ -262,16 +267,16 @@ const SCENE = (() => {
       ctx.strokeStyle = a.u.team === 'player' ? 'rgba(98,243,255,0.6)' : 'rgba(255,90,90,0.6)'; ctx.lineWidth = 1.5; ctx.stroke();
       const pid = a.u.portrait || a.u.pilot; const pimg = ART.portrait(pid, 'normal', 96, 120);
       ctx.save(); ctx.beginPath(); ctx.rect(x + 6, y + 6, 72, 80); ctx.clip(); ctx.drawImage(pimg, x - 6, y + 2, 96, 120); ctx.restore();
-      ctx.fillStyle = '#e9f3ff'; ctx.font = '700 20px "Chakra Petch", sans-serif'; ctx.textAlign = 'left'; ctx.fillText(a.m.name, x + 88, y + 26);
-      ctx.fillStyle = '#9fb3c8'; ctx.font = '500 13px "Chakra Petch", sans-serif'; ctx.fillText((a.u.pname || NAMES[a.u.pilot] || '') + '  ·  ' + ARMOR[a.m.armor].name, x + 88, y + 44);
+      ctx.fillStyle = '#e9f3ff'; ctx.font = '700 23px system-ui, sans-serif'; ctx.textAlign = 'left'; ctx.fillText(a.u.nameOverride||a.m.name, x + 88, y + 27, 350);
+      ctx.fillStyle = '#b9cbe0'; ctx.font = '500 15px system-ui, sans-serif'; ctx.fillText((a.u.pname || NAMES[a.u.pilot] || '') + '  ·  ' + ARMOR[a.m.armor].name, x + 88, y + 48, 350);
       // HP bar
       const bw = 300, frac = Math.max(0, a.dispHP / a.maxHP);
-      ctx.fillStyle = 'rgba(255,255,255,0.08)'; ctx.fillRect(x + 88, y + 54, bw, 12);
+      ctx.fillStyle = 'rgba(255,255,255,0.12)'; ctx.fillRect(x + 88, y + 56, bw, 9);
       const hg = ctx.createLinearGradient(x + 88, 0, x + 88 + bw, 0); hg.addColorStop(0, frac < 0.3 ? '#ff3b5c' : '#2bd9a0'); hg.addColorStop(1, frac < 0.3 ? '#ff8a3d' : '#62f3ff');
-      ctx.fillStyle = hg; ctx.fillRect(x + 88, y + 54, bw * frac, 12);
-      ctx.fillStyle = '#fff'; ctx.font = '600 13px "Chakra Petch", sans-serif'; ctx.fillText(`HP ${Math.max(0, Math.round(a.dispHP))} / ${a.maxHP}`, x + 88, y + 82);
-      ctx.fillStyle = '#ffd166'; ctx.fillText(`WILL ${a.u.will}`, x + 260, y + 82);
-      ctx.fillStyle = '#7dc8ff'; ctx.fillText(`EN ${a.u.en}`, x + 340, y + 82);
+      ctx.fillStyle = hg; ctx.fillRect(x + 88, y + 56, bw * frac, 9);
+      ctx.fillStyle = '#fff'; ctx.font = '650 15px system-ui, sans-serif'; ctx.fillText(`HP ${Math.max(0, Math.round(a.dispHP))} / ${a.maxHP}`, x + 88, y + 83, 158);
+      ctx.fillStyle = '#ffd166'; ctx.fillText(`WILL ${a.u.will}`, x + 253, y + 83, 78);
+      ctx.fillStyle = '#7dc8ff'; ctx.fillText(`EN ${a.u.en}`, x + 337, y + 83, 70);
       ctx.restore();
     }
   }
@@ -284,8 +289,8 @@ const SCENE = (() => {
     ctx.strokeStyle = ART.rgba(b.col, 0.8); ctx.lineWidth = 2; ctx.stroke();
     ctx.save(); ctx.beginPath(); ctx.moveTo(x + 4, y + 4); ctx.lineTo(x + 116, y + 4); ctx.lineTo(x + 92, y + 116); ctx.lineTo(x - 20, y + 116); ctx.closePath(); ctx.clip();
     ctx.drawImage(ART.portrait(b.pid, b.expr, 112, 140), x - 6, y - 4, 112, 140); ctx.restore();
-    ctx.fillStyle = b.col; ctx.font = '700 15px "Chakra Petch", sans-serif'; ctx.fillText(b.name, x + 126, y + 28);
-    ctx.fillStyle = '#fff'; ctx.font = '600 21px "Saira", "Chakra Petch", sans-serif';
+    ctx.fillStyle = b.col; ctx.font = '700 19px system-ui, sans-serif'; ctx.fillText(b.name, x + 126, y + 30, 450);
+    ctx.fillStyle = '#fff'; ctx.font = '600 23px system-ui, sans-serif';
     wrap(ctx, b.text.slice(0, Math.floor((now - b.start) / 18)), x + 126, y + 58, 450, 26);
     ctx.restore();
   }
@@ -305,6 +310,7 @@ const SCENE = (() => {
     ctx.beginPath(); ctx.rect(0, by, W, bh); ctx.clip();
     const p = ART.portrait(cut.pid, 'angry', 240, 300);
     ctx.drawImage(p, 0, 70, 240, 120, W / 2 - 560, by - 40, 1120, 560 * 0.5 + 40);
+    if(cut.pid2){ctx.save();ctx.beginPath();ctx.rect(W/2,by,W/2,bh);ctx.clip();const p2=ART.portrait(cut.pid2,'angry',240,300);ctx.drawImage(p2,0,70,240,120,W/2-80,by-40,720,320);ctx.restore();ctx.strokeStyle='#ffffff';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(W/2+35,by);ctx.lineTo(W/2-35,by+bh);ctx.stroke();}
     ctx.restore();
     // text
     ctx.font = 'italic 800 34px "Chakra Petch", sans-serif'; ctx.textAlign = 'center';
@@ -321,7 +327,7 @@ const SCENE = (() => {
       if (st.dodged) return; st.dodged = true;
       afterimage(d); SFX.play('whoosh');
       tween(d, { ox: -d.dir * 70, oy: -50 }, 140, 'out').then(() => { afterimage(d); return wait(260); }).then(() => tween(d, { ox: 0, oy: 0 }, 260, 'io'));
-      popText(cx, cy - 60, 'MISS', '#9fd8ff', 46);
+      popText(cx, cy - 60, res.phantom?'PHANTOM':'MISS', '#9fd8ff', 46);
       return;
     }
     const pw = ctxo.power || 1;
@@ -630,15 +636,15 @@ const SCENE = (() => {
     a.ox = tx; bgSpeed = 20; a.opts.thrust = 0;
   }
   async function dashBack(a) { a.opts.thrust = 1; afterimage(a); await tween(a, { ox: 0, oy: 0 }, 300, 'io'); a.opts.thrust = 0; }
-  async function cutIn(a, w) {
+  async function cutIn(a, w, partner) {
     const pid = a.u.portrait || a.u.pilot;
-    cut = { start: now, pid, text: w.cut || '', wname: w.name, col: typeCol(w), side: a.side, end: now + 1700 };
+    cut = { start: now, pid, pid2:partner?.u.pilot, text: w.cut || '', wname: w.name, col: typeCol(w), side: a.side, end: now + 1700 };
     SFX.play('cutin'); await wait(1700); cut = null;
   }
   function say(a, kind) {
     const lines = (PILOTS[a.u.pilot] && PILOTS[a.u.pilot].lines) || (EPILOTS[a.u.lineSet] && EPILOTS[a.u.lineSet].lines) || EPILOTS.grunt_c.lines;
     const pool = lines[kind] || lines.atk; const text = pool[Math.floor(Math.random() * pool.length)];
-    banner = { start: now, side: a.side, pid: a.u.portrait || a.u.pilot, name: a.u.pname || NAMES[a.u.pilot] || '', text, col: a.u.team === 'player' ? '#62f3ff' : '#ff6b6b', expr: kind === 'hit' ? 'shock' : kind === 'kill' ? 'smile' : 'angry' };
+    banner = { start: now, side: a.side, pid: a.u.portrait || a.u.pilot, name: a.u.pname || NAMES[a.u.pilot] || '', text, col: a.u.team === 'player' ? '#62f3ff' : '#ff6b6b', expr: kind === 'hit' ? (a.m.armor === 'BIO' ? 'hurt' : 'shock') : kind === 'kill' ? 'smile' : 'angry' };
   }
 
   async function doAttack(a, d, ev) {
@@ -648,9 +654,9 @@ const SCENE = (() => {
     popText(a.side === 'L' ? 330 : 950, 150, ev.w.name, typeCol(ev.w), 30, 1400, { vy: 0, italic: true });
     await wait(500);
     if (ev.w.finisher) {
-      banner = null; await cutIn(a, ev.w);
+      banner = null; await cutIn(a, ev.w, ev.comboPartner?actors.S:null);
       const seq = ev.w.seq || ['slash'];
-      for (let i = 0; i < seq.length; i++) await anim(seq[i], a, d, ev.w, ev.res, st, i === seq.length - 1);
+      for (let i = 0; i < seq.length; i++) await anim(seq[i], ev.comboPartner&&actors.S&&i%2&&i<seq.length-1?actors.S:a, d, ev.w, ev.res, st, i === seq.length - 1);
     } else {
       await anim(ev.w.anim, a, d, ev.w, ev.res, st, true);
     }
@@ -667,11 +673,12 @@ const SCENE = (() => {
     // Painted actors and painted environments share one canvas. Only use the
     // 3D fallback when an exchange has no painted unit assets at all.
     use3D = false;
-    if (R3D.ok && !ASSETS.unit(opts.left.mech) && !ASSETS.unit(opts.right.mech)) {
+    if (R3D.ok && !(typeof QUALITY!=='undefined'&&QUALITY.low) && !ASSETS.unit(opts.left.mech) && !ASSETS.unit(opts.right.mech)) {
       try { if (!bgCv) { bgCv=document.createElement('canvas');bgCv.width=W;bgCv.height=H;bgCtx=bgCv.getContext('2d'); } R3D.battleInit(document.getElementById('battle3d'),bgCv);use3D=true; } catch(e) { console.warn('3D battle disabled',e); }
     }
     document.getElementById('battle3d').hidden = !use3D;
     const el = document.getElementById('battle'); el.hidden = false;
+    const restoreScore=typeof SFX.battle==='function'?SFX.battle(opts.left,opts.right,typeof G!=='undefined'?G.map?.ch:null):null;
     running = true; skipAll = false; timeScale = SAVE.settings.anim === 'fast' ? 2 : 1; now = 0; last = 0;
     parts.length = 0; fxs.length = 0; tweens.length = 0; waiters.length = 0; texts.length = 0; cut = null; banner = null; tintA = 0; flashA = 0; zoom = 1; zoomTarget = 1;
     bgKey = opts.bg || 'sky'; bgSpeed = 20; if (use3D) R3D.battleBegin(bgKey, !!ASSETS.drawBattleBG(bgCtx, W, H, bgKey, 0));
@@ -683,10 +690,12 @@ const SCENE = (() => {
     SFX.play('whoosh');
     await Promise.all([tween(actors.L, { ox: 0 }, 450, 'out'), tween(actors.R, { ox: 0 }, 450, 'out')]);
     await wait(250);
+    if(opts.intercept){const {side,target}=opts.intercept,guard=actors[side],protectedActor=makeActor(target,side);protectedActor.hp=protectedActor.dispHP=target.hp;actors[side]=protectedActor;actors.S=guard;guard.ox=-guard.dir*550;SFX.play('barrier');popText(guard.x,200,'SUPPORT DEFEND','#92d7ff',30,1300,{vy:0});await Promise.all([tween(protectedActor,{ox:-protectedActor.dir*100,alpha:.25},260),tween(guard,{ox:0},300)]);actors[side]=guard;actors.S=null;}
     for (const ev of opts.events) {
       let a = actors[ev.by]; const d = actors[ev.by === 'L' ? 'R' : 'L'];
       if (!a.visible || !d.visible) break;
-      if (ev.support) { // support attacker slides in
+      if(ev.comboPartner){const partner=makeActor(ev.comboPartner,ev.by);partner.x=a.x-a.dir*120;partner.ox=-a.dir*500;actors.S=partner;await tween(partner,{ox:0},300);popText(a.x,200,'COMBINATION ATTACK','#ffd166',30,1400,{vy:0});await doAttack(a,d,ev);await tween(partner,{ox:-a.dir*500},250);actors.S=null;
+      } else if (ev.support) { // support attacker slides in
         const s = makeActor(ev.support, ev.by); s.ox = a.dir * -600; s.hp = s.dispHP = ev.support.hp; actors.S = s;
         tween(a, { ox: a.dir * -500, alpha: 0 }, 300, 'in'); await tween(s, { ox: 0 }, 350, 'out');
         popText(s.x, 200, 'SUPPORT ATTACK', '#7dffb0', 28, 1200, { vy: 0 });
@@ -700,6 +709,7 @@ const SCENE = (() => {
     await wait(400);
     running = false; cancelAnimationFrame(raf);
     el.hidden = true;
+    if(restoreScore)restoreScore();
   }
-  return { play, init };
+  return { play, init,skip:()=>{skipAll=true},fastForward:()=>{timeScale=timeScale===1?3:1} };
 })();

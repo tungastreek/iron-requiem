@@ -52,6 +52,7 @@ const EXPANSION = (() => {
   MECHS.kestrel.ratings={air:'S'};
   MECHS.cinder.abil={regenEN:.1};
   MECHS.mantle.abil={barrier:{name:'Carapace',val:450,en:8,bypass:['BLADE','GRAV']}};
+  MECHS.marauder.faction='free_states';
   const crew = [
     ['anika','Anika Sen','aegis','gunnar','EXPL',['Rescue Line','Shelter','Evacuation'],'cap_ilse','Open Corridor','Allies within 2 tiles gain +10 hit and evasion.',['mend','ironwall'],'portraits-relief',0,
       ['There is a shelter behind me. You stop here.','Aegis, anchor the line.'],['Door holds. Keep moving.'],['The last transport is clear.']],
@@ -79,9 +80,9 @@ const EXPANSION = (() => {
   // Interludes are placed between the original chapters, preserving the route
   // split, character reveals, player choices, and both authored endings.
   const extras=[
-    {id:'i1',after:['c1'],next:'c2',num:'01.5',title:'The Shelter Line',bg:'city',theme:'urban',lvl:2,join:['anika','corin'],enemy:['crawler','mantle','leech','wyrmling','crawler','mantle'],
-      brief:'The Halcyon cannot leave the valley while the relief crews are trapped. Clear the eastern approach before the shelters lose power.',
-      pre:[['ilse','Kestrel is behind us. Six shelters are still broadcasting. We turn back.'],['mira','The command tower is gone. Dad is gone. And those things are still—'],['anika','Mira. I heard him order the shelters open before his channel cut. There are people alive because he stayed.'],['mira','Then we get them out. Show me the road.'],['corin','The lower road is underwater. Nautilus can mark a crossing. Keep their jaws away from the pumps.'],['rei','The creatures are circling the substations. The core gets louder when they touch the cables.'],['anika','We can ask why when everyone is breathing. Aegis takes point.']],
+    {id:'i1',after:['c1'],next:'c2',num:'01.5',title:'The Shelter Line',bg:'city',theme:'urban',lvl:2,join:['anika','corin'],enemy:['crawler','lancer','leech','wyrmling','bailiff','mantle'],
+      brief:'Open the eastern shelter road. Ourobor are at the substations, and a Concord robot detachment has sealed the evacuation checkpoint.',
+      pre:[['ilse','Kestrel is behind us. Six shelters are still broadcasting. We turn back.'],['mira','The command tower is gone. Dad is gone. And those things are still—'],['anika','Mira. I heard him order the shelters open before his channel cut. There are people alive because he stayed.'],['mira','Then we get them out. Show me the road.'],['corin','Ourobor at the pumps. And north of the crossing, I count Concord Lancers and a Bailiff. They have their rifles on the evacuation lane.'],['grunt_c','Halcyon, stand clear of the checkpoint. Our orders are to seize the prototype and hold the road.'],['ilse','That road is full of civilians. Lower your weapons and let them through.'],['anika','If they move on the buses, Aegis takes point.']],
       post:[['anika','Shelter Six reports its last bus clear. No one left below.'],['mira','You said he opened the shelters. Did you hear anything after that?'],['anika','Only the evacuation tone. I kept the recording, if you want it.'],['mira','Not tonight. Keep it safe. Please.'],['corin','We are coming with you, Captain. Somebody has to keep your people afloat.']]},
     {id:'i2',after:['c2'],next:'c3',num:'02.5',title:'A Record of the Missing',bg:'ruins',theme:'coast',lvl:4,join:['leda','hugo'],enemy:['bailiff','lancer','warden','leech','bailiff','mantle'],
       brief:'Recover the civilian relay archive before Concord seizure teams destroy it. The survey crews have brought heavy equipment.',
@@ -97,8 +98,8 @@ const EXPANSION = (() => {
       post:[['mira','I thought saying their names would make me feel better.'],['leda','Did it?'],['mira','It made them people. That is harder.'],['ilse','Keep that difficulty. Commands get dangerous when it becomes easy.']]},
     {id:'i5',after:['c6a','c6b'],next:'c7',num:'06.5',title:'A Voice Outside the Choir',bg:'colony',theme:'colony',lvl:15,join:['orran','vale'],enemy:['cantor','knight','shard','marauder','cantor','bailiff'],
       brief:'A Vael dissident and a civilian escort are trapped between three forces. Silence the conductors and secure the colony docks.',
-      pre:[['orran','Do not answer the conductor. It will use the reply to find you.'],['yuna','I can hear it through the hull. It is making every voice sound the same.'],['vale','My convoy followed a rescue signal. It turned out to be a targeting beacon. Orpheus cut it before the cruisers arrived.'],['orran','The Choir calls that treason. My friend called it listening. She is no longer here to name it.'],['rei','Then you can name it. Fly with us.'],['vale','Palisade has eighteen families behind its shield. Find us a route, and we are yours.']],
-      post:[['orran','You will ask me what the Vael want. I cannot answer for all of them.'],['yuna','Good. Neither can I.'],['vale','The convoy wants to stop for the night. Somewhere with a sky.'],['ilse','Pell, find them a sky. Then put their escort on the roster.']]},
+      pre:[['orran','Do not answer the conductor. It will use the reply to find you.'],['rei','I can hear it through the hull. It is making every voice sound the same.'],['vale','My convoy followed a rescue signal. It turned out to be a targeting beacon. Orpheus cut it before the cruisers arrived.'],['orran','The Choir calls that treason. My friend called it listening. She is no longer here to name it.'],['rei','Then you can name it. Fly with us.'],['vale','Palisade has eighteen families behind its shield. Find us a route, and we are yours.']],
+      post:[['orran','You will ask me what the Vael want. I cannot answer for all of them.'],['rei','Good. Neither can I.'],['vale','The convoy wants to stop for the night. Somewhere with a sky.'],['ilse','Pell, find them a sky. Then put their escort on the roster.']]},
     {id:'i6',after:['c7'],next:'c8',num:'07.5',title:'The Molting Choir',bg:'hive',theme:'hive',lvl:18,join:[],enemy:['mantle','leech','chrysalis','bellwether','wyrmling','mantle','leech'],
       brief:'A wounded brood has mistaken the fleet’s reactor wake for a stolen Heart fragment. Clear a corridor without destroying its nursery.',
       pre:[['corin','The pressure echoes are not attack calls. Something underneath is hurt.'],['leda','Every human sonar pulse sounds like a drill to them. We are announcing an excavation.'],['brann','Can we turn the sonar off?'],['gunnar','In a tunnel full of teeth? Terrible idea.'],['anika','We can hold a visual line. Shield to shield. Slow, but possible.'],['rei','The core knows the nursery is there. It keeps pulling us away from it. Follow me.']],
@@ -114,16 +115,21 @@ const EXPANSION = (() => {
   ];
   const stagePilots=[['rei','mira','ilse','gunnar'],['rei','mira','ilse','gunnar','odessa'],['rei','mira','ilse','gunnar','brann','odessa'],['rei','mira','ilse','gunnar','brann','odessa'],['rei','mira','ilse','gunnar','brann','odessa','jin','yuna'],['rei','mira','ilse','gunnar','brann','odessa','jin','yuna','sera'],['rei','mira','ilse','gunnar','brann','odessa','jin','yuna','sera','lucien'],['rei','mira','ilse','gunnar','brann','odessa','jin','yuna','sera','lucien']];
   const slots=[[3,5],[3,7],[1,3],[2,8],[4,6],[1,6],[4,9],[5,4],[2,2],[5,8]],enemySlots=[[11,2],[12,8],[13,5],[15,7],[14,2],[15,10],[10,10],[11,5],[16,3],[16,9],[13,10],[10,1]];
+  const mapSizes = [[16,11], [20,11], [18,14], [23,11], [18,14], [20,16], [22,14], [18,13]];
   const script=(rows)=>rows.map(([s,t])=>({s,e:'normal',t}));
   extras.forEach((x,i)=>{
+    const [width, height] = mapSizes[i];
     const oldNext=x.after.length?CHAPTERS[x.after[0]].next:null;
     const next=x.next||oldNext;
     x.after.forEach(id=>CHAPTERS[id].next=x.id);
     CHAPTERS[x.id]={num:x.num,title:x.title,bg:x.bg,mood:i<4?'tense':'battle',brief:x.brief,
       pre:[{title:x.title.toUpperCase(),sub:'The Unbroken Chorus'},{bg:x.bg,m:'tense'},...script(x.pre),...x.join.map(join=>({join}))],
-      map:{w:18,h:12,theme:x.theme,seed:1401+i*137,space:['space','colony','vael'].includes(x.theme)},
+      map:{w:width,h:height,theme:x.theme,seed:1401+i*137,space:['space','colony','vael'].includes(x.theme)},
       deploy:stagePilots[i].map((p,k)=>({p,x:slots[k][0],y:slots[k][1]})),
-      enemies:x.enemy.concat(x.enemy.slice(0,i<2?2:i<5?3:5)).map((m,k)=>E(m,enemySlots[k][0],enemySlots[k][1],x.lvl,{tag:'interlude_'+i+'_'+k})),
+      enemies:x.enemy.concat(x.enemy.slice(0,i<2?2:i<5?3:5)).map((m,k)=>{
+        const [x,y] = enemySlots[k];
+        return E(m, x + Math.max(0, Math.round((width - 18) * (x - 9) / 8)), Math.round(y * (height - 1) / 11), extras[i].lvl, {tag:'interlude_'+i+'_'+k});
+      }),
       events:[],win:'rout',vital:['rei','ilse'],
       bonus:{text:'Clear by turn 9',check:s=>s.turn<=9,part:['repair','targeting','reactor','plating','resonator','nanocoat','thruster','reactor'][i]},
       post:[{bg:i===5?'hive':'bridge',m:'calm'},...script(x.post),{codex:'unbroken'}],next,

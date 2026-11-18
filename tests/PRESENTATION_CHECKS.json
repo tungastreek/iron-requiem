@@ -1,0 +1,30 @@
+{
+  "status": "passed",
+  "quality": {
+    "softwareFallback": true,
+    "slowFrameFallback": true,
+    "manualHigh": true,
+    "dpr": true,
+    "particleHalving": true
+  },
+  "audio": {
+    "themes": 12,
+    "userGestureGate": true,
+    "sequencer": true,
+    "crossfadeLifecycle": true,
+    "optionalFileFallback": true,
+    "factionAndPhaseSelection": true,
+    "soundCues": 33
+  },
+  "touch": {
+    "tapConfirmation": true,
+    "pinchZoom": true,
+    "inverseCoordinates": true,
+    "longPress": true,
+    "noGestureCommands": true
+  },
+  "limits": [
+    "Simulated WebAudio and DOM only; no audible playback or browser layout verification.",
+    "No measured device frame times or screenshots; end-to-end browser checks remain pending."
+  ]
+}

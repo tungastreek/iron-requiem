@@ -1,0 +1,18 @@
+{
+  "anchors": {
+    "muzzle": [
+      0.79,
+      0.46
+    ],
+    "core": [
+      0.51,
+      0.42
+    ],
+    "head": [
+      0.54,
+      0.12
+    ]
+  },
+  "scale": 1,
+  "facesLeft": false
+}

@@ -7,10 +7,10 @@ const ARCHIVE=(()=>{
     const root=h('div',{class:'card archive'});
     const render=()=>{
       root.replaceChildren();
-      const ids=Object.keys(MECHS).filter(id=>id!=='carmine_e'&&(filter==='all'||filter==='new'&&EXPANSION.units.includes(id)||filter==='allies'&&playerMechs.has(id)||filter==='enemies'&&!playerMechs.has(id)));
+      const ids=Object.keys(MECHS).filter(id=>id!=='carmine_e'&&(filter==='all'||filter==='new'&&(EXPANSION.units.includes(id)||ENEMY_ROSTER.ids.includes(id))||filter==='allies'&&playerMechs.has(id)||filter==='enemies'&&!playerMechs.has(id)));
       if(!ids.includes(selected))selected=ids[0];const m=MECHS[selected],su=ASSETS.unit(selected);
       root.append(h('div',{class:'archiveHead'},h('div',{},h('div',{class:'eyebrow'},'HALCYON FIELD ARCHIVE'),h('h2',{},'Machines with a purpose')),h('button',{class:'btn',onclick:()=>close()},'Close')));
-      root.append(h('div',{class:'row archiveFilters'},[['new','New machines · 16'],['allies','Allied frames'],['enemies','Enemy frames'],['all','All frames']].map(([id,label])=>h('button',{class:'btn'+(filter===id?' primary':''),onclick:()=>{filter=id;weaponIndex=0;render();}},label))));
+      root.append(h('div',{class:'row archiveFilters'},[['new','New machines'],['allies','Allied frames'],['enemies','Enemy frames'],['all','All frames']].map(([id,label])=>h('button',{class:'btn'+(filter===id?' primary':''),onclick:()=>{filter=id;weaponIndex=0;render();}},label))));
       const list=h('div',{class:'archiveList'},ids.map(id=>{const c=h('canvas',{width:100,height:100});const icon=ASSETS.mapIcon(id,50,false);if(icon)c.getContext('2d').drawImage(icon,0,0);return h('button',{class:'archiveItem'+(id===selected?' on':''),onclick:()=>{selected=id;weaponIndex=0;render();}},c,h('span',{},MECHS[id].name));}));
       const stage=h('canvas',{width:720,height:420,class:'archiveStage'}),ctx=stage.getContext('2d');
       if(!ASSETS.drawBattleBG(ctx,720,420,background,0))ART.drawBG(ctx,720,420,background,0,0);
@@ -25,7 +25,7 @@ const ARCHIVE=(()=>{
   });}
   async function demo(mid,w,bg){
     const enemy=playerMechs.has(mid)?'mantle':'aegis';
-    const make=(id,side)=>{const m=MECHS[id],pilot=Object.keys(PILOTS).find(p=>PILOTS[p].mech===id)||null;return {mech:id,team:side,pilot,lvl:12,hp:m.hp,hpStart:m.hp,en:m.en,will:140,status:{},buf:{},ammo:{},x:side==='player'?2:4,y:4,lineSet:m.armor==='BIO'?'beast':m.armor==='VOID'?'vael':'grunt_c'};};
+    const make=(id,side)=>{const m=MECHS[id],pilot=Object.keys(PILOTS).find(p=>PILOTS[p].mech===id)||null;return {mech:id,team:side,pilot,lvl:12,hp:m.hp,hpStart:m.hp,en:m.en,will:140,status:{},buf:{},ammo:{},x:side==='player'?2:4,y:4,portrait:OUROBOR_FACE[id],lineSet:m.armor==='BIO'?'beast':m.armor==='VOID'?'vael':'grunt_c'};};
     const left=make(mid,'player'),right=make(enemy,'enemy'),dmg=Math.min(right.hp-1,Math.round(w.pow*.6));
     const result={hit:true,crit:false,dmg,mult:1,barrier:null,status:null};
     $('#title').hidden=true;SFX.music('battle');

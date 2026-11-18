@@ -24,4 +24,6 @@ for source in sorted((ROOT / 'assets').rglob('*.png')):
     target.write_text('window.IRON_OFFLINE=window.IRON_OFFLINE||{};window.IRON_OFFLINE[' + json.dumps(key) + ']=' + json.dumps(data) + ';\n')
     entries.append({'path': rel, 'width': width, 'height': height, 'sha256': hashlib.sha256(raw).hexdigest()})
 (ROOT / 'assets' / 'manifest.json').write_text(json.dumps(entries, indent=2) + '\n')
+metadata={kind:{p.stem:json.loads(p.read_text()) for p in sorted((ROOT/'assets'/kind).glob('*.json'))} for kind in ['units','portraits']}
+(ROOT/'assets'/'art-metadata.js').write_text('window.IRON_ART_META='+json.dumps(metadata,separators=(',',':'))+';\n')
 print(f'Packaged {len(entries)} images for offline use; refreshed assets/manifest.json')

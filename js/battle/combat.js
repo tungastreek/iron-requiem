@@ -69,7 +69,7 @@ const CB = (() => {
       o.SP = 999;
     }
     const pm = partFx(u); if (pm.sp) o.SP += pm.sp;
-    return o;
+    return typeof ENEMIES!=='undefined'?ENEMIES.pilotStats(u,o):o;
   }
   function partFx(u) {
     const r = {};
@@ -97,10 +97,11 @@ const CB = (() => {
     if (u.status && u.status.BREAK) o.arm = Math.round(o.arm * 0.65);
     if (u.status && u.status.SLOW) o.move = Math.max(1, o.move - 2);
     if (u.mode === 'fighter') { o.move += 2; o.mob += 10; }
-    return o;
+    return typeof ENEMIES!=='undefined'?ENEMIES.mechStats(u,o):o;
   }
   function weapons(u) {
     const m = MECHS[u.mech]; let list = m.weapons;
+    if (typeof COMBOS !== 'undefined') list=list.concat(COMBOS.weapons(u));
     if (u.mode === 'fighter' && u.mech === 'sylph') list = list.filter(w => w.anim === 'vulcan' || w.name === 'Beam Pistol').concat([W('Strafe Run', 'KIN', 2800, 1, 3, { acc: 15, ammo: 0, en: 15, anim: 'vulcan', crit: 15 })]);
     const up = (u.team === 'player' && SAVE.mechs[u.mech]) ? (SAVE.mechs[u.mech].up.wpn || 0) : Math.floor((u.lvl || 1) / 6);
     const sk = skills(u);
@@ -113,7 +114,8 @@ const CB = (() => {
     });
   }
   function dist(a, b) { return Math.abs(a.x - b.x) + Math.abs(a.y - b.y); }
-  function usable(u, w, d, moved, counter) {
+  function usable(u, w, d, moved, counter, target) {
+    if(w.combo&&(counter||!COMBOS.partner(u,w)||(target&&!COMBOS.canTarget(u,w,target))))return 'partner';
     if (d != null && (d < w.rmin || d > w.rmax)) return 'range';
     if (moved && !w.post && !counter) return 'move';
     if (w.en && u.en < w.en) return 'en';
@@ -163,6 +165,7 @@ const CB = (() => {
     if (a.status.JAM) h -= 25;
     h += prevailF(a) * 20;
     if (skills(d).has('cap_mira')) h -= 20;
+    if(typeof ENEMIES!=='undefined')h+=ENEMIES.accuracy(a)+ENEMIES.aura(a,G.map)-ENEMIES.aura(d,G.map);
     if (mode === 'evade') h *= 0.5;
     return Math.max(0, Math.min(100, Math.round(h)));
   }
@@ -179,7 +182,8 @@ const CB = (() => {
   }
   function damage(a, d, w, mode, crit, rand = 1) {
     const ap = pstats(a), dp = pstats(d), dm = mstats(d);
-    const stat = w.cat === 'M' ? ap.MEL : ap.RNG;
+    let stat = w.cat === 'M' ? ap.MEL : ap.RNG;
+    if(w.combo){const p=COMBOS.partner(a,w);if(p){const ps=pstats(p);stat=(stat+(w.cat==='M'?ps.MEL:ps.RNG))/2;}}
     const atk = w.pow * (stat + a.will) / 200;
     const def = dm.arm * (dp.DEF + d.will) / 200 * (1 + tileBonus(d).def / 100);
     let dmg = Math.max(atk * 0.12, atk - def);
@@ -202,6 +206,7 @@ const CB = (() => {
     if (sd.has('nerves')) dmg *= 0.9;
     if (sd.has('guardian') && d.will >= 130) dmg *= 0.8;
     if (sd.has('cap_sera')) dmg *= 0.85;
+    if(typeof ENEMIES!=='undefined')dmg*=ENEMIES.reduction(d,G.map)*ENEMIES.damageMultiplier(a,w);
     dmg *= rand;
     // barrier
     let barrier = null;
@@ -216,13 +221,14 @@ const CB = (() => {
   }
   // Roll an attack (pure; returns result). Apply with applyResult.
   function roll(a, d, w, mode) {
+    if(typeof ENEMIES!=='undefined'&&ENEMIES.phantom(d))return {hit:false,crit:false,dmg:0,barrier:null,status:null,mult:typeMult(a,d,w),w,phantom:true};
     const hc = hitChance(a, d, w, mode);
     const hit = Math.random() * 100 < hc;
     const crit = hit && Math.random() * 100 < critChance(a, d, w);
     const { dmg, barrier } = hit ? damage(a, d, w, mode, crit, 0.95 + Math.random() * 0.1) : { dmg: 0, barrier: null };
     let status = null;
     if (hit && w.status) {
-      let ch = w.status.ch + (skills(a).has('afflict') ? 25 : 0);
+      let ch = w.status.ch + (skills(a).has('afflict') ? 25 : 0)+(typeof ENEMIES!=='undefined'?ENEMIES.statusBonus(a):0);
       const pf = partFx(d); if (pf.sres) ch *= (1 - pf.sres);
       if (skills(d).has('guardian') && d.will >= 130) ch = 0;
       if (d.boss) ch *= 0.6;
@@ -234,10 +240,12 @@ const CB = (() => {
   function willCap(u) { return skills(u).has('overdrive') ? 170 : 150; }
   function addWill(u, n) { u.will = Math.min(willCap(u), Math.max(50, u.will + n)); }
   function spend(u, w) {
+    if(w.combo){const p=COMBOS.partner(u,w);if(p){p.en=Math.max(0,p.en-w.partnerEN);p.acted=true;p.moved=true;}}
     if (w.en) u.en = Math.max(0, u.en - w.en);
     if (w.ammo) { if (u.ammo[w.idx] == null) u.ammo[w.idx] = w.ammo; u.ammo[w.idx]--; }
   }
   function applyResult(a, d, r) {
+    if(typeof ENEMIES!=='undefined')ENEMIES.spent(a);
     const sa = skills(a), sd = skills(d);
     if (r.hit) {
       d.hp = Math.max(d.protect ? 1 : 0, d.hp - r.dmg);
@@ -256,7 +264,7 @@ const CB = (() => {
   function bestWeapon(a, d, moved, counter) {
     const ds = dist(a, d); let best = null, bv = -1;
     for (const w of weapons(a)) {
-      if (usable(a, w, ds, moved, counter)) continue;
+      if (usable(a, w, ds, moved, counter, d)) continue;
       const f = forecast(a, d, w, 'counter');
       let v = f.dmg * (f.hit / 100);
       if (f.dmg >= d.hp) v += 5000 * (f.hit / 100);

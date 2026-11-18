@@ -1,0 +1,352 @@
+{
+  "status": "passed",
+  "checks": 59,
+  "coverage": {
+    "spitter": [
+      "c3",
+      "c7",
+      "i6"
+    ],
+    "burrower": [
+      "c3",
+      "c6a",
+      "i6"
+    ],
+    "broodmaw": [
+      "c5a",
+      "c6a",
+      "i6"
+    ],
+    "skyray": [
+      "c5a",
+      "c7"
+    ],
+    "valkyr": [
+      "c2",
+      "i3"
+    ],
+    "aegisdrone": [
+      "c4",
+      "i2",
+      "i7"
+    ],
+    "siegecrawler": [
+      "c4",
+      "i3"
+    ],
+    "shade": [
+      "c2",
+      "c4",
+      "i2"
+    ],
+    "rigger": [
+      "c5b",
+      "i4"
+    ],
+    "harpoon": [
+      "c6b",
+      "i4"
+    ],
+    "breaker": [
+      "c6b",
+      "i5"
+    ],
+    "gale": [
+      "c5b",
+      "i4"
+    ],
+    "cantor": [
+      "c9",
+      "i5",
+      "i7",
+      "i8"
+    ],
+    "seraphlancer": [
+      "c8",
+      "i7"
+    ],
+    "monolith": [
+      "c8",
+      "c10",
+      "i8"
+    ],
+    "echo": [
+      "c9",
+      "c10",
+      "i8"
+    ]
+  },
+  "variants": {
+    "c1": {
+      "total": 6,
+      "elite": 0,
+      "commander": 0,
+      "corrupted": 0
+    },
+    "c2": {
+      "total": 7,
+      "elite": 0,
+      "commander": 0,
+      "corrupted": 0
+    },
+    "c3": {
+      "total": 7,
+      "elite": 1,
+      "commander": 0,
+      "corrupted": 0
+    },
+    "c4": {
+      "total": 8,
+      "elite": 1,
+      "commander": 1,
+      "corrupted": 0
+    },
+    "c5a": {
+      "total": 7,
+      "elite": 1,
+      "commander": 0,
+      "corrupted": 0
+    },
+    "c6a": {
+      "total": 9,
+      "elite": 1,
+      "commander": 1,
+      "corrupted": 0
+    },
+    "c5b": {
+      "total": 8,
+      "elite": 1,
+      "commander": 0,
+      "corrupted": 0
+    },
+    "c6b": {
+      "total": 9,
+      "elite": 1,
+      "commander": 1,
+      "corrupted": 0
+    },
+    "c7": {
+      "total": 8,
+      "elite": 2,
+      "commander": 1,
+      "corrupted": 1
+    },
+    "c8": {
+      "total": 10,
+      "elite": 3,
+      "commander": 1,
+      "corrupted": 0
+    },
+    "c9": {
+      "total": 8,
+      "elite": 2,
+      "commander": 1,
+      "corrupted": 1
+    },
+    "c10": {
+      "total": 7,
+      "elite": 2,
+      "commander": 1,
+      "corrupted": 1
+    },
+    "i1": {
+      "total": 8,
+      "elite": 0,
+      "commander": 0,
+      "corrupted": 0
+    },
+    "i2": {
+      "total": 8,
+      "elite": 0,
+      "commander": 0,
+      "corrupted": 0
+    },
+    "i3": {
+      "total": 9,
+      "elite": 1,
+      "commander": 0,
+      "corrupted": 0
+    },
+    "i4": {
+      "total": 9,
+      "elite": 1,
+      "commander": 0,
+      "corrupted": 0
+    },
+    "i5": {
+      "total": 9,
+      "elite": 2,
+      "commander": 1,
+      "corrupted": 1
+    },
+    "i6": {
+      "total": 12,
+      "elite": 3,
+      "commander": 1,
+      "corrupted": 1
+    },
+    "i7": {
+      "total": 12,
+      "elite": 3,
+      "commander": 1,
+      "corrupted": 1
+    },
+    "i8": {
+      "total": 11,
+      "elite": 3,
+      "commander": 1,
+      "corrupted": 1
+    }
+  },
+  "rigs": [
+    {
+      "id": "spitter",
+      "meshes": 58,
+      "bounds": [
+        124,
+        103,
+        77
+      ]
+    },
+    {
+      "id": "burrower",
+      "meshes": 34,
+      "bounds": [
+        162,
+        42,
+        92
+      ]
+    },
+    {
+      "id": "broodmaw",
+      "meshes": 74,
+      "bounds": [
+        156,
+        120,
+        94
+      ]
+    },
+    {
+      "id": "skyray",
+      "meshes": 89,
+      "bounds": [
+        203,
+        65,
+        284
+      ]
+    },
+    {
+      "id": "valkyr",
+      "meshes": 227,
+      "bounds": [
+        103,
+        124,
+        113
+      ]
+    },
+    {
+      "id": "aegisdrone",
+      "meshes": 9,
+      "bounds": [
+        70,
+        65,
+        72
+      ]
+    },
+    {
+      "id": "siegecrawler",
+      "meshes": 83,
+      "bounds": [
+        161,
+        89,
+        123
+      ]
+    },
+    {
+      "id": "shade",
+      "meshes": 224,
+      "bounds": [
+        71,
+        134,
+        83
+      ]
+    },
+    {
+      "id": "rigger",
+      "meshes": 244,
+      "bounds": [
+        86,
+        165,
+        87
+      ]
+    },
+    {
+      "id": "harpoon",
+      "meshes": 230,
+      "bounds": [
+        95,
+        131,
+        84
+      ]
+    },
+    {
+      "id": "breaker",
+      "meshes": 230,
+      "bounds": [
+        75,
+        128,
+        99
+      ]
+    },
+    {
+      "id": "gale",
+      "meshes": 15,
+      "bounds": [
+        130,
+        55,
+        76
+      ]
+    },
+    {
+      "id": "cantor",
+      "meshes": 11,
+      "bounds": [
+        60,
+        129,
+        49
+      ]
+    },
+    {
+      "id": "seraphlancer",
+      "meshes": 253,
+      "bounds": [
+        111,
+        160,
+        116
+      ]
+    },
+    {
+      "id": "monolith",
+      "meshes": 7,
+      "bounds": [
+        107,
+        150,
+        104
+      ]
+    },
+    {
+      "id": "echo",
+      "meshes": 237,
+      "bounds": [
+        129,
+        154,
+        133
+      ]
+    }
+  ],
+  "limits": [
+    "3D rigs were constructed and animated as geometry without a WebGL renderer.",
+    "No screenshots or browser end-to-end run: computer/browser access is blocked.",
+    "Full campaign difficulty and visual appearance require a playtest."
+  ]
+}

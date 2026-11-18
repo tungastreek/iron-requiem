@@ -108,6 +108,13 @@ const R3D = (() => {
     knight:   { build: 'slim', helm: 'crown', wings: 'energy', feet: 'talon', weapon: 'lance', halo: true, skirt: true },
     herald:   { build: 'slim', helm: 'crown', wings: 'solar', feet: 'talon', weapon: 'lance', halo: true, skirt: true, cape: true },
     aurelion: { build: 'heavy', helm: 'crown', wings: 'energy', feet: 'boot', weapon: 'lance', shield: 'kite', cape: true, banners: true, halo: true, skirt: true, bigShoulder: true },
+    valkyr: { build:'normal',helm:'falcon',wings:'jet',feet:'fin',weapon:'pistol',emblem:'none',backpack:'pack' },
+    shade: { build:'slim',helm:'visor',feet:'talon',weapon:'katana',cape:true,emblem:'none',skirt:true },
+    rigger: { build:'heavy',helm:'diver',feet:'boot',weapon:'claw',backpack:'tanks',tex:'rust',bigShoulder:true },
+    harpoon: { build:'slim',helm:'mono',feet:'fin',weapon:'lance',shield:'kite',backpack:'pack',tex:'rust' },
+    breaker: { build:'heavy',helm:'mono',feet:'boot',weapon:'drill',gauntlet:true,backpack:'tanks',bigShoulder:true,tex:'rust' },
+    seraphlancer: { build:'slim',helm:'crown',wings:'solar',feet:'talon',weapon:'lance',emblem:'gem',skirt:true },
+    echo: { build:'slim',helm:'visor',wings:'energy',feet:'talon',weapon:'sword',emblem:'gem',halo:true },
   };
   function humanoid(v, kit) {
     const K = Object.assign({ build: 'normal', helm: 'visor', wings: 'none', feet: 'boot', weapon: 'rifle', emblem: 'core', tex: 'plate' }, kit || {});
@@ -241,6 +248,7 @@ const R3D = (() => {
     wg('sword', g => { g.add(at(cyl(1.8, 1.8, 10, D2), 0, 3, 0)); g.add(at(pbox(4, 3, 16, Cm), 0, -3, 0)); g.add(at(pbox(1.6, 62, 7, BL, { tx: 0.5 }), 0, -36, 0)); g.add(at(pbox(0.6, 58, 1, E(G, 2)), 0, -36, 3.6)); });
     wg('katana', g => { g.add(at(cyl(1.5, 1.5, 12, D2), 0, 3, 0)); g.add(at(cyl(4, 4, 1.2, Cm, 12), 0, -3, 0)); const bl = pbox(1.2, 58, 4, BL, { tx: 0.4 }); at(bl, 0.8, -33, 0, 0, 0, 0.06); g.add(bl); g.add(at(pbox(0.5, 54, 0.8, E('#ff5a5a', 2)), 1.4, -33, 2, 0, 0, 0.06)); });
     wg('lance', g => { g.add(at(cyl(1.6, 1.6, 84, D2), 0, -20, 0)); g.add(at(wedge(6, 22, 2.5, BL, 0.05), 0, -71, 0, Math.PI, 0, 0)); g.add(at(torus(3, 1, Cm, 12), 0, -58, 0, Math.PI / 2, 0, 0)); g.add(at(pbox(0.6, 18, 0.8, E(G, 2)), 0, -70, 1.4)); g.add(at(wedge(3, 10, 2, Cm, 0.1), 0, 22, 0)); });
+    wg('drill', g => {g.add(at(cyl(7,7,18,D2,10),0,-5,0));g.add(at(cone(10,42,BL,12),0,-34,0,Math.PI,0,0));for(let i=0;i<4;i++)g.add(at(torus(8-i*1.5,1.2,Cm,12),0,-19-i*7,0,Math.PI/2,0,0));});
     const sbm = E(G, 2.2), sabers = [];
     wg('saber', g => { g.add(at(cyl(1.8, 1.8, 10, D2), 0, 3, 0)); g.add(at(pbox(2, 54, 3.2, sbm, { tx: 0.6 }), 0, -32, 0)); g.add(at(pbox(0.8, 52, 3.6, E('#ffffff', 2)), 0, -32, 0)); const sp = sprite(G, 60, 0.45); sp.scale.set(22, 80, 1); at(sp, 0, -32, 0); g.add(sp); sabers.push(g); });
     // wings / back
@@ -617,7 +625,45 @@ const R3D = (() => {
 
 
   // ================= rig assembly: dispatch, ink outlines, hit-flash =====
-  const SPECIAL = { bastion: v => walker(v, false), sovereign: v => walker(v, true), trinity: excavator, tyrant: turtleTank, talos: heron, carmine: wolf, carmine_e: wolf, warden: crab, seraphyne: manta, shard: jelly };
+  function specialist(v,kind) {
+    const m=mats(v),{A,A2,Bm,Cm,D,D2}=m,G=v.g;
+    if(kind==='rigger'||kind==='harpoon'){
+      const r=humanoid(v,KITS[kind]);
+      if(kind==='rigger'){const crane=grp(r.root,-15,98,-10,0,0,.3);crane.add(at(pbox(6,58,8,Cm),0,20,0));crane.add(at(pbox(42,5,8,Cm),18,48,0));crane.add(at(cyl(.8,.8,38,D2,5),37,29,0));crane.add(at(torus(5,1,D2,12,Math.PI*1.5),37,8,0));}
+      else{r.root.add(at(cyl(4,6,48,A2,10),22,103,17,0,0,Math.PI/2));for(let i=0;i<6;i++)r.root.add(at(torus(3,1,D2,8),-10-i*3,95-i*3,19,i%2*Math.PI/2,0,0));}
+      return r;
+    }
+    if(kind==='spitter'||kind==='broodmaw'){
+      const r=beast(v),sac=ell(kind==='broodmaw'?38:24,kind==='broodmaw'?31:22,26,Bm);at(sac,-8,76,0);r.root.add(sac);
+      for(const z of [-1,1])for(let i=0;i<3;i++)r.root.add(at(sph(6,E(G,1.4),10),-28+i*20,76,z*22));
+      if(kind==='spitter'){r.root.add(at(cyl(5,8,72,A,10),29,88,0,0,0,Math.PI/2));const muzzle=grp(r.root,67,88,0);r.anchors.hand=muzzle;}
+      else for(let i=0;i<5;i++){const egg=ell(9,16,11,Cm);at(egg,-35+i*14,97-(i%2)*4,0);r.root.add(egg);}
+      return r;
+    }
+    if(kind==='skyray'){const r=manta(v);r.root.scale.set(1.3,.7,1.55);for(let i=0;i<5;i++)r.root.add(at(cone(3,24,Cm,5),-40+i*13,40,0,0,0,-.6));return r;}
+    if(kind==='siegecrawler'){const r=turtleTank(v);for(const z of [-10,10]){r.root.add(at(cyl(4,6,102,A,10),34,78,z,0,0,Math.PI/2));r.root.add(at(pbox(12,10,13,Cm),86,78,z));}r.anchors.hand=grp(r.root,92,78,0);r.root.scale.set(1,.8,1);return r;}
+    const root=new V.Group();let core,head,hand;const moving=[];
+    if(kind==='burrower'){
+      for(let i=0;i<8;i++){const r=16-i*.8,s=ell(r,r*.95,r*1.05,i%2?A:Bm);at(s,38-i*17,28+Math.sin(i*.5)*10,0);root.add(s);moving.push(s);}
+      head=grp(root,58,29,0);head.add(at(torus(13,4,Cm,18),0,0,0,0,Math.PI/2,0));for(let i=0;i<8;i++){const a=i*Math.PI/4;head.add(at(cone(3,16,A2,5),7,Math.cos(a)*12,Math.sin(a)*12,0,0,-Math.PI/2));}hand=grp(head,15,0,0);core=moving[3];
+    }else if(kind==='aegisdrone'){
+      core=grp(root,0,58,0);core.add(ell(18,11,17,A));core.add(at(torus(24,3,Cm,6),0,0,0,Math.PI/2,0,0));core.add(at(sprite(G,65,.5),0,0,0));
+      for(const z of [-1,1]){const shield=shapeMesh([0,22,20,12,20,-14,0,-26,-20,-14,-20,12],4,Bm);at(shield,0,0,z*30,0,Math.PI/2,0);core.add(shield);moving.push(shield);}head=grp(core,13,5,0);head.add(sph(4,E(G,2),10));hand=grp(core,22,-3,0);
+    }else if(kind==='gale'){
+      core=grp(root,0,40,0);core.add(pbox(82,12,20,A,{tx:.35}));core.add(at(ell(17,10,14,Bm),3,12,0));core.add(at(pbox(8,16,16,Cm),-12,15,0));
+      for(const z of [-1,1]){core.add(at(cyl(7,10,42,D2,12),-35,-3,z*18,0,0,Math.PI/2));core.add(at(sprite(G,55,.7),-58,-3,z*18));core.add(at(pbox(38,3,14,Bm,{tx:.3}),-13,0,z*27,0,z*.25,0));}head=grp(core,18,16,0);head.add(sph(5,E(G,1.6),10));hand=grp(core,45,0,0);
+    }else if(kind==='monolith'){
+      core=grp(root,0,74,0);core.add(at(cyl(0,24,118,A,4),0,0,0,0,Math.PI/4,0));core.add(at(cyl(24,0,32,Bm,4),0,-74,0,0,Math.PI/4,0));core.add(at(ell(12,18,12,E(G,1.4)),10,-5,10));
+      const halo=torus(38,2,Cm,6);at(halo,0,0,0,Math.PI/2,0,0);root.add(halo);moving.push(halo);head=grp(core,0,50,0);hand=grp(core,20,0,0);hand.add(sprite(G,55,.5));
+    }else if(kind==='cantor'){
+      core=grp(root,0,76,0);const prism=shapeMesh([0,31,25,-16,-25,-16],8,A);core.add(prism);core.add(at(sph(10,E(G,2),14),0,0,8));
+      for(let i=0;i<3;i++){const a=i*Math.PI*2/3,leg=grp(core,Math.cos(a)*10,-13,Math.sin(a)*10);leg.add(at(pbox(6,58,6,Bm,{tx:.4}),Math.cos(a)*12,-29,Math.sin(a)*12,0,0,-Math.cos(a)*.3));moving.push(leg);}
+      const crown=torus(29,2.5,Cm,3);at(crown,0,25,0,0,0,Math.PI/2);core.add(crown);head=grp(core,0,31,0);hand=grp(core,15,0,8);
+    }
+    return {root,anchors:{core,head,hand},apply(p,o,t){if(kind==='burrower')moving.forEach((s,i)=>s.position.y=28+Math.sin(t*2+i*.5)*8);else if(core){core.position.y=(kind==='monolith'?74:kind==='cantor'?76:kind==='gale'?40:58)+Math.sin(t*2)*3;}if(kind==='monolith')moving[0].rotation.z=t*.3;if(kind==='aegisdrone')moving.forEach((s,i)=>s.rotation.y=Math.sin(t+i)*.15);}};
+  }
+  const SPECIAL = { bastion: v => walker(v, false), sovereign: v => walker(v, true), trinity: excavator, tyrant: turtleTank, talos: heron, carmine: wolf, carmine_e: wolf, warden: crab, seraphyne: manta, shard: jelly,
+    spitter:v=>specialist(v,'spitter'),broodmaw:v=>specialist(v,'broodmaw'),burrower:v=>specialist(v,'burrower'),skyray:v=>specialist(v,'skyray'),aegisdrone:v=>specialist(v,'aegisdrone'),siegecrawler:v=>specialist(v,'siegecrawler'),gale:v=>specialist(v,'gale'),monolith:v=>specialist(v,'monolith'),cantor:v=>specialist(v,'cantor'),rigger:v=>specialist(v,'rigger'),harpoon:v=>specialist(v,'harpoon') };
   const OUTLINE = new V.MeshBasicMaterial({ color: 0x14121b, side: V.BackSide });
   function addOutlines(root, th = 0.7) {
     const list = []; root.traverse(o => { if (o.isMesh && o.material && o.material.isMeshToonMaterial && !o.userData.noOutline && !o.material.transparent) list.push(o); });
@@ -638,6 +684,8 @@ const R3D = (() => {
     addOutlines(r.root);
     const set = new Set(); r.root.traverse(o => { if (o.isMesh && o.material && o.material.emissive && !o.material.userData.glow && !o.userData.isOutline) set.add(o.material); });
     r.mats = [...set]; r.mats.forEach(m => { m.userData.e0 = m.emissive.clone(); m.userData.ei0 = m.emissiveIntensity; });
+    let aura=null,variantKey=null;
+    r.setVariant=key=>{if(key===variantKey)return;variantKey=key;const v=typeof VARIANTS!=='undefined'&&VARIANTS[key];r.mats.forEach(m=>{m.userData.ebase ||= m.userData.e0.clone();if(m.userData.eibase==null)m.userData.eibase=m.userData.ei0;m.userData.e0.copy(m.userData.ebase);m.userData.ei0=m.userData.eibase;if(v){m.userData.e0.lerp(col(v.color),key==='corrupted'?.45:.2);m.userData.ei0=Math.max(.15,m.userData.ei0);} });if(v&&!aura){aura=sprite(v.color,140,.2);aura.position.set(0,65,0);r.root.add(aura);}if(aura){aura.material.opacity=v?(key==='commander'?.3:.18):0;if(v)aura.material.color.set(v.color);}lastF=-1;};
     let lastF = -1;
     r.setFlash = f => { const q = f > 0.01 ? Math.round(f * 10) / 10 : 0; if (q === lastF) return; lastF = q; r.mats.forEach(m => { if (q > 0) { m.emissive.setRGB(q, q, q); m.emissiveIntensity = 1; } else { m.emissive.copy(m.userData.e0); m.emissiveIntensity = m.userData.ei0; } }); };
     const outer = new V.Group(), turn = new V.Group(); turn.add(r.root); outer.add(turn);
@@ -818,6 +866,7 @@ const R3D = (() => {
     const comp = new V.EffectComposer(r); comp.addPass(new V.RenderPass(scene, cam));
     const bloom = new V.UnrealBloomPass(new V.Vector2(640, 360), 0.75, 0.5, 0.86); comp.addPass(bloom);
     Object.assign(B, { renderer: r, composer: comp, scene, cam, bloom });
+    if(typeof QUALITY!=='undefined'){QUALITY.configureRenderer(r);bloom.enabled=!QUALITY.low;}
   }
   function battleBegin(bgKey, painted) {
     B.rigs.forEach(rg => { B.scene.remove(rg.outer); }); B.rigs.clear();
@@ -832,6 +881,7 @@ const R3D = (() => {
   const tmpV = new V.Vector3();
   function project(obj) { obj.getWorldPosition(tmpV); tmpV.project(B.cam); return [(tmpV.x + 1) * 640, (1 - tmpV.y) * 360]; }
   function battleFrame(actors, t, shakeX, shakeY, zoom, bgOff) {
+    if(typeof QUALITY!=='undefined'){B.bloom.enabled=!QUALITY.low;B.renderer.shadowMap.enabled=!QUALITY.low;}
     B.bgTex.needsUpdate = true;
     if (B.env) {
       const dx = B.lastOff == null ? 0 : (bgOff - B.lastOff) * 2.2; B.lastOff = bgOff;
@@ -847,7 +897,7 @@ const R3D = (() => {
       rg.outer.visible = a.visible && a.alpha > 0.35;
       rg.outer.position.set(a.x + a.ox - 640, 360 - (a.y + a.oy), 0);
       const s = a.scale * rg.scaleHint * 1.3; rg.outer.scale.set(s * a.dir, s, s);
-      rg.apply(a.pose, a.opts, t); rg.setFlash(Math.min(1, a.flash));
+      rg.apply(a.pose, a.opts, t); rg.setVariant(a.u.variant); rg.setFlash(Math.min(1, a.flash));
       rg.outer.updateMatrixWorld(true);
       a.anchors3d = { hand: project(rg.anchors.hand), core: project(rg.anchors.core), head: project(rg.anchors.head) };
     }

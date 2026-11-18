@@ -1,16 +1,18 @@
-// ===== Procedural SFX + simple ambient music (WebAudio, no assets) =====
+// ===== Procedural effects and adaptive score; optional local music files =====
 'use strict';
 const SFX = (() => {
-  let ac = null, master = null, noiseBuf = null, musicGain = null, musicNodes = [], musicKey = null;
+  let ac = null, master = null, noiseBuf = null, musicGain = null, musicKey = null, currentTrack=null;
+  const tracks=new Set();let pendingMusic=null;
   const lastPlay = {};
   function ensure() {
-    if (ac) return true;
+    if (ac) { if(ac.state==='suspended')ac.resume().catch(()=>{});return true; }
     try {
       ac = new (window.AudioContext || window.webkitAudioContext)();
       master = ac.createGain(); master.gain.value = 0.5; master.connect(ac.destination);
-      musicGain = ac.createGain(); musicGain.gain.value = 0.0; musicGain.connect(master);
+      musicGain = ac.createGain(); musicGain.gain.value = musicVolume()*.42; musicGain.connect(master);
       noiseBuf = ac.createBuffer(1, ac.sampleRate * 2, ac.sampleRate); const d = noiseBuf.getChannelData(0); for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
-      return true;
+      if(ac.state==='suspended')ac.resume().catch(()=>{});
+      if(pendingMusic){const wanted=pendingMusic;pendingMusic=null;startMusic(wanted.key,wanted.chapter);}return true;
     } catch (e) { return false; }
   }
   function vol() { return (SAVE && SAVE.settings && SAVE.settings.sfx != null) ? SAVE.settings.sfx : 0.7; }
@@ -65,32 +67,57 @@ const SFX = (() => {
       case 'nullring': osc('sine',90,24,1.2,.3*V,t);osc('triangle',740,74,1,.08*V,t);noise(1,.15*V,t,'highpass',6000,800);break;
     }
   }
-  // ---- ambient music: slow pad chords per mood ----
-  const MOODS = {
-    title: [[220, 277, 330], [196, 247, 294], [175, 220, 262], [196, 247, 330]],
-    calm: [[262, 330, 392], [220, 277, 330], [175, 220, 262], [196, 247, 294]],
-    tense: [[147, 175, 220], [139, 165, 208], [147, 185, 220], [131, 156, 196]],
-    battle: [[110, 165, 220], [98, 147, 196], [117, 175, 233], [104, 156, 208]],
-    sad: [[220, 262, 330], [175, 220, 262], [147, 175, 220], [165, 196, 247]],
-    hope: [[262, 330, 392], [294, 370, 440], [330, 415, 494], [349, 440, 523]],
+  // Sixteen steps per bar. Melodies are scale degrees; nulls leave breathing room.
+  const THEMES={
+    title:{name:'Iron and Light',bpm:92,root:57,major:false,chords:[0,5,3,4],lead:[0,null,2,4,7,null,6,4,2,null,0,2,3,2,0,null],wave:'triangle',pad:true,bass:true,kick:[0,8],snare:[4,12],hat:4},
+    calm:{name:'Forty Hands Aboard',bpm:76,root:60,major:true,chords:[0,5,3,4],lead:[0,null,null,2,4,null,2,null,5,null,4,2,1,null,0,null],wave:'sine',pad:true,bass:true,kick:[],snare:[],hat:0},
+    tense:{name:'The Redacted Line',bpm:100,root:50,major:false,chords:[0,0,5,4],lead:[0,null,1,null,0,null,4,null,0,null,1,2,1,null,0,null],wave:'triangle',pad:false,bass:true,kick:[0,6,10],snare:[12],hat:4},
+    sad:{name:'The Empty Channel',bpm:62,root:57,major:false,chords:[0,3,5,4],lead:[7,null,null,6,4,null,null,2,3,null,2,null,0,null,null,null],wave:'sine',pad:true,bass:false,kick:[],snare:[],hat:0},
+    hope:{name:'Fourth Dawn',bpm:104,root:60,major:true,chords:[0,4,5,3],lead:[0,2,4,null,7,6,4,null,5,4,2,1,2,null,0,null],wave:'triangle',pad:true,bass:true,kick:[0,8],snare:[4,12],hat:4},
+    player:{name:'Open Corridor',bpm:124,root:57,major:false,chords:[0,5,3,4],lead:[0,2,4,null,7,4,2,null,5,4,2,0,3,2,1,2],wave:'square',pad:false,bass:true,kick:[0,6,8,14],snare:[4,12],hat:2},
+    enemy:{name:'Emergency Directive',bpm:116,root:50,major:false,chords:[0,1,0,4],lead:[0,null,0,1,4,null,3,1,0,null,0,1,6,4,3,1],wave:'sawtooth',pad:false,bass:true,kick:[0,3,8,11],snare:[4,12],hat:2},
+    concord:{name:'Order Is Mercy',bpm:104,root:50,major:false,chords:[0,4,0,5],lead:[0,0,4,null,0,0,5,4,3,3,2,null,1,1,4,null],wave:'square',pad:false,bass:true,kick:[0,2,8,10],snare:[4,6,12,14],hat:4},
+    free_states:{name:'A Free Sky',bpm:140,root:52,major:false,chords:[0,3,5,4],lead:[0,2,4,7,null,4,2,4,5,7,5,4,3,2,0,2],wave:'sawtooth',pad:false,bass:true,kick:[0,6,8,10],snare:[4,12],hat:1},
+    ourobor:{name:'Under the Cradle',bpm:72,root:38,major:false,chords:[0,0,1,0],lead:[0,null,null,null,7,null,null,1,0,null,null,null,6,null,1,null],wave:'sine',pad:true,bass:true,kick:[0,7,10],snare:[5,13],hat:0},
+    vael:{name:'The Thousand-Year Choir',bpm:84,root:59,major:false,chords:[0,2,5,3],lead:[7,null,6,null,4,null,2,3,5,null,4,null,2,1,0,null],wave:'sine',pad:true,bass:false,kick:[0,10],snare:[],hat:8},
+    final_boss:{name:'Answer the Silence',bpm:152,root:45,major:false,chords:[0,1,5,4],lead:[0,7,4,2,1,4,7,6,5,7,5,4,3,2,1,4],wave:'sawtooth',pad:true,bass:true,kick:[0,3,6,8,11,14],snare:[4,12],hat:1},
   };
-  let musicTimer = null;
-  function music(key) {
-    if (!ensure()) return;
-    if (musicKey === key) return; musicKey = key;
-    clearInterval(musicTimer); musicNodes.forEach(n => { try { n.stop(ac.currentTime + 1); } catch (e) {} }); musicNodes = [];
-    const mv = (SAVE && SAVE.settings && SAVE.settings.music != null) ? SAVE.settings.music : 0.4;
-    musicGain.gain.cancelScheduledValues(ac.currentTime); musicGain.gain.linearRampToValueAtTime(0.12 * mv, ac.currentTime + 1.5);
-    if (!key || !MOODS[key]) return;
-    let i = 0; const ch = MOODS[key]; const beat = key === 'battle' ? 2.2 : 4;
-    const playChord = () => {
-      const t = ac.currentTime; const c = ch[i++ % ch.length];
-      c.forEach((f, k) => { const o = ac.createOscillator(), g = ac.createGain(); o.type = k === 0 ? 'triangle' : 'sine'; o.frequency.value = f; o.detune.value = (k - 1) * 6; g.gain.setValueAtTime(0.0001, t); g.gain.linearRampToValueAtTime(0.25, t + beat * 0.3); g.gain.linearRampToValueAtTime(0.0001, t + beat * 1.1); o.connect(g); g.connect(musicGain); o.start(t); o.stop(t + beat * 1.15); musicNodes.push(o); });
-      if (key === 'battle') { for (let b = 0; b < 4; b++) { const o = ac.createOscillator(), g = ac.createGain(); o.type = 'square'; o.frequency.value = c[0] / 2; const tt = t + b * beat / 4; g.gain.setValueAtTime(0.0001, tt); g.gain.exponentialRampToValueAtTime(0.18, tt + 0.01); g.gain.exponentialRampToValueAtTime(0.0001, tt + 0.2); o.connect(g); g.connect(musicGain); o.start(tt); o.stop(tt + 0.25); } }
-      musicNodes = musicNodes.slice(-30);
-    };
-    playChord(); musicTimer = setInterval(playChord, beat * 1000);
+  function musicVolume(){try{return Math.max(0,Math.min(1,SAVE.settings.music??.4));}catch{return .4;}}
+  const midi=n=>440*2**((n-69)/12),normalKey=k=>k==='battle'?'player':k==='intermission'?'calm':k;
+  function degree(theme,n){const scale=theme.major?[0,2,4,5,7,9,11]:[0,2,3,5,7,8,10],oct=Math.floor(n/7),i=((n%7)+7)%7;return theme.root+oct*12+scale[i];}
+  function voice(track,n,t,dur,type,peak,attack=.012){
+    const o=ac.createOscillator(),g=ac.createGain();o.type=type;o.frequency.value=midi(n);g.gain.setValueAtTime(.0001,t);g.gain.linearRampToValueAtTime(peak,t+attack);g.gain.exponentialRampToValueAtTime(.0001,t+Math.max(attack+.04,dur));o.connect(g);g.connect(track.synth);o.start(t);o.stop(t+dur+.06);track.nodes.add(o);o.onended=()=>{track.nodes.delete(o);o.disconnect();g.disconnect();};
   }
-  function setMusicVol(v) { if (ac && musicGain) musicGain.gain.value = 0.12 * v; }
-  return { play, music, ensure, setMusicVol };
+  function percussion(track,kind,t){
+    if(kind==='kick'){const o=ac.createOscillator(),g=ac.createGain();o.type='sine';o.frequency.setValueAtTime(115,t);o.frequency.exponentialRampToValueAtTime(34,t+.17);env(g,t,.004,.22,.24);o.connect(g);g.connect(track.synth);o.start(t);o.stop(t+.25);return;}
+    const s=ac.createBufferSource(),f=ac.createBiquadFilter(),g=ac.createGain();s.buffer=noiseBuf;f.type=kind==='hat'?'highpass':'bandpass';f.frequency.value=kind==='hat'?6000:1300;f.Q.value=kind==='hat'?.5:1.4;env(g,t,.003,kind==='hat'?.045:.14,kind==='hat'?.028:.09);s.connect(f);f.connect(g);g.connect(track.synth);s.start(t,0);s.stop(t+(kind==='hat'?.06:.18));
+  }
+  function scheduleStep(track){
+    const th=track.theme,k=track.step%16,bar=Math.floor(track.step/16),ch=th.chords[bar%th.chords.length],t=track.next,step=60/th.bpm/4;
+    if(th.pad&&k===0)for(const n of [ch,ch+2,ch+4])voice(track,degree(th,n)-12,t,step*17,'sine',.045,.18);
+    if(th.bass&&k%2===0)voice(track,degree(th,ch)-24,t,step*1.65,'triangle',track.key==='ourobor'?.16:.12);
+    const note=th.lead[(k+(bar%2?4:0))%th.lead.length];if(note!=null)voice(track,degree(th,note)+(bar%4===3?12:0),t,step*.8,th.wave,th.wave==='sine'?.09:.045);
+    if(th.kick.includes(k))percussion(track,'kick',t);if(th.snare.includes(k))percussion(track,'snare',t);if(th.hat&&k%th.hat===0)percussion(track,'hat',t);
+    track.step++;track.next+=step;
+  }
+  function stopTrack(track,fade=.8){if(!track||track.stopping)return;track.stopping=true;clearInterval(track.timer);const t=ac.currentTime;track.gain.gain.cancelScheduledValues(t);track.gain.gain.setValueAtTime(track.gain.gain.value,t);track.gain.gain.linearRampToValueAtTime(0,t+fade);setTimeout(()=>{track.nodes.forEach(n=>{try{n.stop();}catch{}});if(track.audio){track.audio.pause();track.audio.removeAttribute('src');track.audio.load();}track.gain.disconnect();tracks.delete(track);},fade*1000+80);}
+  function optionalFile(track,key){
+    if(typeof Audio==='undefined')return;const audio=new Audio();audio.loop=true;audio.preload='auto';let ext=0;
+    const next=()=>{if(track.stopping)return;if(ext>=2){audio.onerror=null;return;}audio.src='assets/music/'+key+'.'+['ogg','mp3'][ext++];audio.load();};
+    audio.onerror=next;audio.oncanplay=()=>{if(track.stopping||track.fileActive)return;let source;try{source=ac.createMediaElementSource(audio);source.connect(track.gain);}catch{return;}audio.play().then(()=>{if(track.stopping){audio.pause();return;}track.fileActive=true;track.synth.gain.linearRampToValueAtTime(0,ac.currentTime+.4);clearInterval(track.timer);}).catch(()=>{try{source.disconnect();}catch{}});};track.audio=audio;next();
+  }
+  function startMusic(key,chapter){
+    key=normalKey(key);if(!key||!THEMES[key]){stopTrack(currentTrack);currentTrack=null;musicKey=null;return;}
+    const chapterNum=Number.parseInt(chapter?.num||chapter||0,10)||0,identity=key+':'+chapterNum;if(currentTrack?.identity===identity&&!currentTrack.stopping)return;
+    const gain=ac.createGain(),synth=ac.createGain(),theme={...THEMES[key],root:THEMES[key].root+(chapterNum?((chapterNum%3)-1)*2:0)};gain.gain.setValueAtTime(0,ac.currentTime);gain.gain.linearRampToValueAtTime(1,ac.currentTime+.85);gain.connect(musicGain);synth.connect(gain);
+    const track={identity,key,theme,gain,synth,nodes:new Set(),step:0,next:ac.currentTime+.04,timer:null,stopping:false,fileActive:false};tracks.add(track);stopTrack(currentTrack);currentTrack=track;musicKey=key;
+    const tick=()=>{if(track.stopping||ac.state==='suspended')return;let guard=0;while(track.next<ac.currentTime+.16&&guard++<32)scheduleStep(track);if(track.next<ac.currentTime-.5)track.next=ac.currentTime+.04;};tick();track.timer=setInterval(tick,35);optionalFile(track,key);
+  }
+  function music(key,chapter){pendingMusic={key,chapter};if(!ac)return;pendingMusic=null;startMusic(key,chapter);}
+  function setMusicVol(v){if(!ac||!musicGain)return;const t=ac.currentTime;musicGain.gain.cancelScheduledValues(t);musicGain.gain.setTargetAtTime(Math.max(0,Math.min(1,v))*.42,t,.08);}
+  function phase(key,ch){music(key==='player'?'player':key==='enemy'?'enemy':'player',ch);}
+  function faction(u){if(!u)return 'concord';const id=u.mech,m=MECHS[id];if(id==='hollow')return 'final_boss';if(m?.armor==='BIO')return 'ourobor';if(m?.armor==='VOID')return 'vael';if(['zephyr','tyrant','carmine_e','marauder','rigger','harpoon','breaker','gale'].includes(id))return 'free_states';return 'concord';}
+  function battle(left,right,ch){const previous=musicKey||'player',enemy=[left,right].find(u=>u.team==='enemy')||right;music(faction(enemy),ch);return()=>music(previous,ch);}
+  function themeInfo(){return Object.fromEntries(Object.entries(THEMES).map(([key,t])=>[key,{name:t.name,bpm:t.bpm,lead:t.wave,pad:t.pad,percussion:t.kick.length+t.snare.length>0}]));}
+  return {play,music,ensure,setMusicVol,phase,battle,faction,themeInfo,get musicKey(){return musicKey},get pendingMusic(){return pendingMusic?.key||null}};
 })();

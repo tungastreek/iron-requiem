@@ -1,6 +1,6 @@
 # Iron Requiem — Generated Art Pack and Expansion
 
-The original 100-image pack described below is now joined by six atlases: **106 PNG files** in total. There are 16 additional machines and eight additional pilot portraits across these atlases.
+The original 100-image pack described below is now joined by twelve atlases: **112 PNG files** in total. The additions cover 31 machines, eight pilots, and eight Ourobor faces.
 
 | Atlas | Rows, top to bottom |
 | --- | --- |
@@ -10,10 +10,16 @@ The original 100-image pack described below is now joined by six atlases: **106 
 | units/enemy-legions.png | Bailiff, Marauder, Cantor, Nullmaw |
 | portraits/portraits-relief.png | Anika, Corin, Leda, Hugo |
 | portraits/portraits-outriders.png | Noor, Emi, Orran, Vale |
+| units/specialist-concord.png | Valkyr, Aegis Drone, Siege Crawler, Shade |
+| units/specialist-free-states.png | Rigger, Harpoon, Breaker, Gale |
+| units/specialist-legacy-brood.png | Spitter, Burrower, Broodmaw, Skyray |
+| units/specialist-vael.png | Seraph Lancer, Monolith, Echo |
+| portraits/ourobor-portraits.png | Crawler, Wyrmling, Behemoth, Hive Mother |
+| portraits/ourobor-specialists.png | Mantle, Leech, Chrysalis, Bellwether |
 
-The new atlases are 1254 × 1254. Unit columns contain idle A, idle B, attack and hit. Portrait columns contain neutral, angry, smiling and shocked. The six exact new generation prompts are in `prompts/`. Atlas mappings are in `js/data/expansion.js`. The new unit sheets contain alpha transparency.
+The new atlases are 1254 × 1254. Unit columns contain idle A, idle B, attack and hit. Portrait columns contain neutral, angry, smiling and shocked. The exact new generation prompts are in `prompts/`. Atlas mappings are in `js/data/expansion.js`. The new unit sheets contain alpha transparency.
 
-**Keep `offline/` in a portable copy.** It contains byte-preserving data-image wrappers that let the browser process sprites when opening the game directly from a folder. Rebuild after replacing PNG files with `python3 tools/build_offline.py`. The refreshed manifest records actual dimensions and hashes for all 106 PNG files.
+**Keep `offline/` in a portable copy.** It contains byte-preserving data-image wrappers that let the browser process sprites when opening the game directly from a folder. Rebuild after replacing PNG files with `python3 tools/build_offline.py`. The refreshed manifest records actual dimensions and hashes for all 112 PNG files.
 
 ## Original pack
 

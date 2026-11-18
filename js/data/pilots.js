@@ -115,7 +115,7 @@ function buildTree(pid) {
     ] },
     { name: p.branches[1], color: '#5cb8ff', icon: '⛨', nodes: [
       { id: 'b1', name: 'Reinforced Cockpit', cost: 1, fx: { stat: { DEF: 10, EVA: 4 } }, desc: 'DEF +10, EVA +4.' },
-      { id: 'b2', name: 'Steel Nerves', cost: 2, fx: { skill: 'nerves' }, desc: 'Start missions with Will +5. Damage taken −10%.' },
+      { id: 'b2', name: ['gunnar','ilse','jin','brann'].includes(pid)?'Support Defend':'Steel Nerves', cost: 2, fx: { skill: ['gunnar','ilse','jin','brann'].includes(pid)?'guard':'nerves' }, desc: ['gunnar','ilse','jin','brann'].includes(pid)?'Once per enemy phase, take an adjacent ally’s incoming attack in Defend mode.':'Start missions with Will +5. Damage taken −10%.' },
       { id: 'b3', name: 'Iron Will', cost: 3, fx: { skill: 'ironwill' }, desc: 'Gain +2 extra Will whenever you are hit or dodge.' },
       { id: 'b4', name: 'Learn: ' + SPIRITS[bs[1]].name, cost: 4, fx: { spirit: bs[1] }, desc: 'Unlocks the ' + SPIRITS[bs[1]].name + ' spirit command. ' + SPIRITS[bs[1]].desc },
       { id: 'b5', name: 'Guardian', cost: 6, fx: { skill: 'guardian' }, desc: 'At Will 130+, damage taken −20% and status immunity.' },
@@ -131,3 +131,20 @@ function buildTree(pid) {
 }
 PORTRAITS.rei_m = PORTRAITS.rei;
 PORTRAITS.rina = { skin: '#f1d2b6', hair: '#20242e', hs: 'long', eye: '#3fd6ff', suit: '#e9eef6', suit2: '#2856c9', jaw: 'soft', acc: 'none', age: 'young', bg: '#1b3a7a' };
+
+const OUROBOR_PORTRAITS = {
+  beast: { sheet: 'ourobor-portraits', row: 0 },
+  wyrmling: { sheet: 'ourobor-portraits', row: 1 },
+  behemoth: { sheet: 'ourobor-portraits', row: 2 },
+  mother: { sheet: 'ourobor-portraits', row: 3 },
+  mantle: { sheet: 'ourobor-specialists', row: 0 },
+  leech: { sheet: 'ourobor-specialists', row: 1 },
+  chrysalis: { sheet: 'ourobor-specialists', row: 2 },
+  bellwether: { sheet: 'ourobor-specialists', row: 3 },
+};
+const OUROBOR_FACE = {
+  crawler: 'beast', wyrmling: 'wyrmling', behemoth: 'behemoth', hivemother: 'mother',
+  prime: 'behemoth', mantle: 'mantle', leech: 'leech', chrysalis: 'chrysalis',
+  bellwether: 'bellwether', spitter: 'chrysalis', burrower: 'leech', broodmaw: 'mother', skyray: 'wyrmling',
+};
+for (const id of Object.keys(OUROBOR_PORTRAITS)) PORTRAITS[id] ||= PORTRAITS.beast;

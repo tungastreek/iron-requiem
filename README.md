@@ -1,35 +1,21 @@
-# Iron Requiem — The Unbroken Chorus
+# Iron Requiem · The Unbroken Chorus
 
-Open **index.html** to play locally, or double-click **Play Iron Requiem.bat** on Windows. No installer, server or game account is needed. Keep the entire folder together, including `assets/offline/` and `vendor/`. Browser sound starts after a click. Settings control sound, music, animation speed and automatic counterattacks.
+Open **index.html** from this folder, or double-click **Play Iron Requiem.bat** on Windows. It runs in a browser with local assets and a procedural soundtrack. Keep the whole folder together. Click once to enable audio.
 
-This extends the supplied Iron Requiem game. The tactical map, cutscenes, combat rules, original chapters, route split, endings and existing artwork remain the foundation.
+Start a new campaign to see the eight added interludes in sequence. Existing saves in the same folder still load through Continue or Load Game. Use System to save to one of three manual slots or export a JSON backup before switching folders or browsers.
 
-## What was added
+- **New Game** opens full-size portrait and frame selection screens. Compare Alteon and Alteon Gigas, then choose your opening loadout.
+- **The Shelter Line**, right after Ashfall, pits the squad against Ourobor and a Concord robot detachment. Later forces include Free States salvage fighters, Vael knights and living machines, and the Silence. Ourobor types have illustrated portraits for conversations, the map panel, and battle HUD.
+- **Frame Archive** shows machines and weapon animations. The expansion adds eight playable pilots and 23 enemy designs, plus three modifier variants. Four combination attacks require adjacent partners with enough EN and Will. Gunnar, Ilse, Jin, and Brann can learn Support Defend. Use the Sortie tab to select up to four recruited auxiliary pilots.
+- There are **20 mission definitions** across both routes, including 17 missions on the normal route through either branch and 18 with the true finale. Maps span 15 sizes, from 16 × 11 to 24 × 16. The map header shows the current size.
+- Settings offer Auto, High and Low graphics, animation speed, music and effects, and automatic counterattacks. The map has zoom and touch movement confirmation. Enemy attacks offer Counter, Evade, Defend and any available Support Defend response.
 
-- Eight playable machines and pilots: Aegis, Nautilus, Vesper, Mastodon, Kestrel, Cinder, Orpheus and Palisade. Each has a different silhouette, loadout, role, four sprite poses, pilot expressions, battle dialogue and a fifteen-node skill tree.
-- Eight enemies: Mantle, Leech, Chrysalis, Bellwether, Bailiff, Marauder, Cantor and Nullmaw. They enter the original campaign as well as the interludes.
-- 53 weapon definitions for the new machines, with five new animation families: tethered harpoons, harmonic sonar, shield discharges, spore volleys and entropic rings. Finishers combine these with the existing sequences, cut-ins, sound and particles.
-- Eight connected interludes between the original chapters. There are now 20 chapter definitions across both routes: 17 missions on a normal-ending playthrough, or 18 with the true finale. These numbers include the original missions; this is not a fifty-mission release.
-- Decisions about the civilian archive and the brood nursery affect later dialogue, resonance and allied reinforcements.
-- An auxiliary wing: choose up to four recruited pilots on the Sortie tab. They deploy beside the main story squadron. Upgrades, parts, spirits and pilot skills use the existing intermission screens.
-- A **Frame Archive** on the title screen. Inspect allies and enemies on several backdrops and preview each weapon without changing your campaign save.
+## Art and offline play
 
-## Sprite and black battlefield correction
+The original sprite files used charcoal mattes. The offline image scripts allow the importer to read pixels even when opening the game from disk. Painted sprites and backdrops share a canvas in battle. Missing painted art uses the procedural art fallback. The `assets/` folder contains the art, exact generation prompts, optional alignment metadata, and generated offline scripts.
 
-The original importer reads image pixels to remove the charcoal sprite matte. Browsers can block that access for images loaded from `file://`; the same restriction prevents uploading painted backdrops to WebGL. `assets/offline/` packages the original PNG bytes as local scripts and decodes them as safe data images. The importer also adapts to the textured charcoal border. Painted battles now draw the actors and their environment on the same canvas; 3D remains a fallback for exchanges without painted actors.
+See [ART_PROMPTS.md](ART_PROMPTS.md) for the pose layouts and anchor format. After changing art, run `python3 tools/build_offline.py` to rebuild the image scripts and manifest.
 
-This approach works without asking the player to run a local server or change browser security settings. Do not remove the offline folder from a portable copy.
+## Verification
 
-## Assets and generation prompts
-
-All new image files are under `assets/units/` and `assets/portraits/`. The six exact generation prompts and their row definitions are under **assets/prompts/**. They were generated with the built-in image tool. Actual output dimensions and hashes are recorded in **assets/manifest.json**; the generated atlases are 1254 × 1254, irrespective of the requested prompt dimensions.
-
-The original prompt collection remains in `assets/ART_PROMPTS_revised.md` and `assets/generation_prompts.json`. New unit atlases use four rows of machines and four columns of poses: idle A, idle B, attack, hit. Portrait atlases use four rows of people and four columns of expressions: neutral, angry, smiling, shocked. Atlas mappings live in `js/data/expansion.js`.
-
-After replacing PNG files, run `python3 tools/build_offline.py` to refresh their portable wrappers and manifest. This is a development step; players need no Python installation.
-
-## Saves and checks
-
-Existing saves in the same browser and folder keep their chapter and unlocks. Starting a new campaign includes every interlude; a save already beyond an interlude will not automatically replay it. Progress is stored by the browser, so moving to a different browser or folder can require starting again.
-
-The automated data checks cover chapter routes, unit deployment, weapon forecasts, skill trees, asset references, sprite processing and offline-wrapper contents. `tools/verify.cjs` runs with Node and has no package dependencies. `tools/verify_animation.cjs` also confirms that all 53 new attack timelines finish on a simulated drawing surface. See `CHECKS.json` and `ANIMATION_CHECKS.json` for the recorded results and limits. Browser playback and Windows execution still require a playtest; they were not verified in this environment.
+See [campaign results](tests/CAMPAIGN_REPORT.md), [balance notes](tests/BALANCE.md), and [browser acceptance](tests/BROWSER_QA.md). Recorded checks cover sprite transparency and offline asset bytes, deployment and routes, combat and support systems, save migration, and simulated animation timelines. Browser screenshots, audible playback, device timings, and Windows launch checks are pending.

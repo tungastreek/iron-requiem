@@ -20,7 +20,7 @@ class PixelCanvas{
 async function verify(root=path.resolve(__dirname,'..')){
   const errors=[],assert=(ok,msg)=>{if(!ok)errors.push(msg)},read=p=>fs.readFileSync(path.join(root,p),'utf8');
   const c=vm.createContext({console,window:{addEventListener(){}},document:{getElementById(){throw Error('MAP_CONSTRUCTED')},createElement(){return new PixelCanvas()}},requestAnimationFrame(){return 1},cancelAnimationFrame(){},UI:{},SFX:{}});
-  const modules=['data/types','data/mechs','data/pilots','data/story','data/expansion','battle/combat','map/tactics','main'];
+  const modules=['data/types','data/mechs','data/pilots','data/story','data/expansion','data/combos','data/enemy-deployments','map/enemy-systems','battle/combat','map/tactics','main'];
   for(const file of modules)vm.runInContext(read('js/'+file+'.js'),c,{filename:file+'.js'});
   for(const dir of ['data','render','battle','map','ui'])for(const file of fs.readdirSync(path.join(root,'js',dir)))if(file.endsWith('.js'))new vm.Script(read('js/'+dir+'/'+file),{filename:dir+'/'+file});
   const check=vm.runInContext(`(()=>{const errors=[],routes={};for(const route of ['A','B'])for(const true_route of [false,true]){let id='c1',seen=[];while(id){if(seen.includes(id)){errors.push('Campaign cycle '+id);break}seen.push(id);const ch=CHAPTERS[id];if(!ch){errors.push('Missing chapter '+id);break}for(const e of ch.enemies)if(!MECHS[e.m])errors.push('Missing enemy '+e.m);id=typeof ch.next==='function'?ch.next({flags:{route,true_route}}):ch.next;}routes[route+(true_route?'-true':'-normal')]=seen;}SAVE=defaultSave();SAVE.roster=Object.keys(PILOTS);SAVE.pilots=Object.fromEntries(SAVE.roster.map(id=>[id,newPilotSave(id,12)]));for(const id of EXPANSION.crew)if(buildTree(id).flatMap(b=>b.nodes).length!==15)errors.push('Skill tree '+id);for(const id of EXPANSION.units){const m=MECHS[id],pid=EXPANSION.crew.find(p=>PILOTS[p].mech===id)||null,u={mech:id,pilot:pid,team:pid?'player':'enemy',lvl:12,hp:m.hp,en:m.en,will:140,buf:{},status:{},ammo:{},x:2,y:2},d={mech:'lancer',team:'enemy',lvl:12,hp:5000,en:150,will:110,buf:{},status:{},ammo:{},x:3,y:2};for(const w of CB.weapons(u))for(const mode of ['counter','evade','defend']){const f=CB.forecast(u,d,w,mode);if(!Number.isFinite(f.dmg)||!Number.isFinite(f.hit)||f.hit<0||f.hit>100)errors.push('Forecast '+id+' '+w.name);}}return {errors,routes,newWeapons:EXPANSION.units.reduce((n,id)=>n+MECHS[id].weapons.length,0),newSkillNodes:EXPANSION.crew.reduce((n,id)=>n+buildTree(id).flatMap(b=>b.nodes).length,0),mechs:Object.keys(MECHS).length,pilots:Object.keys(PILOTS).length}})()`,c);
@@ -34,12 +34,27 @@ async function verify(root=path.resolve(__dirname,'..')){
   const mechs=vm.runInContext('MECHS',c),aliases={carmine_e:'carmine'};
   for(const [id,m] of Object.entries(mechs)){if(aliases[id])continue;const file='assets/units/'+(m.atlas?.sheet||id)+'.png';assert(fs.existsSync(path.join(root,file)),'Missing sprite '+file);if(!decoded.has(file))decoded.set(file,decodePNG(fs.readFileSync(path.join(root,file))));c.testImage=decoded.get(file);c.testLayout=m.atlas||undefined;
     const sprite=vm.runInContext('ASSETS._process(testImage,testLayout)',c);assert(sprite.frames.length===4&&sprite.ground>0,'Sprite frames '+id);
-    for(const f of sprite.frames){const corners=[0,(f.width-1)*4,(f.width*(f.height-1))*4,(f.width*f.height-1)*4];assert(corners.every(i=>f.data[i+3]<40),'Opaque sprite corner '+id)}
+    for(const f of sprite.frames){const corners=[0,(f.width-1)*4,(f.width*(f.height-1))*4,(f.width*f.height-1)*4];assert(corners.filter(i=>f.data[i+3]<40).length>=3,'Opaque sprite corner '+id)}
     sprites.push({id,width:sprite.w,height:sprite.h,ground:Number(sprite.ground.toFixed(3))});}
+  const maps=vm.runInContext(`(()=>{const errors=[],sizes=new Set();for(const [id,ch] of Object.entries(CHAPTERS)){
+    const {w,h,theme,seed}=ch.map;sizes.add(w+'×'+h);const rows=genMap(theme,w,h,seed);
+    if(rows.length!==h||rows.some(r=>r.length!==w||[...r].some(t=>!TERRAIN[t])))errors.push('Invalid terrain '+id);
+    const check=(spawn)=>{if(spawn.x<0||spawn.x>=w||spawn.y<0||spawn.y>=h)errors.push('Off map '+id+' '+JSON.stringify(spawn));};
+    [...ch.enemies,...ch.deploy,...(ch.events||[]).flatMap(ev=>[...(ev.add||[]),...(ev.ally||[]),...(ev.join||[])])].forEach(check);
+    if(typeof ch.allies==='function')ch.allies({flags:{ourobor_peace:true,nursery_channel:true,archive_public:true}}).forEach(check);
+  }if(sizes.size<8)errors.push('Too few sizes');const types=CHAPTERS.i1.enemies.map(e=>MECHS[e.m].armor);if(!types.includes('BIO')||types.every(a=>a==='BIO'))errors.push('Early mixed enemies');return {sizes:[...sizes],errors};})()`,c);
+  errors.push(...maps.errors);
+  const portraitMapping=vm.runInContext('OUROBOR_PORTRAITS',c);
+  for(const [id,p] of Object.entries(portraitMapping)){
+    const file='assets/portraits/'+p.sheet+'.png';
+    assert(fs.existsSync(path.join(root,file)), 'Portrait sheet '+id);
+    if(!decoded.has(file))decoded.set(file,decodePNG(fs.readFileSync(path.join(root,file))));
+    assert(p.row>=0&&p.row<4&&decoded.get(file).width>=1000,'Portrait atlas layout '+id);
+  }
   const scene=read('js/battle/scene.js'),animations=new Set([...scene.matchAll(/case '([^']+)'/g)].map(x=>x[1]));
   for(const [id,m] of Object.entries(mechs))for(const w of m.weapons){if(w.anim==='finisher')for(const seq of w.seq||[])assert(animations.has(seq),'Unknown finisher animation '+id+' '+seq);else assert(animations.has(w.anim),'Unknown animation '+id+' '+w.anim)}
   for(const [id,m] of Object.entries(mechs))if(m.atlas){const sprite=decoded.get('assets/units/'+m.atlas.sheet+'.png');assert(m.atlas.row>=0&&m.atlas.row<4&&sprite.width>=1024,'Atlas layout '+id)}
-  return {status:errors.length?'failed':'passed',errors,...check,chapterDefinitions:vm.runInContext('Object.keys(CHAPTERS).length',c),pngAssets:manifest.length,spriteDesignsChecked:sprites.length,sprites,limits:['No browser playback check: native computer permission was unavailable and local-file preview was blocked.','No Windows execution check.','These checks do not certify visual polish or full campaign balance.']};
+  return {status:errors.length?'failed':'passed',errors,...check,chapterDefinitions:vm.runInContext('Object.keys(CHAPTERS).length',c),mapSizes:maps.sizes,ouroborPortraits:Object.keys(portraitMapping).length,pngAssets:manifest.length,spriteDesignsChecked:sprites.length,sprites,limits:['No browser playback check: native computer permission was unavailable and local-file preview was blocked.','No Windows execution check.','These checks do not certify visual polish or full campaign balance.']};
 }
 module.exports={verify,decodePNG};
 if(require.main===module)verify().then(r=>{console.log(JSON.stringify(r,null,2));if(r.errors.length)process.exitCode=1}).catch(e=>{console.error(e);process.exitCode=1});

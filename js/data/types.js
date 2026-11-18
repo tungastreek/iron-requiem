@@ -17,6 +17,11 @@ const ARMOR = {
   VOID:  { name: 'Void Body',   color: '#d48bff', desc: 'Vael posthuman matter. Resists most physics — but not resonance.' },
   HULL:  { name: 'Ship Hull',   color: '#b8c0cc', desc: 'Capital-ship plating. Huge targets, weak to explosives and gravity.' },
 };
+const VARIANTS = {
+  elite: { name: 'Elite', prefix: 'Elite ', desc: 'Veteran frame: stronger hull, armor, mobility and targeting.', hp: 1.4, arm: 1.15, mob: 10, accuracy: 10, stats: 0, regenHP: 0, reward: 1.5, skills: ['prevail'], badge: '⌃', color: '#c8d8e8', filter: 'saturate(1.3) brightness(1.05)' },
+  commander: { name: 'Commander', prefix: 'Cmdr. ', desc: 'Command link: nearby allies gain +10 hit and evasion.', hp: 1.8, arm: 1.2, mob: 0, accuracy: 0, stats: 15, regenHP: 0, reward: 2, skills: ['prevail', 'nerves'], badge: '★', color: '#ffd166', filter: 'saturate(1.15) brightness(1.06)' },
+  corrupted: { name: 'Corrupted', prefix: 'Corrupted ', desc: 'Resonance infection: regenerates 5% HP; status chance +15 points.', hp: 1.5, arm: 1, mob: 0, accuracy: 0, stats: 0, regenHP: .05, reward: 1.75, status: 15, skills: [], badge: '✣', color: '#b57dff', filter: 'hue-rotate(35deg) saturate(1.4) brightness(.85)' },
+};
 // multiplier[attack][armor]
 const CHART = {
   KIN:  { HEAVY: 0.75, LIGHT: 1.25, COAT: 1.25, BIO: 1.0,  VOID: 0.75, HULL: 1.0 },

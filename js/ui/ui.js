@@ -41,10 +41,11 @@ const UI = (() => {
   }
   async function typeText(el, text) {
     el.textContent = ''; if (story.skip) { el.textContent = text; return; }
+    const characters = Array.from(text);
     let i = 0, stop = false;
     const el2 = $('#story'); const skipper = e => { if (e.target.closest('.storyCtl')) return; stop = true; };
     el2.addEventListener('click', skipper, { once: true });
-    while (i < text.length && !stop) { i += 2; el.textContent = text.slice(0, i); if (i % 6 === 0) SFX.play('text'); await sleep(16); }
+    while (i < characters.length && !stop) { i += 2; el.textContent = characters.slice(0, i).join(''); if (i % 6 === 0) SFX.play('text'); await sleep(16); }
     el.textContent = text; el2.removeEventListener('click', skipper);
     await sleep(30);
   }
@@ -69,8 +70,8 @@ const UI = (() => {
     for (let i = 0; i < script.length; i++) {
       const c = script[i];
       if (c.label) continue;
+      if (c.if) { if (c.if(SAVE) && labels[c.go] != null) i = labels[c.go]; continue; }
       if (c.go) { if (labels[c.go] != null) { i = labels[c.go]; continue; } }
-      if (c.if) { if (c.if(SAVE)) { i = labels[c.go]; } continue; }
       if (c.bg) { story.bgKey = c.bg; story.cg = null; }
       if (c.cg && ASSETS.drawEvent(document.createElement('canvas').getContext('2d'), 1, 1, c.cg)) { story.cg = c.cg; if (opts.overlay && !el.classList.contains('cgshow')) { el.classList.add('cgshow'); story.t0 = performance.now(); cancelAnimationFrame(story.raf); storyLoop(); } }
       if (c.cgEnd) { story.cg = null; if (opts.overlay) { el.classList.remove('cgshow'); cancelAnimationFrame(story.raf); } }
@@ -134,6 +135,7 @@ const UI = (() => {
   function mapHUD(st) {
     const ch = st.ch;
     $('#mapTitle').textContent = `${ch.num} · ${ch.title}`;
+    $('#mapSize').textContent = `${st.w} × ${st.h}`;
     $('#btnEnd').onclick = () => { SFX.play('confirm'); MAP.endPlayerPhase(); };
     $('#btnThreat').onclick = () => MAP.toggleThreat();
     $('#btnObj').onclick = () => objectiveCard(ch);
@@ -150,7 +152,12 @@ const UI = (() => {
     const left = st.units.filter(u => u.team === 'enemy' && u.hp > 0).length; $('#mapEnemies').textContent = `${left} hostile`;
   }
   function chip(type) { return h('span', { class: 'chip', style: `--c:${ATK[type].color}` }, ASSETS.iconEl(type, 14), ATK[type].short); }
-  function bar(v, max, cls) { return h('div', { class: 'bar ' + cls }, h('i', { style: `width:${Math.max(0, Math.min(100, v / max * 100))}%` }), h('span', {}, `${Math.max(0, Math.round(v))} / ${max}`)); }
+  function bar(value, max, kind) {
+    const percent = Math.max(0, Math.min(100, value / max * 100));
+    return h('div', { class: 'meter ' + kind },
+      h('div', { class: 'meterReadout' }, h('b', {}, kind.toUpperCase()), h('span', {}, `${Math.max(0, Math.round(value)).toLocaleString()} / ${max.toLocaleString()}`)),
+      h('div', { class: 'bar', 'aria-hidden': 'true' }, h('i', { style: `width:${percent}%` })));
+  }
   function showTileInfo(x, y, tl, u) {
     if (u) { showUnit(u); return; }
     const t = TERRAIN[tl]; const p = $('#sidePanel'); p.innerHTML = '';
@@ -165,6 +172,7 @@ const UI = (() => {
     const ter = CB.ter(u.mech);
     const pm = CB.formation(u);
     p.appendChild(h('div', { class: 'uhead ' + u.team }, pimg, h('div', {}, h('div', { class: 'uname' }, name), h('div', { class: 'upilot' }, (u.pname || NAMES[u.pilot] || '') + ` · Lv ${u.lvl}`), h('div', { class: 'ucls' }, m.cls), h('div', { class: 'armorTag', style: `--c:${ARMOR[ms.armor].color}` }, ARMOR[ms.armor].name + ' · ' + m.size))));
+    const variant=typeof ENEMIES!=='undefined'?ENEMIES.label(u):null;if(variant)p.appendChild(h('p',{class:'muted small'},variant.description));
     p.appendChild(bar(u.hp, ms.hp, 'hp')); p.appendChild(bar(u.en, ms.en, 'en'));
     p.appendChild(h('div', { class: 'kv four' }, h('span', {}, 'Will'), h('b', { class: 'gold' }, u.will), h('span', {}, 'SP'), h('b', { class: 'green' }, `${u.sp}`), h('span', {}, 'Move'), h('b', {}, ms.move), h('span', {}, 'Mob'), h('b', {}, ms.mob), h('span', {}, 'Armor'), h('b', {}, ms.arm), h('span', {}, 'Terrain'), h('b', { title: 'Air / Land / Sea / Space' }, `${ter.air}${ter.lnd}${ter.sea}${ter.spc}`)));
     if (pm) p.appendChild(h('div', { class: 'tag green' }, `Formation: +${pm} evasion from adjacent allies`));
@@ -180,6 +188,7 @@ const UI = (() => {
   }
   function hideMenus() { $('#actMenu').hidden = true; $('#wpnPanel').hidden = true; hideForecast(); }
   function actionMenu(u, moved) {
+    if(typeof TOUCH!=='undefined')TOUCH.revealUnit(u,MAP.geom);
     const menu = $('#actMenu'); menu.innerHTML = ''; menu.hidden = false; $('#wpnPanel').hidden = true;
     const tg = MAP.targetsFor(u, moved); const canAtk = tg.some(t => t.ok);
     const add = (label, fn, dis, hint) => menu.appendChild(h('button', { class: 'act', disabled: dis ? 'disabled' : null, title: hint || '', onclick: () => { SFX.play('select'); fn(); } }, label));
@@ -196,10 +205,10 @@ const UI = (() => {
     pnl.appendChild(h('div', { class: 'phead' }, 'Select weapon', h('span', { class: 'muted small' }, moved ? ' · moved: post-move (P) weapons only' : '')));
     for (const w of CB.weapons(u)) {
       const why = CB.usable(u, w, null, moved);
-      const hasT = G.map.units.some(o => o.hp > 0 && (o.team === 'enemy') !== (u.team === 'enemy') && CB.usable(u, w, CB.dist(u, o), moved) === null);
+      const hasT = G.map.units.some(o => o.hp > 0 && (o.team === 'enemy') !== (u.team === 'enemy') && CB.usable(u, w, CB.dist(u, o), moved, false, o) === null);
       const reason = why && why !== 'range' ? { move: 'Not post-move', en: 'Low EN', ammo: 'No ammo', will: `Will ${w.will}` }[why] : (!hasT ? 'No target' : '');
       pnl.appendChild(h('button', { class: 'wbtn' + (w.finisher ? ' fin' : ''), disabled: reason ? 'disabled' : null, onclick: () => { SFX.play('select'); pnl.hidden = true; $('#actMenu').hidden = true; MAP.beginAttack(u, w); } },
-        chip(w.type), h('span', { class: 'wn' }, w.name + (w.post ? ' ᴾ' : '')), h('span', { class: 'wp' }, w.pow), h('span', { class: 'wr2' }, `${w.rmin}-${w.rmax}`), h('span', { class: 'we' }, w.en ? `${w.en} EN` : w.ammo ? `${u.ammo[w.idx] != null ? u.ammo[w.idx] : w.ammo} rds` : '—'),
+        chip(w.type), h('span', { class: 'wn' }, w.name + (w.combo?' · COMBO':'') + (w.post ? ' ᴾ' : '')), h('span', { class: 'wp' }, w.pow), h('span', { class: 'wr2' }, `${w.rmin}-${w.rmax}`), h('span', { class: 'we' }, w.en ? `${w.en} EN${w.combo?' each':''}` : w.ammo ? `${u.ammo[w.idx] != null ? u.ammo[w.idx] : w.ammo} rds` : '—'),
         w.status ? h('span', { class: 'stchip', style: `--c:${STATUS[w.status.id].color}` }, `${STATUS[w.status.id].name} ${w.status.ch}%`) : null,
         reason ? h('span', { class: 'why' }, reason) : null));
     }
@@ -222,12 +231,15 @@ const UI = (() => {
     const f = $('#forecast'); f.innerHTML = ''; f.hidden = false;
     const fa = CB.forecast(a, d, w, 'counter'); const cw = CB.bestWeapon(d, a, false, true); const fd = cw ? CB.forecast(d, a, cw, 'counter') : null;
     const eff = effLabel(fa.mult); const pm = CB.posMods(a, d);
-    const side = (u, wp, fc, isAtk) => h('div', { class: 'fside ' + u.team }, h('div', { class: 'fname' }, u.nameOverride || MECHS[u.mech].name), h('div', { class: 'fhp' }, bar(u.hp, CB.mstats(u).hp, 'hp')),
+    const side = (u, wp, fc, isAtk) => h('div', { class: 'fside ' + u.team }, h('div', { class: 'frole' }, isAtk ? 'Attack' : 'Response'), h('div', { class: 'fname' }, u.nameOverride || MECHS[u.mech].name), h('div', { class: 'fhp' }, bar(u.hp, CB.mstats(u).hp, 'hp')),
       wp ? h('div', { class: 'fw' }, chip(wp.type), ' ', wp.name) : h('div', { class: 'fw muted' }, 'No counter'),
       fc ? h('div', { class: 'fstats' }, h('div', {}, h('span', {}, 'DMG'), h('b', {}, fc.dmg)), h('div', {}, h('span', {}, 'HIT'), h('b', {}, fc.hit + '%')), h('div', {}, h('span', {}, 'CRIT'), h('b', {}, fc.crit + '%'))) : null,
       fc && isAtk ? h('div', { class: 'eff', style: `--c:${eff.c}` }, eff.t + (fa.mult !== 1 ? ` ×${fa.mult.toFixed(2)}` : '')) : null);
-    f.appendChild(h('div', { class: 'fgrid' }, side(a, w, fa, true), h('div', { class: 'fvs' }, 'VS'), side(d, cw, fd, false)));
+    f.appendChild(h('h2', { class: 'forecastTitle' }, 'Combat forecast'));
+    f.appendChild(h('div', { class: 'fgrid' }, side(a, w, fa, true), h('div', { class: 'fvs', 'aria-hidden': 'true' }, 'VS'), side(d, cw, fd, false)));
     const mods = [];
+    for(const unit of [a,d]){const v=typeof ENEMIES!=='undefined'?ENEMIES.label(unit):null;if(v)mods.push(v.name+' · '+v.description);}
+    if(w.combo){const p=COMBOS.partner(a,w);mods.push('COMBO · '+NAMES[p?.pilot]+' · both actions and '+w.en+' EN each');}
     if (pm.flank.pincer) mods.push('PINCER +25% dmg'); else if (pm.flank.n) mods.push('FLANK +10% dmg, +10 hit');
     if (pm.high) mods.push('HIGH GROUND +10 hit');
     if (pm.eva) mods.push(`Target formation −${pm.eva} hit`);
@@ -253,6 +265,7 @@ const UI = (() => {
             h('button', { class: 'dopt', onclick: () => close('evade') }, h('b', {}, 'Evade'), h('span', {}, `Hit chance halved: ${fe.hit}%`), h('span', {}, `Damage ${fe.dmg}`)),
             h('button', { class: 'dopt', onclick: () => close('defend') }, h('b', {}, 'Defend'), h('span', {}, `Damage halved: ${fdf.dmg}`), h('span', {}, `Hit ${fdf.hit}%`))),
           weps.length > 1 ? h('div', { class: 'cwsel' }, h('span', { class: 'muted small' }, 'Counter with: '), weps.map(x => h('button', { class: 'btn sm' + (cw && x.idx === cw.idx ? ' on' : ''), onclick: () => { cw = x; const m = $('#modal'); m.innerHTML = ''; m.appendChild(render(close)); } }, x.name))) : null);
+        for(const guard of COMBOS.guards(d)){const f=CB.forecast(a,guard,w,'defend');box.appendChild(h('button',{class:'btn supportDefend',onclick:()=>close('guard:'+guard.uid)},ASSETS.iconEl('guard',22),'Support Defend by '+NAMES[guard.pilot]+' · '+f.dmg+' damage / '+f.hit+'%'));}
         return box;
       };
       modal(render, 'defense').then(res);
@@ -286,6 +299,8 @@ const UI = (() => {
     const s = SAVE.settings;
     return modal(close => h('div', { class: 'card' }, h('h3', {}, 'Settings'),
       h('label', { class: 'set' }, 'Battle animations', h('select', { id: 'setAnim', onchange: e => { s.anim = e.target.value; GAME.persist(); } }, ['full', 'fast', 'off'].map(v => { const o = h('option', { value: v }, v === 'full' ? 'Full' : v === 'fast' ? 'Fast (2×)' : 'Off'); if (s.anim === v) o.selected = true; return o; }))),
+      h('label',{class:'set'},'Graphics',h('select',{onchange:e=>{QUALITY.set(e.target.value);MAP.resize?.();}},['auto','high','low'].map(v=>h('option',{value:v,selected:(s.graphics||'auto')===v?'selected':null},v[0].toUpperCase()+v.slice(1))))),
+      h('p',{class:'muted small'},'Active graphics: '+QUALITY.mode+'. Auto lowers effects on software rendering or sustained slow frames.'),
       h('label', { class: 'set' }, 'Auto-counter when attacked', h('input', { id: 'setDef', type: 'checkbox', checked: s.defAuto ? 'checked' : null, onchange: e => { s.defAuto = e.target.checked; GAME.persist(); } })),
       h('label', { class: 'set' }, 'Auto end turn when all units acted', h('input', { id: 'setEnd', type: 'checkbox', checked: s.autoEnd ? 'checked' : null, onchange: e => { s.autoEnd = e.target.checked; GAME.persist(); } })),
       h('label', { class: 'set' }, 'Sound effects', h('input', { id: 'setSfx', type: 'range', min: 0, max: 1, step: 0.1, value: s.sfx, oninput: e => { s.sfx = +e.target.value; GAME.persist(); } })),
@@ -392,9 +407,13 @@ const UI = (() => {
     b.appendChild(h('section', { class: 'system' }, h('h2', {}, 'System'),
       h('div', { class: 'list' },
         h('button', { class: 'btn primary', onclick: () => { GAME.persist(true); toast('Game saved.'); } }, 'Save game'),
+        h('button',{class:'btn',onclick:()=>SAVES.openSave()},'Save to slot'),
+        h('button',{class:'btn',onclick:()=>SAVES.openLoad()},'Load game'),
+        h('button',{class:'btn',onclick:()=>SAVES.openExport()},'Export save'),
+        h('button',{class:'btn',onclick:()=>SAVES.openImport()},'Import save'),
         h('button', { class: 'btn', onclick: () => settingsModal() }, 'Settings'),
         h('button', { class: 'btn danger', onclick: () => { GAME.toTitle(); } }, 'Return to title')),
-      h('p', { class: 'muted small' }, 'Progress also autosaves at every intermission. Saves live in this browser only.')));
+      h('p', { class: 'muted small' }, 'Progress autosaves at intermission. Export a backup to take it to another browser or folder.')));
   }
   function pilotSpirits(pid) {
     const p = PILOTS[pid]; if (!p) return [];

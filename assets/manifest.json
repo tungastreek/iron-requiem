@@ -336,6 +336,18 @@
     "sha256": "68c4a967dee9ad28921834cd8b80c96eb393e200f92cc603f8d41de6f70444bf"
   },
   {
+    "path": "assets/portraits/ourobor-portraits.png",
+    "width": 1254,
+    "height": 1254,
+    "sha256": "ea7baf2aebd0ae4d3f6d42316eed31c287af629a658477c9f8a93d09a6ead579"
+  },
+  {
+    "path": "assets/portraits/ourobor-specialists.png",
+    "width": 1254,
+    "height": 1254,
+    "sha256": "1bf6b08dd8599f33fe4094ef817c9f136713bb5f3d987577978f18084bc9ee02"
+  },
+  {
     "path": "assets/portraits/pell.png",
     "width": 1024,
     "height": 1024,
@@ -592,6 +604,30 @@
     "width": 1536,
     "height": 1024,
     "sha256": "ada03b19d7bee9eddb631877d10d6f19da586af23d15890363cbf5856428e86b"
+  },
+  {
+    "path": "assets/units/specialist-concord.png",
+    "width": 1254,
+    "height": 1254,
+    "sha256": "c3f3c3b092e1c9cd80917741f9d4a5b4503f73b5291d427707fdb13f325d7f8a"
+  },
+  {
+    "path": "assets/units/specialist-free-states.png",
+    "width": 1254,
+    "height": 1254,
+    "sha256": "0af68fd93ddcf2d221fc755e4a459dee436a9c3539f68cfa135bda6aa6792c46"
+  },
+  {
+    "path": "assets/units/specialist-legacy-brood.png",
+    "width": 1254,
+    "height": 1254,
+    "sha256": "e9fb4133185b97023cc60a9862a53781a6b0577218276f6a09fd808f2a2db2a5"
+  },
+  {
+    "path": "assets/units/specialist-vael.png",
+    "width": 1254,
+    "height": 1254,
+    "sha256": "c14315cf05c9760c841667562dac704ce2822f942c882c7ce6899093ff5ee430"
   },
   {
     "path": "assets/units/sylph.png",

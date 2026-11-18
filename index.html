@@ -1,9 +1,10 @@
-<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Iron Requiem</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,400;0,500;0,600;0,700;1,700&family=Saira:wght@400;500;600&family=Saira+Condensed:wght@700;800&display=swap">
 <link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/saves.css">
+<link rel="stylesheet" href="css/touch.css">
+<link rel="stylesheet" href="css/readability.css">
+</head><body>
 
 <div id="app">
   <!-- TITLE -->
@@ -16,6 +17,7 @@
       <div class="tmenu">
         <button id="btnNew" class="btn primary big">New Game</button>
         <button id="btnContinue" class="btn big">Continue</button>
+        <button id="btnLoad" class="btn">Load Game</button>
         <button id="btnArchive" class="btn">Frame Archive</button>
         <button id="btnTitleSettings" class="btn">Settings</button>
       </div>
@@ -26,9 +28,8 @@
   <!-- SETUP -->
   <section id="setup" class="screen" hidden>
     <div class="setupWrap">
-      <div class="eyebrow">New game</div>
-      <h2>Who pilots the Alteon?</h2>
-      <p class="muted">Your choices set the protagonist's name and portrait, and whether the prototype is a nimble Real robot or a heavy Super robot. The story is the same either way; how you fight changes.</p>
+      <div id="setupStep" class="eyebrow">New game · 1 of 2</div>
+      <h2 id="setupTitle">Choose your pilot</h2>
       <div id="setupBody"></div>
     </div>
   </section>
@@ -54,6 +55,7 @@
   <section id="mapScreen" class="screen" hidden>
     <header id="mapTop">
       <div id="mapTitle"></div>
+      <div id="mapSize" aria-label="Map dimensions"></div>
       <div id="mapTurn"></div>
       <div id="mapPhase" class="phase"></div>
       <div id="mapEnemies" class="muted"></div>
@@ -93,6 +95,8 @@
 <script src="js/data/pilots.js"></script>
 <script src="js/data/story.js"></script>
 <script src="js/data/expansion.js"></script>
+<script src="js/data/combos.js"></script>
+<script src="js/data/enemy-deployments.js"></script>
 <script src="js/render/audio.js"></script>
 <script src="js/render/mechart.js"></script>
 <script src="vendor/three/three.min.js"></script>
@@ -104,12 +108,17 @@
 <script src="vendor/three/ShaderPass.js"></script>
 <script src="vendor/three/UnrealBloomPass.js"></script>
 <script src="vendor/three/RoomEnvironment.js"></script>
+<script src="js/render/quality.js"></script>
 <script src="js/render/r3d.js"></script>
+<script src="assets/art-metadata.js"></script>
 <script src="js/render/assets.js"></script>
+<script src="js/map/enemy-systems.js"></script>
 <script src="js/battle/combat.js"></script>
 <script src="js/battle/scene.js"></script>
 <script src="js/map/tactics.js"></script>
 <script src="js/ui/ui.js"></script>
+<script src="js/ui/saves.js"></script>
+<script src="js/ui/touch.js"></script>
 <script src="js/ui/archive.js"></script>
 <script src="js/main.js"></script>
 

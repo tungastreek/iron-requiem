@@ -22,7 +22,7 @@ function genMap(theme, w, h, seed) {
         case 'hive': t = a > 0.7 ? 'x' : a > 0.55 ? 'h' : b > 0.75 ? 'r' : b < 0.25 ? 'h' : '.'; break;
         case 'ice': t = a > 0.7 ? 'm' : a < 0.2 ? 'w' : b > 0.8 ? 'r' : '.'; break;
         case 'space': t = a > 0.68 ? 'a' : 's'; break;
-        case 'colony': t = (y >= 5 && y <= 6 && x > 3 && x < 15) ? (b > 0.5 ? 'c' : 'b') : a > 0.72 ? 'a' : 's'; break;
+        case 'colony': t = (Math.abs(y - (h - 1) / 2) <= 1 && x > Math.floor(w * .18) && x < Math.ceil(w * .82)) ? (b > 0.5 ? 'c' : 'b') : a > 0.72 ? 'a' : 's'; break;
         case 'vael': t = a > 0.6 ? 'v' : b > 0.82 ? 'a' : 's'; break;
       }
       row += t;
@@ -52,18 +52,19 @@ const MAP = (() => {
   function pilotMech(pid) { return pid === 'rei' ? heroMech() : PILOTS[pid].mech; }
   function makeUnit(o, team) {
     const mech = o.m || pilotMech(o.p);
-    const u = { uid: st.uid++, team, mech, pilot: o.p || o.pilot || null, x: o.x, y: o.y, lvl: o.lvl || 1, tag: o.tag || o.p, boss: !!o.boss, hold: o.hold || 0, retreatAt: o.retreat || 0, usePlayerStats: !!o.usePlayerStats, hpMul: o.hpMul, lineSet: o.lineSet, protect: !!o.protect, buf: {}, status: {}, ammo: {}, moved: false, acted: false, kills: 0, mode: 'robot' };
+    const u = { uid: st.uid++, team, mech, pilot: o.p || o.pilot || null, x: o.x, y: o.y, lvl: o.lvl || 1, tag: o.tag || o.p, boss: !!o.boss, hold: o.hold || 0, retreatAt: o.retreat || 0, usePlayerStats: !!o.usePlayerStats, hpMul: o.hpMul, lineSet: o.lineSet, protect: !!(o.protect || o.retreat), buf: {}, status: {}, ammo: {}, moved: false, acted: false, kills: 0, mode: 'robot' };
     if (team === 'player') { const sp = SAVE.pilots[o.p]; u.lvl = sp.lvl; u.tag = o.p; }
     if (!u.pilot || !PILOTS[u.pilot] || (team !== 'player' && !u.usePlayerStats && !['lucien', 'aurelion'].includes(u.pilot))) {
       // enemy line sets / portraits
-      const fac = MECHS[mech].armor === 'BIO' ? 'beast' : MECHS[mech].armor === 'VOID' ? 'vael' : ['zephyr', 'tyrant'].includes(mech) ? 'grunt_f' : 'grunt_c';
-      u.portrait = o.pilot && PORTRAITS[o.pilot] ? o.pilot : fac; u.lineSet = o.lineSet || (o.pilot && EPILOTS[o.pilot] ? o.pilot : fac);
+      const fac = MECHS[mech].armor === 'BIO' ? 'beast' : MECHS[mech].armor === 'VOID' ? 'vael' : MECHS[mech].faction==='free_states'||['zephyr', 'tyrant'].includes(mech) ? 'grunt_f' : 'grunt_c';
+      u.portrait = o.pilot && PORTRAITS[o.pilot] ? o.pilot : (OUROBOR_FACE[mech] || fac); u.lineSet = o.lineSet || (o.pilot && EPILOTS[o.pilot] ? o.pilot : fac);
       u.pname = o.pilot && NAMES[o.pilot] ? NAMES[o.pilot] : (fac === 'beast' ? 'Ourobor' : fac === 'vael' ? 'Vael Choir' : fac === 'grunt_f' ? 'Free States Pilot' : 'Concord Pilot');
       if (u.pilot && !PILOTS[u.pilot]) { u.pilot = null; }
     }
     if (o.name) u.nameOverride = o.name;
     if (team !== 'player' && o.p && PILOTS[o.p]) { u.pilot = o.p; u.usePlayerStats = true; u.lvl = o.lvl || Math.max(10, avgLevel()); }
     if (u.boss && team === 'enemy') u.eskills = ['prevail', 'nerves'];
+    if(typeof ENEMIES!=='undefined')ENEMIES.init(u,o);
     const ms = CB.mstats(u); u.hp = ms.hp; u.en = ms.en;
     const sk = CB.skills(u); u.will = 100 + (sk.has('nerves') && team === 'player' ? 5 : 0) + (sk.has('overdrive') ? 10 : 0) + ((CB.partFx(u).will) || 0);
     u.sp = CB.pstats(u).SP;
@@ -97,18 +98,20 @@ const MAP = (() => {
     placeSecrets();
     document.getElementById('mapScreen').hidden = false;
     initCanvas(); resize();
+    if(typeof TOUCH!=='undefined')TOUCH.resetMap();
     UI.mapHUD(st);
     SFX.music(ch.mood || 'battle');
     loop();
     await UI.objectiveCard(ch);
     await phaseStart('player');
   }
-  function stop() { cancelAnimationFrame(raf); document.getElementById('mapScreen').hidden = true; G.map = null; }
+  function stop() { cancelAnimationFrame(raf); document.getElementById('mapScreen').hidden = true; G.map = null; st = null; }
 
   // ---------- canvas ----------
   function initCanvas() {
     if (cv) return;
     cv = document.getElementById('mapCanvas'); ctx = cv.getContext('2d');
+    if(typeof TOUCH!=='undefined')TOUCH.attachMap(cv,{state:()=>st,ui:()=>ui,geom:()=>({T,ox,oy}),toTile,click:onClick,preview:t=>{hover=t;if(t)onHover();else ui.path=null;},inspect:t=>{hover=t;onHover();}});
     window.addEventListener('resize', () => { if (st) { resize(); } });
     cv.addEventListener('pointermove', e => { const t = toTile(e); if (!hover || !t || hover.x !== t.x || hover.y !== t.y) { hover = t; onHover(); } });
     cv.addEventListener('pointerleave', () => { hover = null; });
@@ -117,27 +120,28 @@ const MAP = (() => {
     window.addEventListener('keydown', e => { if (!st || document.getElementById('mapScreen').hidden) return; if (e.key === 'Escape') cancel(); if (e.key === 't' || e.key === 'T') toggleThreat(); });
   }
   function resize() {
+    if(!st)return;
     const wrap = document.getElementById('mapWrap'); const W = wrap.clientWidth, H = wrap.clientHeight;
-    const dpr = Math.min(2, window.devicePixelRatio || 1);
+    const dpr = typeof QUALITY!=='undefined'?QUALITY.dpr:Math.min(2, window.devicePixelRatio || 1);
     T = Math.max(20, Math.floor(Math.min(W / st.w, H / st.h)));
     cv.width = W * dpr; cv.height = H * dpr; cv.style.width = W + 'px'; cv.style.height = H + 'px';
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     ox = Math.floor((W - T * st.w) / 2); oy = Math.floor((H - T * st.h) / 2);
     buildTerrain();
   }
-  function toTile(e) { const r = cv.getBoundingClientRect(); const x = Math.floor((e.clientX - r.left - ox) / T), y = Math.floor((e.clientY - r.top - oy) / T); return (x >= 0 && y >= 0 && x < st.w && y < st.h) ? { x, y } : null; }
+  function toTile(e) { const r=cv.getBoundingClientRect(),p=typeof TOUCH!=='undefined'?TOUCH.localPoint(e,cv):{x:e.clientX-r.left,y:e.clientY-r.top};const x=Math.floor((p.x-ox)/T),y=Math.floor((p.y-oy)/T);return st&&(x>=0&&y>=0&&x<st.w&&y<st.h)?{x,y}:null; }
   function terrColor(tl) {
     const th = st.theme;
     if (tl === '.') return th === 'ice' ? '#b9c7d6' : th === 'hive' ? '#3a2630' : th === 'lab' ? '#3e3a26' : '#33452d';
     return TERRAIN[tl].col;
   }
   function buildTerrain() {
-    const dpr = Math.min(2, window.devicePixelRatio || 1);
+    const dpr = typeof QUALITY!=='undefined'?QUALITY.dpr:Math.min(2, window.devicePixelRatio || 1);
     terrCv = document.createElement('canvas'); terrCv.width = T * st.w * dpr; terrCv.height = T * st.h * dpr;
     const c = terrCv.getContext('2d'); c.scale(dpr, dpr);
     const r = rng(st.ch.map.seed + 99);
     const tiled = !!ASSETS.tileFor(st.theme, st.tile(0, 0), 0, 0);
-    let baked = null; if (!tiled && R3D.ok) { try { baked = R3D.bakeTerrain(st, T, dpr, terrColor); } catch (e) { console.warn('3D terrain failed', e); } }
+    let baked = null; if (!tiled && R3D.ok && !(typeof QUALITY!=='undefined'&&QUALITY.low)) { try { baked = R3D.bakeTerrain(st, T, dpr, terrColor); } catch (e) { console.warn('3D terrain failed', e); } }
     if (tiled) { for (let y = 0; y < st.h; y++) for (let x = 0; x < st.w; x++) { const im = ASSETS.tileFor(st.theme, st.tile(x, y), x, y); if (im) c.drawImage(im, x * T, y * T, T, T); } }
     else if (baked) c.drawImage(baked, 0, 0, T * st.w, T * st.h);
     else for (let y = 0; y < st.h; y++) for (let x = 0; x < st.w; x++) {
@@ -170,7 +174,7 @@ const MAP = (() => {
     const tl = st.tile(x, y); if (tl === 'x') return 99;
     if (CB.mstats(u).fly) return 1;
     if (tl === 'w' && MECHS[u.mech].amphibious) return 1;
-    return TERRAIN[tl].cost;
+    return typeof ENEMIES!=='undefined'?ENEMIES.moveCost(u,tl,TERRAIN[tl].cost):TERRAIN[tl].cost;
   }
   function foeOf(a, b) { return (a.team === 'enemy') !== (b.team === 'enemy'); }
   function reach(u, mv) {
@@ -199,7 +203,9 @@ const MAP = (() => {
   function toggleThreat() { threatOn = !threatOn; threatSet = threatOn ? computeThreat() : null; UI.setThreatBtn(threatOn); SFX.play('select'); }
 
   // ---------- render ----------
+  let lastMapFrame=0;
   function loop() {
+    const stamp=performance.now();if(lastMapFrame&&stamp-lastMapFrame<200&&typeof QUALITY!=='undefined')QUALITY.observe(stamp-lastMapFrame,'map');lastMapFrame=stamp;
     raf = requestAnimationFrame(loop);
     const t = performance.now() / 1000; draw(t);
   }
@@ -239,6 +245,7 @@ const MAP = (() => {
     let x = u.x, y = u.y;
     if (u.anim) { const k = Math.min(u.anim.path.length - 1e-6, (performance.now() - u.anim.t0) / 110); const i = Math.floor(k), f = k - i; const a = u.anim.path[i], b = u.anim.path[Math.min(i + 1, u.anim.path.length - 1)]; x = a[0] + (b[0] - a[0]) * f; y = a[1] + (b[1] - a[1]) * f; }
     const px = x * T, py = y * T; const done = u.team === 'player' && u.acted;
+    if(typeof ENEMIES!=='undefined')ENEMIES.badge(ctx,u,px+T/2,py+T*.6,T);
     const col = u.team === 'player' ? '#3fd6ff' : u.team === 'ally' ? '#7dffb0' : '#ff4d6d';
     // base ring
     ctx.save(); ctx.globalCompositeOperation = 'lighter'; ctx.strokeStyle = ART.rgba(col, done ? 0.25 : 0.7); ctx.lineWidth = 2; ctx.beginPath(); ctx.ellipse(px + T / 2, py + T * 0.82, T * 0.38, T * 0.14, 0, 0, 7); ctx.stroke(); ctx.restore();
@@ -260,6 +267,7 @@ const MAP = (() => {
   function floater(x, y, s, c = '#fff', size = 16, life = 1200) { floaters.push({ x, y, s, c, size, life, t: performance.now() }); }
   function animateMove(u, path) {
     if (!path.length) return Promise.resolve();
+    u.moveDistance=(u.moveDistance||0)+path.length;
     return new Promise(res => { u.anim = { path: [[u.x, u.y], ...path], t0: performance.now() }; SFX.play('step'); setTimeout(() => { const [lx, ly] = path[path.length - 1]; u.x = lx; u.y = ly; u.anim = null; res(); }, path.length * 110 + 20); });
   }
 
@@ -269,7 +277,7 @@ const MAP = (() => {
     const u = st.unitAt(hover.x, hover.y);
     UI.showTileInfo(hover.x, hover.y, st.tile(hover.x, hover.y), u);
     if (ui.mode === 'moving' && ui.range && ui.range.tiles.has(hover.x + ',' + hover.y)) ui.path = pathTo(ui.range, ui.sel, hover.x, hover.y);
-    if (ui.mode === 'target' && ui.weapon && u && foeOf(u, ui.sel) && ui.atkRange.has(u.x + ',' + u.y)) UI.forecast(ui.sel, u, ui.weapon);
+    if (ui.mode === 'target' && !ui.target && ui.weapon && u && foeOf(u, ui.sel) && ui.atkRange.has(u.x + ',' + u.y) && !CB.usable(ui.sel, ui.weapon, CB.dist(ui.sel,u), ui.sel.moved, false, u)) UI.forecast(ui.sel, u, ui.weapon);
   }
   async function onClick(x, y) {
     if (busy || st.phase !== 'player') return;
@@ -291,7 +299,7 @@ const MAP = (() => {
         } else if (u && u.team === 'player' && !u.acted && u !== ui.sel) { selectUnit(u); }
         break;
       case 'target':
-        if (u && foeOf(u, ui.sel) && ui.atkRange.has(x + ',' + y)) {
+        if (u && foeOf(u, ui.sel) && ui.atkRange.has(x + ',' + y) && CB.usable(ui.sel,ui.weapon,CB.dist(ui.sel,u),ui.sel.moved,false,u)===null) {
           if (ui.target === u) { await confirmAttack(); } else { ui.target = u; UI.forecast(ui.sel, u, ui.weapon, true); }
         }
         break;
@@ -300,8 +308,9 @@ const MAP = (() => {
   }
   function selectUnit(u) { SFX.play('select'); ui = { mode: 'moving', sel: u, range: u.moved ? null : reach(u), atkRange: null, path: null, origin: null, weapon: null, target: null }; if (u.moved) { ui.mode = 'menu'; UI.actionMenu(u, true); } UI.showUnit(u); }
   function showEnemyRange(u) { const rr = (u.hold && st.turn <= u.hold && u.team === 'enemy') ? { tiles: new Set([u.x + ',' + u.y]) } : reach(u); const mr = Math.max(...CB.weapons(u).map(w => w.rmax)); const s = new Set(); rr.tiles.forEach(k => { const [x, y] = k.split(',').map(Number); rangeTiles(x, y, 1, mr).forEach(t => s.add(t)); }); ui = { mode: 'enemyview', sel: u, range: rr, atkRange: s }; UI.showUnit(u); SFX.play('select'); }
-  function clearSel() { ui = { mode: 'idle', sel: null, range: null, atkRange: null, path: null }; UI.hideMenus(); }
+  function clearSel() { if(typeof TOUCH!=='undefined')TOUCH.cancelMove(); ui = { mode: 'idle', sel: null, range: null, atkRange: null, path: null }; UI.hideMenus(); }
   function cancel() {
+    if(typeof TOUCH!=='undefined')TOUCH.cancelMove();
     if (busy) return; SFX.play('cancel');
     if (ui.mode === 'target') { ui.mode = 'menu'; ui.atkRange = null; ui.target = null; ui.weapon = null; UI.hideForecast(); UI.actionMenu(ui.sel, ui.sel.moved); return; }
     if (ui.mode === 'menu' && ui.origin && ui.sel.moved && !ui.sel.acted) { ui.sel.x = ui.origin.x; ui.sel.y = ui.origin.y; ui.sel.moved = false; const u = ui.sel; UI.hideMenus(); selectUnit(u); return; }
@@ -310,17 +319,17 @@ const MAP = (() => {
   // called by UI action menu
   function beginAttack(u, w) {
     ui.mode = 'target'; ui.weapon = w; ui.atkRange = rangeTiles(u.x, u.y, w.rmin, w.rmax); ui.target = null;
-    const foes = st.units.filter(o => o.hp > 0 && foeOf(o, u) && ui.atkRange.has(o.x + ',' + o.y));
+    const foes = st.units.filter(o => o.hp > 0 && foeOf(o, u) && ui.atkRange.has(o.x + ',' + o.y) && CB.usable(u,w,CB.dist(u,o),u.moved,false,o)===null);
     if (foes.length === 1) { ui.target = foes[0]; UI.forecast(u, foes[0], w, true); }
     else UI.toast('Select a target in red range. Click it twice (or confirm) to attack.');
   }
   function targetsFor(u, moved) {
     const res = [];
-    for (const w of CB.weapons(u)) { if (CB.usable(u, w, null, moved) && CB.usable(u, w, null, moved) !== 'range') continue; const ok = st.units.some(o => o.hp > 0 && foeOf(o, u) && CB.usable(u, w, CB.dist(u, o), moved) === null); res.push({ w, ok }); }
+    for (const w of CB.weapons(u)) { if (CB.usable(u, w, null, moved) && CB.usable(u, w, null, moved) !== 'range') continue; const ok = st.units.some(o => o.hp > 0 && foeOf(o, u) && CB.usable(u, w, CB.dist(u, o), moved,false,o) === null); res.push({ w, ok }); }
     return res;
   }
   async function confirmAttack() {
-    const a = ui.sel, d = ui.target, w = ui.weapon; if (!a || !d || !w) return;
+    const a = ui.sel, d = ui.target, w = ui.weapon; if (!a || !d || !w || CB.usable(a,w,CB.dist(a,d),a.moved,false,d)) return;
     UI.hideMenus(); UI.hideForecast(); ui.atkRange = null; ui.target = null; busy = true;
     await battle(a, d, w);
     if (!st) return;
@@ -389,14 +398,17 @@ const MAP = (() => {
     let mode;
     if (d.team === 'player') mode = SAVE.settings.defAuto ? (CB.bestWeapon(d, a, false, true) ? 'counter' : 'defend') : await UI.defensePrompt(a, d, w);
     else mode = aiDefMode(d, a);
+    let intercept=null;
+    if(typeof mode==='string'&&mode.startsWith('guard:')){const guard=COMBOS.guards(d).find(u=>u.uid===Number(mode.split(':')[1]));if(guard){intercept={target:d,guard};d=guard;d.supportDefended=true;}mode='defend';}
+    const comboPartner=w.combo?COMBOS.partner(a,w):null;
     const counterW = mode === 'counter' ? (d.team === 'player' && d._counterW ? d._counterW : CB.bestWeapon(d, a, false, true)) : null; d._counterW = null;
     const hp0 = { a: a.hp, d: d.hp };
     const events = [];
     const pm = CB.posMods(a, d);
     // attack
-    CB.spend(a, w); const r1 = CB.roll(a, d, w, mode); CB.applyResult(a, d, r1); events.push({ by: 'A', w, res: r1, mode, hpAfter: d.hp });
+    CB.spend(a, w); const r1 = CB.roll(a, d, w, mode); CB.applyResult(a, d, r1); events.push({ by: 'A', w, res: r1, mode, hpAfter: d.hp, comboPartner });
     // support attack
-    if (d.hp > 0) {
+    if (d.hp > 0 && !w.combo) {
       const sup = st.units.find(o => o !== a && o.hp > 0 && o.team === a.team && CB.dist(o, a) === 1 && CB.skills(o).has('support') && CB.bestWeapon(o, d, true, true));
       if (sup) { const sw = Object.assign({}, CB.bestWeapon(sup, d, true, true), { support: true }); CB.spend(sup, sw); const rs = CB.roll(sup, d, sw, mode); CB.applyResult(sup, d, rs); events.push({ by: 'A', w: sw, res: rs, mode, hpAfter: d.hp, support: sup }); }
     }
@@ -411,15 +423,15 @@ const MAP = (() => {
       const sideA = a === leftU ? 'L' : 'R', sideD = sideA === 'L' ? 'R' : 'L';
       leftU.hpStart = leftU === a ? hp0.a : hp0.d; rightU.hpStart = rightU === a ? hp0.a : hp0.d;
       document.getElementById('mapScreen').classList.add('dim');
-      SFX.music('battle');
-      await SCENE.play({ left: leftU, right: rightU, bg: st.ch.bg, events: events.map(e => ({ by: e.by === 'A' ? sideA : sideD, w: e.w, res: e.res, mode: e.mode, hpAfter: e.hpAfter, support: e.support })) });
+      await SCENE.play({ left: leftU, right: rightU, bg: st.ch.bg, intercept:intercept?{side:sideD,target:intercept.target,guard:intercept.guard}:null, events: events.map(e => ({ by: e.by === 'A' ? sideA : sideD, w: e.w, res: e.res, mode: e.mode, hpAfter: e.hpAfter, support: e.support, comboPartner:e.comboPartner })) });
       document.getElementById('mapScreen').classList.remove('dim');
     } else {
       for (const e of events) { const tgt = e.by === 'A' ? d : a; floater(tgt.x, tgt.y, e.res.hit ? String(e.res.dmg) : 'MISS', e.res.hit ? (e.res.crit ? '#ffd166' : '#fff') : '#9fd8ff', 18); await sleep(350); }
     }
     if (pm.flank.pincer) floater(d.x, d.y - 0.5, 'PINCER!', '#ffb347', 14); else if (pm.flank.n) floater(d.x, d.y - 0.5, 'FLANK', '#ffb347', 13);
     // knockback
-    if (r1.hit && d.hp > 0 && CB.pushes(w) && !['XL'].includes(MECHS[d.mech].size) && !MECHS[d.mech].ship) await knockback(a, d);
+    const pull=r1.hit&&typeof ENEMIES!=='undefined'?ENEMIES.pullTile(st,a,d,w):null;
+    if(pull){await animateMove(d,[[pull.x,pull.y]]);floater(d.x,d.y,'PULLED','#ffb347',14);}else if (r1.hit && d.hp > 0 && CB.pushes(w) && !['XL'].includes(MECHS[d.mech].size) && !MECHS[d.mech].ship) await knockback(a, d);
     // rewards & deaths
     for (const [att, def] of [[a, d], [d, a]]) if (att.team === 'player' || att.team === 'ally') rewards(att, def, def.hp <= 0, events);
     for (const u of [a, d]) if (u.hp <= 0) await unitDown(u);
@@ -441,10 +453,10 @@ const MAP = (() => {
   function rewards(att, def, killed, events) {
     if (att.team !== 'player') return;
     const base = 10 * Math.max(0.3, (def.lvl + 5) / (att.lvl + 5));
-    let exp = Math.round(base * (killed ? 3 : 1) * (def.boss ? 2 : 1)); if (att.buf.insight) { exp *= 2; att.buf.insight = false; }
+    let exp = Math.round(base * (killed ? 3 : 1) * (def.boss ? 2 : 1)*(typeof ENEMIES!=='undefined'?ENEMIES.reward(def):1)); if (att.buf.insight) { exp *= 2; att.buf.insight = false; }
     gainExp(att, exp);
     if (killed) {
-      let c = Math.round(MECHS[def.mech].hp / 3 / 10) * 10 * (def.boss ? 2 : 1); if (att.buf.fortune) { c *= 2; att.buf.fortune = false; }
+      let c = Math.round(Math.round(MECHS[def.mech].hp / 3 / 10) * 10 * (def.boss ? 2 : 1)*(typeof ENEMIES!=='undefined'?ENEMIES.reward(def):1)); if (att.buf.fortune) { c *= 2; att.buf.fortune = false; }
       st.credits += c; st.kills++; SAVE.pilots[att.pilot].kills++; SAVE.pilots[att.pilot].pp += 1;
       floater(att.x, att.y, '+' + c + ' CR', '#ffd166', 13);
     }
@@ -468,6 +480,8 @@ const MAP = (() => {
   async function phaseStart(phase) {
     if (!st) return;
     st.phase = phase;
+    if(typeof SFX.phase==='function')SFX.phase(phase,st.ch);
+    if(phase==='enemy')st.units.forEach(u=>u.supportDefended=false);
     await UI.phaseBanner(phase, st.turn);
     for (const u of st.units) {
       if (u.hp <= 0) continue;
@@ -492,6 +506,7 @@ const MAP = (() => {
       if (CB.skills(u).has('afflict')) u.sp = Math.min(CB.pstats(u).SP, u.sp + 5);
       if (u.team === 'player') u.sp = Math.min(CB.pstats(u).SP, u.sp + 2);
     }
+    if(typeof ENEMIES!=='undefined')ENEMIES.phase(st,phase==='enemy'?'enemy':phase==='ally'?'ally':'player',{maxHP:u=>CB.mstats(u).hp,spawn:(o,team)=>{const born=makeUnit(o,team);st.units.push(born);return born;},effect:e=>floater(e.target.x,e.target.y,e.kind==='heal'?'REPAIR +'+e.amount:e.kind==='spawn'?'BROOD':'CHOIR +10','#c8b0ff',13)});
     UI.refreshHUD(st);
     await runEvents();
     if (!st) return;
@@ -536,6 +551,7 @@ const MAP = (() => {
         const fc = CB.forecast(e, f, w, 'counter');
         let score = fc.dmg * fc.hit / 100 + (fc.dmg >= f.hp ? 4000 : 0) + (MECHS[f.mech].ship ? 300 : 0) + (f.pilot === 'rei' ? 200 : 0) - (moved ? 0 : -50);
         const tl = st.tile(x, y); score += (TERRAIN[tl].def + TERRAIN[tl].eva) * 5;
+        if(typeof ENEMIES!=='undefined')score+=ENEMIES.supportScore(e,x,y,st);
         if (!best || score > best.score) best = { x, y, f, w, score, moved };
       }
     });
@@ -567,7 +583,7 @@ const MAP = (() => {
       if (at.turn != null) ok = st.turn >= at.turn && (!at.phase || at.phase === st.phase) && (ev.repeat ? true : true);
       if (at.enemies != null) ok = st.units.filter(u => u.team === 'enemy' && u.hp > 0).length <= at.enemies;
       if (at.defeated) ok = st.defeatedTurn[at.defeated] != null;
-      if (at.hp) { const u = st.find(at.hp.tag); ok = !!u && u.hp <= CB.mstats(u).hp * at.hp.below; }
+      if (at.hp) { const u = st.find(at.hp.tag); ok ||= !!u && u.hp <= CB.mstats(u).hp * at.hp.below; }
       if (!ok) continue;
       st.fired[key] = st.turn;
       if (ev.script) { const r = await UI.runScript(ev.script, { overlay: true }); if (r === 'endmap:true') { await win(true); return; } }
@@ -576,6 +592,7 @@ const MAP = (() => {
       (ev.ally || []).forEach(o => { const p = freeNear(o.x, o.y); st.units.push(makeUnit(Object.assign({ lvl: avgLevel() + 2 }, o, p), 'ally')); });
       (ev.join || []).forEach(o => { addRoster(o.p); const p = freeNear(o.x, o.y); const u = makeUnit(Object.assign({}, o, p), 'player'); st.units.push(u); floater(u.x, u.y, 'JOINED', '#3fd6ff', 15); });
       if (ev.retreat) { const u = st.find(ev.retreat); if (u) { floater(u.x, u.y, 'RETREAT', '#ffd166', 15); u.hp = 0; u.retreated = true; st.defeatedTurn[u.tag] = st.turn; } }
+      if (ev.unprotect) { const u = st.find(ev.unprotect); if (u) u.protect = false; }
       if (ev.defect) { const u = st.find(ev.defect); if (u) { u.protect = false; addRoster(u.pilot); u.team = 'player'; u.usePlayerStats = false; u.lvl = SAVE.pilots[u.pilot].lvl; const ms = CB.mstats(u); u.hp = Math.min(ms.hp, Math.max(u.hp, Math.round(ms.hp * 0.6))); u.portrait = null; u.lineSet = null; u.pname = null; u.boss = false; u.hpMul = null; u.acted = st.phase === 'player'; floater(u.x, u.y, 'JOINED', '#3fd6ff', 15); } }
       if (ev.upgrade) { const u = st.find('rei'); SAVE.flags.zero = true; if (u) { u.mech = heroMech(); const ms = CB.mstats(u); u.hp = ms.hp; u.en = ms.en; CB.addWill(u, 20); u.acted = false; u.moved = false; floater(u.x, u.y, 'ALTEON ZERO', '#9dfcff', 18, 2000); } }
       UI.refreshHUD(st);
@@ -586,6 +603,7 @@ const MAP = (() => {
   function addRoster(pid) { if (!pid || !PILOTS[pid]) return; if (!SAVE.roster.includes(pid)) { SAVE.roster.push(pid); if (!SAVE.pilots[pid]) SAVE.pilots[pid] = newPilotSave(pid); if (EXPANSION.crew.includes(pid)) { SAVE.auxiliary ||= []; if(SAVE.auxiliary.length<4) SAVE.auxiliary.push(pid); } } }
   async function checkEnd() {
     if (!st) return true;
+    if (st.ch.requiredEvents?.some(index => !st.fired['e' + index])) return false;
     const win_ = st.ch.win;
     const enemiesLeft = st.units.filter(u => u.team === 'enemy' && u.hp > 0).length;
     let won = false;
@@ -615,6 +633,6 @@ const MAP = (() => {
   }
   async function lose(text) { stop(); await UI.defeat(text); GAME.retryMap(); }
 
-  return { get geom() { return { T, ox, oy }; }, start, stop, beginAttack, targetsFor, waitUnit, useSpirit, transform, endPlayerPhase, toggleThreat, cancel, confirmAttack, reach, get state() { return st; }, get ui() { return ui; }, floater, pilotMech, heroMech, addRoster, avgLevel };
+  return { get geom() { return { T, ox, oy }; }, resize,start, stop, beginAttack, targetsFor, waitUnit, useSpirit, transform, endPlayerPhase, toggleThreat, cancel, confirmAttack, reach, get state() { return st; }, get ui() { return ui; }, floater, pilotMech, heroMech, addRoster, avgLevel };
 })();
 function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }

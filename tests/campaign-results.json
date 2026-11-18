@@ -1,0 +1,4282 @@
+[
+  {
+    "chapter": "c1",
+    "route": "A",
+    "trueRoute": true,
+    "seed": 17,
+    "result": "win",
+    "turns": 3,
+    "actions": 8,
+    "losses": [],
+    "events": [
+      "e2",
+      "e0",
+      "e1"
+    ],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar"
+    ],
+    "flags": {
+      "route": "A",
+      "zero": false,
+      "trueRoute": false,
+      "sparedLucien": false,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 17520
+  },
+  {
+    "chapter": "i1",
+    "route": "A",
+    "trueRoute": true,
+    "seed": 17,
+    "result": "win",
+    "turns": 2,
+    "actions": 12,
+    "losses": [],
+    "events": [],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar",
+      "anika",
+      "corin"
+    ],
+    "flags": {
+      "route": "A",
+      "zero": false,
+      "trueRoute": false,
+      "sparedLucien": false,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 14500
+  },
+  {
+    "chapter": "c2",
+    "route": "A",
+    "trueRoute": true,
+    "seed": 17,
+    "result": "win",
+    "turns": 3,
+    "actions": 15,
+    "losses": [],
+    "events": [
+      "e0",
+      "e1"
+    ],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar",
+      "anika",
+      "corin",
+      "odessa"
+    ],
+    "flags": {
+      "route": "A",
+      "zero": false,
+      "trueRoute": false,
+      "sparedLucien": false,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 16190
+  },
+  {
+    "chapter": "i2",
+    "route": "A",
+    "trueRoute": true,
+    "seed": 17,
+    "result": "win",
+    "turns": 2,
+    "actions": 17,
+    "losses": [],
+    "events": [],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar",
+      "anika",
+      "corin",
+      "odessa",
+      "leda",
+      "hugo"
+    ],
+    "flags": {
+      "route": "A",
+      "zero": false,
+      "trueRoute": false,
+      "sparedLucien": false,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 17070
+  },
+  {
+    "chapter": "c3",
+    "route": "A",
+    "trueRoute": true,
+    "seed": 17,
+    "result": "win",
+    "turns": 2,
+    "actions": 15,
+    "losses": [],
+    "events": [
+      "e1"
+    ],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar",
+      "anika",
+      "corin",
+      "odessa",
+      "leda",
+      "hugo",
+      "brann"
+    ],
+    "flags": {
+      "route": "A",
+      "zero": false,
+      "trueRoute": false,
+      "sparedLucien": false,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 25435
+  },
+  {
+    "chapter": "i3",
+    "route": "A",
+    "trueRoute": true,
+    "seed": 17,
+    "result": "win",
+    "turns": 3,
+    "actions": 24,
+    "losses": [],
+    "events": [],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar",
+      "anika",
+      "corin",
+      "odessa",
+      "leda",
+      "hugo",
+      "brann",
+      "noor",
+      "emi"
+    ],
+    "flags": {
+      "route": "A",
+      "zero": false,
+      "trueRoute": false,
+      "sparedLucien": false,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 21815
+  },
+  {
+    "chapter": "c4",
+    "route": "A",
+    "trueRoute": true,
+    "seed": 17,
+    "result": "win",
+    "turns": 3,
+    "actions": 22,
+    "losses": [
+      "odessa"
+    ],
+    "events": [
+      "e0"
+    ],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar",
+      "anika",
+      "corin",
+      "odessa",
+      "leda",
+      "hugo",
+      "brann",
+      "noor",
+      "emi"
+    ],
+    "flags": {
+      "route": "A",
+      "zero": false,
+      "trueRoute": false,
+      "sparedLucien": true,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 22655
+  },
+  {
+    "chapter": "i4",
+    "route": "A",
+    "trueRoute": true,
+    "seed": 17,
+    "result": "win",
+    "turns": 2,
+    "actions": 19,
+    "losses": [],
+    "events": [],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar",
+      "anika",
+      "corin",
+      "odessa",
+      "leda",
+      "hugo",
+      "brann",
+      "noor",
+      "emi"
+    ],
+    "flags": {
+      "route": "A",
+      "zero": false,
+      "trueRoute": false,
+      "sparedLucien": false,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 22650
+  },
+  {
+    "chapter": "c5a",
+    "route": "A",
+    "trueRoute": true,
+    "seed": 17,
+    "result": "win",
+    "turns": 2,
+    "actions": 18,
+    "losses": [],
+    "events": [
+      "e1"
+    ],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar",
+      "anika",
+      "corin",
+      "odessa",
+      "leda",
+      "hugo",
+      "brann",
+      "noor",
+      "emi",
+      "jin"
+    ],
+    "flags": {
+      "route": "A",
+      "zero": false,
+      "trueRoute": false,
+      "sparedLucien": false,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 47625
+  },
+  {
+    "chapter": "c6a",
+    "route": "A",
+    "trueRoute": true,
+    "seed": 17,
+    "result": "win",
+    "turns": 2,
+    "actions": 20,
+    "losses": [
+      "corin"
+    ],
+    "events": [
+      "e1",
+      "e0"
+    ],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar",
+      "anika",
+      "corin",
+      "odessa",
+      "leda",
+      "hugo",
+      "brann",
+      "noor",
+      "emi",
+      "jin"
+    ],
+    "flags": {
+      "route": "A",
+      "zero": false,
+      "trueRoute": false,
+      "sparedLucien": false,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 30415
+  },
+  {
+    "chapter": "i5",
+    "route": "A",
+    "trueRoute": true,
+    "seed": 17,
+    "result": "win",
+    "turns": 3,
+    "actions": 23,
+    "losses": [],
+    "events": [],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar",
+      "anika",
+      "corin",
+      "odessa",
+      "leda",
+      "hugo",
+      "brann",
+      "noor",
+      "emi",
+      "jin",
+      "orran",
+      "vale"
+    ],
+    "flags": {
+      "route": "A",
+      "zero": false,
+      "trueRoute": false,
+      "sparedLucien": false,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 31015
+  },
+  {
+    "chapter": "c7",
+    "route": "A",
+    "trueRoute": true,
+    "seed": 17,
+    "result": "win",
+    "turns": 4,
+    "actions": 36,
+    "losses": [],
+    "events": [
+      "e0",
+      "e1",
+      "e3",
+      "e2"
+    ],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar",
+      "anika",
+      "corin",
+      "odessa",
+      "leda",
+      "hugo",
+      "brann",
+      "noor",
+      "emi",
+      "jin",
+      "orran",
+      "vale",
+      "yuna",
+      "sera"
+    ],
+    "flags": {
+      "route": "A",
+      "zero": true,
+      "trueRoute": false,
+      "sparedLucien": false,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 31220
+  },
+  {
+    "chapter": "i6",
+    "route": "A",
+    "trueRoute": true,
+    "seed": 17,
+    "result": "win",
+    "turns": 3,
+    "actions": 35,
+    "losses": [],
+    "events": [],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar",
+      "anika",
+      "corin",
+      "odessa",
+      "leda",
+      "hugo",
+      "brann",
+      "noor",
+      "emi",
+      "jin",
+      "orran",
+      "vale",
+      "yuna"
+    ],
+    "flags": {
+      "route": "A",
+      "zero": true,
+      "trueRoute": false,
+      "sparedLucien": false,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 41998
+  },
+  {
+    "chapter": "c8",
+    "route": "A",
+    "trueRoute": true,
+    "seed": 17,
+    "result": "win",
+    "turns": 3,
+    "actions": 35,
+    "losses": [],
+    "events": [],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar",
+      "anika",
+      "corin",
+      "odessa",
+      "leda",
+      "hugo",
+      "brann",
+      "noor",
+      "emi",
+      "jin",
+      "orran",
+      "vale",
+      "yuna"
+    ],
+    "flags": {
+      "route": "A",
+      "zero": true,
+      "trueRoute": false,
+      "sparedLucien": false,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 80625
+  },
+  {
+    "chapter": "i7",
+    "route": "A",
+    "trueRoute": true,
+    "seed": 17,
+    "result": "win",
+    "turns": 3,
+    "actions": 28,
+    "losses": [],
+    "events": [],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar",
+      "anika",
+      "corin",
+      "odessa",
+      "leda",
+      "hugo",
+      "brann",
+      "noor",
+      "emi",
+      "jin",
+      "orran",
+      "vale",
+      "yuna"
+    ],
+    "flags": {
+      "route": "A",
+      "zero": true,
+      "trueRoute": false,
+      "sparedLucien": false,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 40980
+  },
+  {
+    "chapter": "i8",
+    "route": "A",
+    "trueRoute": true,
+    "seed": 17,
+    "result": "win",
+    "turns": 3,
+    "actions": 25,
+    "losses": [],
+    "events": [],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar",
+      "anika",
+      "corin",
+      "odessa",
+      "leda",
+      "hugo",
+      "brann",
+      "noor",
+      "emi",
+      "jin",
+      "orran",
+      "vale",
+      "yuna"
+    ],
+    "flags": {
+      "route": "A",
+      "zero": true,
+      "trueRoute": false,
+      "sparedLucien": false,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 41540
+  },
+  {
+    "chapter": "c9",
+    "route": "A",
+    "trueRoute": true,
+    "seed": 17,
+    "result": "win",
+    "turns": 4,
+    "actions": 47,
+    "losses": [
+      "odessa",
+      "jin",
+      "corin"
+    ],
+    "events": [
+      "e0",
+      "e1"
+    ],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar",
+      "anika",
+      "corin",
+      "odessa",
+      "leda",
+      "hugo",
+      "brann",
+      "noor",
+      "emi",
+      "jin",
+      "orran",
+      "vale",
+      "yuna"
+    ],
+    "flags": {
+      "route": "A",
+      "zero": true,
+      "trueRoute": true,
+      "sparedLucien": false,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 71535
+  },
+  {
+    "chapter": "c10",
+    "route": "A",
+    "trueRoute": true,
+    "seed": 17,
+    "result": "win",
+    "turns": 5,
+    "actions": 42,
+    "losses": [
+      "brann",
+      "gunnar",
+      "odessa",
+      "jin",
+      "anika",
+      "corin",
+      "hugo"
+    ],
+    "events": [
+      "e1",
+      "e0"
+    ],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar",
+      "anika",
+      "corin",
+      "odessa",
+      "leda",
+      "hugo",
+      "brann",
+      "noor",
+      "emi",
+      "jin",
+      "orran",
+      "vale",
+      "yuna"
+    ],
+    "flags": {
+      "route": "A",
+      "zero": true,
+      "trueRoute": true,
+      "sparedLucien": false,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 67115
+  },
+  {
+    "chapter": "c1",
+    "route": "B",
+    "trueRoute": true,
+    "seed": 17,
+    "result": "win",
+    "turns": 3,
+    "actions": 8,
+    "losses": [],
+    "events": [
+      "e2",
+      "e0",
+      "e1"
+    ],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar"
+    ],
+    "flags": {
+      "route": "B",
+      "zero": false,
+      "trueRoute": false,
+      "sparedLucien": false,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 17520
+  },
+  {
+    "chapter": "i1",
+    "route": "B",
+    "trueRoute": true,
+    "seed": 17,
+    "result": "win",
+    "turns": 2,
+    "actions": 12,
+    "losses": [],
+    "events": [],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar",
+      "anika",
+      "corin"
+    ],
+    "flags": {
+      "route": "B",
+      "zero": false,
+      "trueRoute": false,
+      "sparedLucien": false,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 14500
+  },
+  {
+    "chapter": "c2",
+    "route": "B",
+    "trueRoute": true,
+    "seed": 17,
+    "result": "win",
+    "turns": 3,
+    "actions": 15,
+    "losses": [],
+    "events": [
+      "e0",
+      "e1"
+    ],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar",
+      "anika",
+      "corin",
+      "odessa"
+    ],
+    "flags": {
+      "route": "B",
+      "zero": false,
+      "trueRoute": false,
+      "sparedLucien": false,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 16190
+  },
+  {
+    "chapter": "i2",
+    "route": "B",
+    "trueRoute": true,
+    "seed": 17,
+    "result": "win",
+    "turns": 2,
+    "actions": 17,
+    "losses": [],
+    "events": [],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar",
+      "anika",
+      "corin",
+      "odessa",
+      "leda",
+      "hugo"
+    ],
+    "flags": {
+      "route": "B",
+      "zero": false,
+      "trueRoute": false,
+      "sparedLucien": false,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 17070
+  },
+  {
+    "chapter": "c3",
+    "route": "B",
+    "trueRoute": true,
+    "seed": 17,
+    "result": "win",
+    "turns": 2,
+    "actions": 15,
+    "losses": [],
+    "events": [
+      "e1"
+    ],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar",
+      "anika",
+      "corin",
+      "odessa",
+      "leda",
+      "hugo",
+      "brann"
+    ],
+    "flags": {
+      "route": "B",
+      "zero": false,
+      "trueRoute": false,
+      "sparedLucien": false,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 25435
+  },
+  {
+    "chapter": "i3",
+    "route": "B",
+    "trueRoute": true,
+    "seed": 17,
+    "result": "win",
+    "turns": 3,
+    "actions": 24,
+    "losses": [],
+    "events": [],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar",
+      "anika",
+      "corin",
+      "odessa",
+      "leda",
+      "hugo",
+      "brann",
+      "noor",
+      "emi"
+    ],
+    "flags": {
+      "route": "B",
+      "zero": false,
+      "trueRoute": false,
+      "sparedLucien": false,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 21815
+  },
+  {
+    "chapter": "c4",
+    "route": "B",
+    "trueRoute": true,
+    "seed": 17,
+    "result": "win",
+    "turns": 3,
+    "actions": 22,
+    "losses": [
+      "odessa"
+    ],
+    "events": [
+      "e0"
+    ],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar",
+      "anika",
+      "corin",
+      "odessa",
+      "leda",
+      "hugo",
+      "brann",
+      "noor",
+      "emi"
+    ],
+    "flags": {
+      "route": "B",
+      "zero": false,
+      "trueRoute": false,
+      "sparedLucien": true,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 22655
+  },
+  {
+    "chapter": "i4",
+    "route": "B",
+    "trueRoute": true,
+    "seed": 17,
+    "result": "win",
+    "turns": 2,
+    "actions": 19,
+    "losses": [],
+    "events": [],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar",
+      "anika",
+      "corin",
+      "odessa",
+      "leda",
+      "hugo",
+      "brann",
+      "noor",
+      "emi"
+    ],
+    "flags": {
+      "route": "B",
+      "zero": false,
+      "trueRoute": false,
+      "sparedLucien": false,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 22650
+  },
+  {
+    "chapter": "c5b",
+    "route": "B",
+    "trueRoute": true,
+    "seed": 17,
+    "result": "win",
+    "turns": 2,
+    "actions": 19,
+    "losses": [],
+    "events": [
+      "e0"
+    ],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar",
+      "anika",
+      "corin",
+      "odessa",
+      "leda",
+      "hugo",
+      "brann",
+      "noor",
+      "emi",
+      "yuna"
+    ],
+    "flags": {
+      "route": "B",
+      "zero": false,
+      "trueRoute": false,
+      "sparedLucien": false,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 31220
+  },
+  {
+    "chapter": "c6b",
+    "route": "B",
+    "trueRoute": true,
+    "seed": 17,
+    "result": "win",
+    "turns": 3,
+    "actions": 21,
+    "losses": [],
+    "events": [
+      "e2"
+    ],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar",
+      "anika",
+      "corin",
+      "odessa",
+      "leda",
+      "hugo",
+      "brann",
+      "noor",
+      "emi"
+    ],
+    "flags": {
+      "route": "B",
+      "zero": false,
+      "trueRoute": false,
+      "sparedLucien": false,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 42750
+  },
+  {
+    "chapter": "i5",
+    "route": "B",
+    "trueRoute": true,
+    "seed": 17,
+    "result": "win",
+    "turns": 3,
+    "actions": 22,
+    "losses": [],
+    "events": [],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar",
+      "anika",
+      "corin",
+      "odessa",
+      "leda",
+      "hugo",
+      "brann",
+      "noor",
+      "emi",
+      "orran",
+      "vale"
+    ],
+    "flags": {
+      "route": "B",
+      "zero": false,
+      "trueRoute": false,
+      "sparedLucien": false,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 31015
+  },
+  {
+    "chapter": "c7",
+    "route": "B",
+    "trueRoute": true,
+    "seed": 17,
+    "result": "win",
+    "turns": 4,
+    "actions": 33,
+    "losses": [
+      "corin"
+    ],
+    "events": [
+      "e0",
+      "e1",
+      "e2",
+      "e3"
+    ],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar",
+      "anika",
+      "corin",
+      "odessa",
+      "leda",
+      "hugo",
+      "brann",
+      "noor",
+      "emi",
+      "orran",
+      "vale",
+      "jin",
+      "sera"
+    ],
+    "flags": {
+      "route": "B",
+      "zero": true,
+      "trueRoute": false,
+      "sparedLucien": false,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 31220
+  },
+  {
+    "chapter": "i6",
+    "route": "B",
+    "trueRoute": true,
+    "seed": 17,
+    "result": "win",
+    "turns": 4,
+    "actions": 35,
+    "losses": [],
+    "events": [],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar",
+      "anika",
+      "corin",
+      "odessa",
+      "leda",
+      "hugo",
+      "brann",
+      "noor",
+      "emi",
+      "orran",
+      "vale",
+      "jin"
+    ],
+    "flags": {
+      "route": "B",
+      "zero": true,
+      "trueRoute": false,
+      "sparedLucien": false,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 41998
+  },
+  {
+    "chapter": "c8",
+    "route": "B",
+    "trueRoute": true,
+    "seed": 17,
+    "result": "win",
+    "turns": 4,
+    "actions": 41,
+    "losses": [
+      "brann",
+      "gunnar",
+      "leda"
+    ],
+    "events": [
+      "e0",
+      "e1"
+    ],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar",
+      "anika",
+      "corin",
+      "odessa",
+      "leda",
+      "hugo",
+      "brann",
+      "noor",
+      "emi",
+      "orran",
+      "vale",
+      "jin",
+      "lucien"
+    ],
+    "flags": {
+      "route": "B",
+      "zero": true,
+      "trueRoute": false,
+      "sparedLucien": false,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 74285
+  },
+  {
+    "chapter": "i7",
+    "route": "B",
+    "trueRoute": true,
+    "seed": 17,
+    "result": "win",
+    "turns": 3,
+    "actions": 29,
+    "losses": [],
+    "events": [],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar",
+      "anika",
+      "corin",
+      "odessa",
+      "leda",
+      "hugo",
+      "brann",
+      "noor",
+      "emi",
+      "orran",
+      "vale",
+      "jin",
+      "lucien"
+    ],
+    "flags": {
+      "route": "B",
+      "zero": true,
+      "trueRoute": false,
+      "sparedLucien": false,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 40980
+  },
+  {
+    "chapter": "i8",
+    "route": "B",
+    "trueRoute": true,
+    "seed": 17,
+    "result": "win",
+    "turns": 2,
+    "actions": 23,
+    "losses": [],
+    "events": [],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar",
+      "anika",
+      "corin",
+      "odessa",
+      "leda",
+      "hugo",
+      "brann",
+      "noor",
+      "emi",
+      "orran",
+      "vale",
+      "jin",
+      "lucien"
+    ],
+    "flags": {
+      "route": "B",
+      "zero": true,
+      "trueRoute": false,
+      "sparedLucien": false,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 41540
+  },
+  {
+    "chapter": "c9",
+    "route": "B",
+    "trueRoute": true,
+    "seed": 17,
+    "result": "win",
+    "turns": 4,
+    "actions": 44,
+    "losses": [
+      "jin",
+      "lucien"
+    ],
+    "events": [
+      "e0",
+      "e1"
+    ],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar",
+      "anika",
+      "corin",
+      "odessa",
+      "leda",
+      "hugo",
+      "brann",
+      "noor",
+      "emi",
+      "orran",
+      "vale",
+      "jin",
+      "lucien"
+    ],
+    "flags": {
+      "route": "B",
+      "zero": true,
+      "trueRoute": true,
+      "sparedLucien": false,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 71535
+  },
+  {
+    "chapter": "c10",
+    "route": "B",
+    "trueRoute": true,
+    "seed": 17,
+    "result": "win",
+    "turns": 4,
+    "actions": 38,
+    "losses": [
+      "brann",
+      "gunnar",
+      "odessa",
+      "jin",
+      "corin",
+      "hugo"
+    ],
+    "events": [
+      "e1",
+      "e0"
+    ],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar",
+      "anika",
+      "corin",
+      "odessa",
+      "leda",
+      "hugo",
+      "brann",
+      "noor",
+      "emi",
+      "orran",
+      "vale",
+      "jin",
+      "lucien"
+    ],
+    "flags": {
+      "route": "B",
+      "zero": true,
+      "trueRoute": true,
+      "sparedLucien": false,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 70715
+  },
+  {
+    "chapter": "c1",
+    "route": "A",
+    "trueRoute": true,
+    "seed": 29,
+    "result": "win",
+    "turns": 3,
+    "actions": 4,
+    "losses": [],
+    "events": [
+      "e2",
+      "e0",
+      "e1"
+    ],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar"
+    ],
+    "flags": {
+      "route": "A",
+      "zero": false,
+      "trueRoute": false,
+      "sparedLucien": false,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 17520
+  },
+  {
+    "chapter": "i1",
+    "route": "A",
+    "trueRoute": true,
+    "seed": 29,
+    "result": "win",
+    "turns": 3,
+    "actions": 14,
+    "losses": [],
+    "events": [],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar",
+      "anika",
+      "corin"
+    ],
+    "flags": {
+      "route": "A",
+      "zero": false,
+      "trueRoute": false,
+      "sparedLucien": false,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 14500
+  },
+  {
+    "chapter": "c2",
+    "route": "A",
+    "trueRoute": true,
+    "seed": 29,
+    "result": "win",
+    "turns": 3,
+    "actions": 16,
+    "losses": [],
+    "events": [
+      "e0",
+      "e1"
+    ],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar",
+      "anika",
+      "corin",
+      "odessa"
+    ],
+    "flags": {
+      "route": "A",
+      "zero": false,
+      "trueRoute": false,
+      "sparedLucien": false,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 16190
+  },
+  {
+    "chapter": "i2",
+    "route": "A",
+    "trueRoute": true,
+    "seed": 29,
+    "result": "win",
+    "turns": 2,
+    "actions": 17,
+    "losses": [],
+    "events": [],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar",
+      "anika",
+      "corin",
+      "odessa",
+      "leda",
+      "hugo"
+    ],
+    "flags": {
+      "route": "A",
+      "zero": false,
+      "trueRoute": false,
+      "sparedLucien": false,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 17070
+  },
+  {
+    "chapter": "c3",
+    "route": "A",
+    "trueRoute": true,
+    "seed": 29,
+    "result": "win",
+    "turns": 2,
+    "actions": 15,
+    "losses": [],
+    "events": [
+      "e1"
+    ],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar",
+      "anika",
+      "corin",
+      "odessa",
+      "leda",
+      "hugo",
+      "brann"
+    ],
+    "flags": {
+      "route": "A",
+      "zero": false,
+      "trueRoute": false,
+      "sparedLucien": false,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 25435
+  },
+  {
+    "chapter": "i3",
+    "route": "A",
+    "trueRoute": true,
+    "seed": 29,
+    "result": "win",
+    "turns": 3,
+    "actions": 24,
+    "losses": [],
+    "events": [],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar",
+      "anika",
+      "corin",
+      "odessa",
+      "leda",
+      "hugo",
+      "brann",
+      "noor",
+      "emi"
+    ],
+    "flags": {
+      "route": "A",
+      "zero": false,
+      "trueRoute": false,
+      "sparedLucien": false,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 21815
+  },
+  {
+    "chapter": "c4",
+    "route": "A",
+    "trueRoute": true,
+    "seed": 29,
+    "result": "win",
+    "turns": 3,
+    "actions": 23,
+    "losses": [],
+    "events": [
+      "e0"
+    ],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar",
+      "anika",
+      "corin",
+      "odessa",
+      "leda",
+      "hugo",
+      "brann",
+      "noor",
+      "emi"
+    ],
+    "flags": {
+      "route": "A",
+      "zero": false,
+      "trueRoute": false,
+      "sparedLucien": true,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 22655
+  },
+  {
+    "chapter": "i4",
+    "route": "A",
+    "trueRoute": true,
+    "seed": 29,
+    "result": "win",
+    "turns": 2,
+    "actions": 19,
+    "losses": [],
+    "events": [],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar",
+      "anika",
+      "corin",
+      "odessa",
+      "leda",
+      "hugo",
+      "brann",
+      "noor",
+      "emi"
+    ],
+    "flags": {
+      "route": "A",
+      "zero": false,
+      "trueRoute": false,
+      "sparedLucien": false,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 22650
+  },
+  {
+    "chapter": "c5a",
+    "route": "A",
+    "trueRoute": true,
+    "seed": 29,
+    "result": "win",
+    "turns": 2,
+    "actions": 21,
+    "losses": [],
+    "events": [
+      "e1"
+    ],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar",
+      "anika",
+      "corin",
+      "odessa",
+      "leda",
+      "hugo",
+      "brann",
+      "noor",
+      "emi",
+      "jin"
+    ],
+    "flags": {
+      "route": "A",
+      "zero": false,
+      "trueRoute": false,
+      "sparedLucien": false,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 47625
+  },
+  {
+    "chapter": "c6a",
+    "route": "A",
+    "trueRoute": true,
+    "seed": 29,
+    "result": "win",
+    "turns": 2,
+    "actions": 21,
+    "losses": [
+      "odessa"
+    ],
+    "events": [
+      "e1",
+      "e0"
+    ],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar",
+      "anika",
+      "corin",
+      "odessa",
+      "leda",
+      "hugo",
+      "brann",
+      "noor",
+      "emi",
+      "jin"
+    ],
+    "flags": {
+      "route": "A",
+      "zero": false,
+      "trueRoute": false,
+      "sparedLucien": false,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 30415
+  },
+  {
+    "chapter": "i5",
+    "route": "A",
+    "trueRoute": true,
+    "seed": 29,
+    "result": "win",
+    "turns": 3,
+    "actions": 30,
+    "losses": [],
+    "events": [],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar",
+      "anika",
+      "corin",
+      "odessa",
+      "leda",
+      "hugo",
+      "brann",
+      "noor",
+      "emi",
+      "jin",
+      "orran",
+      "vale"
+    ],
+    "flags": {
+      "route": "A",
+      "zero": false,
+      "trueRoute": false,
+      "sparedLucien": false,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 31015
+  },
+  {
+    "chapter": "c7",
+    "route": "A",
+    "trueRoute": true,
+    "seed": 29,
+    "result": "win",
+    "turns": 4,
+    "actions": 36,
+    "losses": [
+      "corin"
+    ],
+    "events": [
+      "e0",
+      "e1",
+      "e3",
+      "e2"
+    ],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar",
+      "anika",
+      "corin",
+      "odessa",
+      "leda",
+      "hugo",
+      "brann",
+      "noor",
+      "emi",
+      "jin",
+      "orran",
+      "vale",
+      "yuna",
+      "sera"
+    ],
+    "flags": {
+      "route": "A",
+      "zero": true,
+      "trueRoute": false,
+      "sparedLucien": false,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 31220
+  },
+  {
+    "chapter": "i6",
+    "route": "A",
+    "trueRoute": true,
+    "seed": 29,
+    "result": "win",
+    "turns": 3,
+    "actions": 35,
+    "losses": [],
+    "events": [],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar",
+      "anika",
+      "corin",
+      "odessa",
+      "leda",
+      "hugo",
+      "brann",
+      "noor",
+      "emi",
+      "jin",
+      "orran",
+      "vale",
+      "yuna"
+    ],
+    "flags": {
+      "route": "A",
+      "zero": true,
+      "trueRoute": false,
+      "sparedLucien": false,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 41998
+  },
+  {
+    "chapter": "c8",
+    "route": "A",
+    "trueRoute": true,
+    "seed": 29,
+    "result": "win",
+    "turns": 4,
+    "actions": 38,
+    "losses": [
+      "brann"
+    ],
+    "events": [
+      "e0",
+      "e1"
+    ],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar",
+      "anika",
+      "corin",
+      "odessa",
+      "leda",
+      "hugo",
+      "brann",
+      "noor",
+      "emi",
+      "jin",
+      "orran",
+      "vale",
+      "yuna"
+    ],
+    "flags": {
+      "route": "A",
+      "zero": true,
+      "trueRoute": false,
+      "sparedLucien": false,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 74285
+  },
+  {
+    "chapter": "i7",
+    "route": "A",
+    "trueRoute": true,
+    "seed": 29,
+    "result": "win",
+    "turns": 3,
+    "actions": 31,
+    "losses": [],
+    "events": [],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar",
+      "anika",
+      "corin",
+      "odessa",
+      "leda",
+      "hugo",
+      "brann",
+      "noor",
+      "emi",
+      "jin",
+      "orran",
+      "vale",
+      "yuna"
+    ],
+    "flags": {
+      "route": "A",
+      "zero": true,
+      "trueRoute": false,
+      "sparedLucien": false,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 40980
+  },
+  {
+    "chapter": "i8",
+    "route": "A",
+    "trueRoute": true,
+    "seed": 29,
+    "result": "win",
+    "turns": 3,
+    "actions": 25,
+    "losses": [],
+    "events": [],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar",
+      "anika",
+      "corin",
+      "odessa",
+      "leda",
+      "hugo",
+      "brann",
+      "noor",
+      "emi",
+      "jin",
+      "orran",
+      "vale",
+      "yuna"
+    ],
+    "flags": {
+      "route": "A",
+      "zero": true,
+      "trueRoute": false,
+      "sparedLucien": false,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 41540
+  },
+  {
+    "chapter": "c9",
+    "route": "A",
+    "trueRoute": true,
+    "seed": 29,
+    "result": "win",
+    "turns": 5,
+    "actions": 49,
+    "losses": [
+      "brann",
+      "odessa",
+      "jin"
+    ],
+    "events": [
+      "e0",
+      "e1"
+    ],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar",
+      "anika",
+      "corin",
+      "odessa",
+      "leda",
+      "hugo",
+      "brann",
+      "noor",
+      "emi",
+      "jin",
+      "orran",
+      "vale",
+      "yuna"
+    ],
+    "flags": {
+      "route": "A",
+      "zero": true,
+      "trueRoute": true,
+      "sparedLucien": false,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 71535
+  },
+  {
+    "chapter": "c10",
+    "route": "A",
+    "trueRoute": true,
+    "seed": 29,
+    "result": "win",
+    "turns": 4,
+    "actions": 41,
+    "losses": [
+      "brann",
+      "gunnar",
+      "jin",
+      "anika",
+      "corin"
+    ],
+    "events": [
+      "e1",
+      "e0"
+    ],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar",
+      "anika",
+      "corin",
+      "odessa",
+      "leda",
+      "hugo",
+      "brann",
+      "noor",
+      "emi",
+      "jin",
+      "orran",
+      "vale",
+      "yuna"
+    ],
+    "flags": {
+      "route": "A",
+      "zero": true,
+      "trueRoute": true,
+      "sparedLucien": false,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 68915
+  },
+  {
+    "chapter": "c1",
+    "route": "B",
+    "trueRoute": true,
+    "seed": 29,
+    "result": "win",
+    "turns": 3,
+    "actions": 4,
+    "losses": [],
+    "events": [
+      "e2",
+      "e0",
+      "e1"
+    ],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar"
+    ],
+    "flags": {
+      "route": "B",
+      "zero": false,
+      "trueRoute": false,
+      "sparedLucien": false,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 17520
+  },
+  {
+    "chapter": "i1",
+    "route": "B",
+    "trueRoute": true,
+    "seed": 29,
+    "result": "win",
+    "turns": 3,
+    "actions": 14,
+    "losses": [],
+    "events": [],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar",
+      "anika",
+      "corin"
+    ],
+    "flags": {
+      "route": "B",
+      "zero": false,
+      "trueRoute": false,
+      "sparedLucien": false,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 14500
+  },
+  {
+    "chapter": "c2",
+    "route": "B",
+    "trueRoute": true,
+    "seed": 29,
+    "result": "win",
+    "turns": 3,
+    "actions": 16,
+    "losses": [],
+    "events": [
+      "e0",
+      "e1"
+    ],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar",
+      "anika",
+      "corin",
+      "odessa"
+    ],
+    "flags": {
+      "route": "B",
+      "zero": false,
+      "trueRoute": false,
+      "sparedLucien": false,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 16190
+  },
+  {
+    "chapter": "i2",
+    "route": "B",
+    "trueRoute": true,
+    "seed": 29,
+    "result": "win",
+    "turns": 2,
+    "actions": 17,
+    "losses": [],
+    "events": [],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar",
+      "anika",
+      "corin",
+      "odessa",
+      "leda",
+      "hugo"
+    ],
+    "flags": {
+      "route": "B",
+      "zero": false,
+      "trueRoute": false,
+      "sparedLucien": false,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 17070
+  },
+  {
+    "chapter": "c3",
+    "route": "B",
+    "trueRoute": true,
+    "seed": 29,
+    "result": "win",
+    "turns": 2,
+    "actions": 15,
+    "losses": [],
+    "events": [
+      "e1"
+    ],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar",
+      "anika",
+      "corin",
+      "odessa",
+      "leda",
+      "hugo",
+      "brann"
+    ],
+    "flags": {
+      "route": "B",
+      "zero": false,
+      "trueRoute": false,
+      "sparedLucien": false,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 25435
+  },
+  {
+    "chapter": "i3",
+    "route": "B",
+    "trueRoute": true,
+    "seed": 29,
+    "result": "win",
+    "turns": 3,
+    "actions": 24,
+    "losses": [],
+    "events": [],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar",
+      "anika",
+      "corin",
+      "odessa",
+      "leda",
+      "hugo",
+      "brann",
+      "noor",
+      "emi"
+    ],
+    "flags": {
+      "route": "B",
+      "zero": false,
+      "trueRoute": false,
+      "sparedLucien": false,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 21815
+  },
+  {
+    "chapter": "c4",
+    "route": "B",
+    "trueRoute": true,
+    "seed": 29,
+    "result": "win",
+    "turns": 3,
+    "actions": 23,
+    "losses": [],
+    "events": [
+      "e0"
+    ],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar",
+      "anika",
+      "corin",
+      "odessa",
+      "leda",
+      "hugo",
+      "brann",
+      "noor",
+      "emi"
+    ],
+    "flags": {
+      "route": "B",
+      "zero": false,
+      "trueRoute": false,
+      "sparedLucien": true,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 22655
+  },
+  {
+    "chapter": "i4",
+    "route": "B",
+    "trueRoute": true,
+    "seed": 29,
+    "result": "win",
+    "turns": 2,
+    "actions": 19,
+    "losses": [],
+    "events": [],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar",
+      "anika",
+      "corin",
+      "odessa",
+      "leda",
+      "hugo",
+      "brann",
+      "noor",
+      "emi"
+    ],
+    "flags": {
+      "route": "B",
+      "zero": false,
+      "trueRoute": false,
+      "sparedLucien": false,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 22650
+  },
+  {
+    "chapter": "c5b",
+    "route": "B",
+    "trueRoute": true,
+    "seed": 29,
+    "result": "win",
+    "turns": 3,
+    "actions": 25,
+    "losses": [
+      "corin"
+    ],
+    "events": [
+      "e0"
+    ],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar",
+      "anika",
+      "corin",
+      "odessa",
+      "leda",
+      "hugo",
+      "brann",
+      "noor",
+      "emi",
+      "yuna"
+    ],
+    "flags": {
+      "route": "B",
+      "zero": false,
+      "trueRoute": false,
+      "sparedLucien": false,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 33020
+  },
+  {
+    "chapter": "c6b",
+    "route": "B",
+    "trueRoute": true,
+    "seed": 29,
+    "result": "win",
+    "turns": 3,
+    "actions": 23,
+    "losses": [],
+    "events": [
+      "e2"
+    ],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar",
+      "anika",
+      "corin",
+      "odessa",
+      "leda",
+      "hugo",
+      "brann",
+      "noor",
+      "emi"
+    ],
+    "flags": {
+      "route": "B",
+      "zero": false,
+      "trueRoute": false,
+      "sparedLucien": false,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 45050
+  },
+  {
+    "chapter": "i5",
+    "route": "B",
+    "trueRoute": true,
+    "seed": 29,
+    "result": "win",
+    "turns": 3,
+    "actions": 24,
+    "losses": [],
+    "events": [],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar",
+      "anika",
+      "corin",
+      "odessa",
+      "leda",
+      "hugo",
+      "brann",
+      "noor",
+      "emi",
+      "orran",
+      "vale"
+    ],
+    "flags": {
+      "route": "B",
+      "zero": false,
+      "trueRoute": false,
+      "sparedLucien": false,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 31015
+  },
+  {
+    "chapter": "c7",
+    "route": "B",
+    "trueRoute": true,
+    "seed": 29,
+    "result": "win",
+    "turns": 4,
+    "actions": 32,
+    "losses": [
+      "mira",
+      "jin",
+      "corin"
+    ],
+    "events": [
+      "e0",
+      "e1",
+      "e3",
+      "e2"
+    ],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar",
+      "anika",
+      "corin",
+      "odessa",
+      "leda",
+      "hugo",
+      "brann",
+      "noor",
+      "emi",
+      "orran",
+      "vale",
+      "jin",
+      "sera"
+    ],
+    "flags": {
+      "route": "B",
+      "zero": true,
+      "trueRoute": false,
+      "sparedLucien": false,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 31220
+  },
+  {
+    "chapter": "i6",
+    "route": "B",
+    "trueRoute": true,
+    "seed": 29,
+    "result": "win",
+    "turns": 3,
+    "actions": 32,
+    "losses": [],
+    "events": [],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar",
+      "anika",
+      "corin",
+      "odessa",
+      "leda",
+      "hugo",
+      "brann",
+      "noor",
+      "emi",
+      "orran",
+      "vale",
+      "jin"
+    ],
+    "flags": {
+      "route": "B",
+      "zero": true,
+      "trueRoute": false,
+      "sparedLucien": false,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 41998
+  },
+  {
+    "chapter": "c8",
+    "route": "B",
+    "trueRoute": true,
+    "seed": 29,
+    "result": "win",
+    "turns": 4,
+    "actions": 37,
+    "losses": [],
+    "events": [
+      "e0",
+      "e1"
+    ],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar",
+      "anika",
+      "corin",
+      "odessa",
+      "leda",
+      "hugo",
+      "brann",
+      "noor",
+      "emi",
+      "orran",
+      "vale",
+      "jin",
+      "lucien"
+    ],
+    "flags": {
+      "route": "B",
+      "zero": true,
+      "trueRoute": false,
+      "sparedLucien": false,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 74285
+  },
+  {
+    "chapter": "i7",
+    "route": "B",
+    "trueRoute": true,
+    "seed": 29,
+    "result": "win",
+    "turns": 3,
+    "actions": 26,
+    "losses": [],
+    "events": [],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar",
+      "anika",
+      "corin",
+      "odessa",
+      "leda",
+      "hugo",
+      "brann",
+      "noor",
+      "emi",
+      "orran",
+      "vale",
+      "jin",
+      "lucien"
+    ],
+    "flags": {
+      "route": "B",
+      "zero": true,
+      "trueRoute": false,
+      "sparedLucien": false,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 40980
+  },
+  {
+    "chapter": "i8",
+    "route": "B",
+    "trueRoute": true,
+    "seed": 29,
+    "result": "win",
+    "turns": 2,
+    "actions": 23,
+    "losses": [],
+    "events": [],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar",
+      "anika",
+      "corin",
+      "odessa",
+      "leda",
+      "hugo",
+      "brann",
+      "noor",
+      "emi",
+      "orran",
+      "vale",
+      "jin",
+      "lucien"
+    ],
+    "flags": {
+      "route": "B",
+      "zero": true,
+      "trueRoute": false,
+      "sparedLucien": false,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 41540
+  },
+  {
+    "chapter": "c9",
+    "route": "B",
+    "trueRoute": true,
+    "seed": 29,
+    "result": "win",
+    "turns": 5,
+    "actions": 52,
+    "losses": [
+      "brann",
+      "gunnar",
+      "jin"
+    ],
+    "events": [
+      "e0",
+      "e1"
+    ],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar",
+      "anika",
+      "corin",
+      "odessa",
+      "leda",
+      "hugo",
+      "brann",
+      "noor",
+      "emi",
+      "orran",
+      "vale",
+      "jin",
+      "lucien"
+    ],
+    "flags": {
+      "route": "B",
+      "zero": true,
+      "trueRoute": true,
+      "sparedLucien": false,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 71535
+  },
+  {
+    "chapter": "c10",
+    "route": "B",
+    "trueRoute": true,
+    "seed": 29,
+    "result": "loss",
+    "turns": 6,
+    "actions": 45,
+    "losses": [
+      "brann",
+      "gunnar",
+      "odessa",
+      "ilse",
+      "jin",
+      "lucien",
+      "anika",
+      "corin",
+      "hugo"
+    ],
+    "events": [
+      "e1",
+      "e0"
+    ],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar",
+      "anika",
+      "corin",
+      "odessa",
+      "leda",
+      "hugo",
+      "brann",
+      "noor",
+      "emi",
+      "orran",
+      "vale",
+      "jin",
+      "lucien"
+    ],
+    "flags": {
+      "route": "B",
+      "zero": true,
+      "trueRoute": true,
+      "sparedLucien": false,
+      "scarredLucien": false
+    },
+    "defeat": "Capt. Ilse Varga has been shot down.",
+    "credits": 0
+  },
+  {
+    "chapter": "c1",
+    "route": "A",
+    "trueRoute": true,
+    "seed": 71,
+    "result": "win",
+    "turns": 3,
+    "actions": 4,
+    "losses": [],
+    "events": [
+      "e2",
+      "e0",
+      "e1"
+    ],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar"
+    ],
+    "flags": {
+      "route": "A",
+      "zero": false,
+      "trueRoute": false,
+      "sparedLucien": false,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 17520
+  },
+  {
+    "chapter": "i1",
+    "route": "A",
+    "trueRoute": true,
+    "seed": 71,
+    "result": "win",
+    "turns": 2,
+    "actions": 8,
+    "losses": [],
+    "events": [],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar",
+      "anika",
+      "corin"
+    ],
+    "flags": {
+      "route": "A",
+      "zero": false,
+      "trueRoute": false,
+      "sparedLucien": false,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 14500
+  },
+  {
+    "chapter": "c2",
+    "route": "A",
+    "trueRoute": true,
+    "seed": 71,
+    "result": "win",
+    "turns": 3,
+    "actions": 16,
+    "losses": [],
+    "events": [
+      "e0",
+      "e1"
+    ],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar",
+      "anika",
+      "corin",
+      "odessa"
+    ],
+    "flags": {
+      "route": "A",
+      "zero": false,
+      "trueRoute": false,
+      "sparedLucien": false,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 16190
+  },
+  {
+    "chapter": "i2",
+    "route": "A",
+    "trueRoute": true,
+    "seed": 71,
+    "result": "win",
+    "turns": 2,
+    "actions": 17,
+    "losses": [],
+    "events": [],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar",
+      "anika",
+      "corin",
+      "odessa",
+      "leda",
+      "hugo"
+    ],
+    "flags": {
+      "route": "A",
+      "zero": false,
+      "trueRoute": false,
+      "sparedLucien": false,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 17070
+  },
+  {
+    "chapter": "c3",
+    "route": "A",
+    "trueRoute": true,
+    "seed": 71,
+    "result": "win",
+    "turns": 2,
+    "actions": 12,
+    "losses": [],
+    "events": [
+      "e1"
+    ],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar",
+      "anika",
+      "corin",
+      "odessa",
+      "leda",
+      "hugo",
+      "brann"
+    ],
+    "flags": {
+      "route": "A",
+      "zero": false,
+      "trueRoute": false,
+      "sparedLucien": false,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 25435
+  },
+  {
+    "chapter": "i3",
+    "route": "A",
+    "trueRoute": true,
+    "seed": 71,
+    "result": "win",
+    "turns": 3,
+    "actions": 24,
+    "losses": [],
+    "events": [],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar",
+      "anika",
+      "corin",
+      "odessa",
+      "leda",
+      "hugo",
+      "brann",
+      "noor",
+      "emi"
+    ],
+    "flags": {
+      "route": "A",
+      "zero": false,
+      "trueRoute": false,
+      "sparedLucien": false,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 21815
+  },
+  {
+    "chapter": "c4",
+    "route": "A",
+    "trueRoute": true,
+    "seed": 71,
+    "result": "win",
+    "turns": 3,
+    "actions": 22,
+    "losses": [
+      "odessa"
+    ],
+    "events": [
+      "e0"
+    ],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar",
+      "anika",
+      "corin",
+      "odessa",
+      "leda",
+      "hugo",
+      "brann",
+      "noor",
+      "emi"
+    ],
+    "flags": {
+      "route": "A",
+      "zero": false,
+      "trueRoute": false,
+      "sparedLucien": true,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 22655
+  },
+  {
+    "chapter": "i4",
+    "route": "A",
+    "trueRoute": true,
+    "seed": 71,
+    "result": "win",
+    "turns": 2,
+    "actions": 19,
+    "losses": [],
+    "events": [],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar",
+      "anika",
+      "corin",
+      "odessa",
+      "leda",
+      "hugo",
+      "brann",
+      "noor",
+      "emi"
+    ],
+    "flags": {
+      "route": "A",
+      "zero": false,
+      "trueRoute": false,
+      "sparedLucien": false,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 22650
+  },
+  {
+    "chapter": "c5a",
+    "route": "A",
+    "trueRoute": true,
+    "seed": 71,
+    "result": "win",
+    "turns": 2,
+    "actions": 21,
+    "losses": [],
+    "events": [
+      "e1"
+    ],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar",
+      "anika",
+      "corin",
+      "odessa",
+      "leda",
+      "hugo",
+      "brann",
+      "noor",
+      "emi",
+      "jin"
+    ],
+    "flags": {
+      "route": "A",
+      "zero": false,
+      "trueRoute": false,
+      "sparedLucien": false,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 47625
+  },
+  {
+    "chapter": "c6a",
+    "route": "A",
+    "trueRoute": true,
+    "seed": 71,
+    "result": "win",
+    "turns": 2,
+    "actions": 21,
+    "losses": [],
+    "events": [
+      "e1",
+      "e0"
+    ],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar",
+      "anika",
+      "corin",
+      "odessa",
+      "leda",
+      "hugo",
+      "brann",
+      "noor",
+      "emi",
+      "jin"
+    ],
+    "flags": {
+      "route": "A",
+      "zero": false,
+      "trueRoute": false,
+      "sparedLucien": false,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 30415
+  },
+  {
+    "chapter": "i5",
+    "route": "A",
+    "trueRoute": true,
+    "seed": 71,
+    "result": "win",
+    "turns": 3,
+    "actions": 23,
+    "losses": [],
+    "events": [],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar",
+      "anika",
+      "corin",
+      "odessa",
+      "leda",
+      "hugo",
+      "brann",
+      "noor",
+      "emi",
+      "jin",
+      "orran",
+      "vale"
+    ],
+    "flags": {
+      "route": "A",
+      "zero": false,
+      "trueRoute": false,
+      "sparedLucien": false,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 31015
+  },
+  {
+    "chapter": "c7",
+    "route": "A",
+    "trueRoute": true,
+    "seed": 71,
+    "result": "win",
+    "turns": 4,
+    "actions": 35,
+    "losses": [
+      "mira"
+    ],
+    "events": [
+      "e0",
+      "e1",
+      "e2",
+      "e3"
+    ],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar",
+      "anika",
+      "corin",
+      "odessa",
+      "leda",
+      "hugo",
+      "brann",
+      "noor",
+      "emi",
+      "jin",
+      "orran",
+      "vale",
+      "yuna",
+      "sera"
+    ],
+    "flags": {
+      "route": "A",
+      "zero": true,
+      "trueRoute": false,
+      "sparedLucien": false,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 31220
+  },
+  {
+    "chapter": "i6",
+    "route": "A",
+    "trueRoute": true,
+    "seed": 71,
+    "result": "win",
+    "turns": 3,
+    "actions": 35,
+    "losses": [],
+    "events": [],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar",
+      "anika",
+      "corin",
+      "odessa",
+      "leda",
+      "hugo",
+      "brann",
+      "noor",
+      "emi",
+      "jin",
+      "orran",
+      "vale",
+      "yuna"
+    ],
+    "flags": {
+      "route": "A",
+      "zero": true,
+      "trueRoute": false,
+      "sparedLucien": false,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 43098
+  },
+  {
+    "chapter": "c8",
+    "route": "A",
+    "trueRoute": true,
+    "seed": 71,
+    "result": "win",
+    "turns": 4,
+    "actions": 39,
+    "losses": [
+      "brann"
+    ],
+    "events": [
+      "e1"
+    ],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar",
+      "anika",
+      "corin",
+      "odessa",
+      "leda",
+      "hugo",
+      "brann",
+      "noor",
+      "emi",
+      "jin",
+      "orran",
+      "vale",
+      "yuna"
+    ],
+    "flags": {
+      "route": "A",
+      "zero": true,
+      "trueRoute": false,
+      "sparedLucien": false,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 80625
+  },
+  {
+    "chapter": "i7",
+    "route": "A",
+    "trueRoute": true,
+    "seed": 71,
+    "result": "win",
+    "turns": 3,
+    "actions": 26,
+    "losses": [],
+    "events": [],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar",
+      "anika",
+      "corin",
+      "odessa",
+      "leda",
+      "hugo",
+      "brann",
+      "noor",
+      "emi",
+      "jin",
+      "orran",
+      "vale",
+      "yuna"
+    ],
+    "flags": {
+      "route": "A",
+      "zero": true,
+      "trueRoute": false,
+      "sparedLucien": false,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 40980
+  },
+  {
+    "chapter": "i8",
+    "route": "A",
+    "trueRoute": true,
+    "seed": 71,
+    "result": "win",
+    "turns": 3,
+    "actions": 29,
+    "losses": [],
+    "events": [],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar",
+      "anika",
+      "corin",
+      "odessa",
+      "leda",
+      "hugo",
+      "brann",
+      "noor",
+      "emi",
+      "jin",
+      "orran",
+      "vale",
+      "yuna"
+    ],
+    "flags": {
+      "route": "A",
+      "zero": true,
+      "trueRoute": false,
+      "sparedLucien": false,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 41540
+  },
+  {
+    "chapter": "c9",
+    "route": "A",
+    "trueRoute": true,
+    "seed": 71,
+    "result": "win",
+    "turns": 5,
+    "actions": 47,
+    "losses": [
+      "odessa",
+      "yuna"
+    ],
+    "events": [
+      "e0",
+      "e1"
+    ],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar",
+      "anika",
+      "corin",
+      "odessa",
+      "leda",
+      "hugo",
+      "brann",
+      "noor",
+      "emi",
+      "jin",
+      "orran",
+      "vale",
+      "yuna"
+    ],
+    "flags": {
+      "route": "A",
+      "zero": true,
+      "trueRoute": true,
+      "sparedLucien": false,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 71535
+  },
+  {
+    "chapter": "c10",
+    "route": "A",
+    "trueRoute": true,
+    "seed": 71,
+    "result": "win",
+    "turns": 5,
+    "actions": 45,
+    "losses": [
+      "brann",
+      "gunnar",
+      "jin",
+      "anika",
+      "corin",
+      "hugo"
+    ],
+    "events": [
+      "e1",
+      "e0"
+    ],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar",
+      "anika",
+      "corin",
+      "odessa",
+      "leda",
+      "hugo",
+      "brann",
+      "noor",
+      "emi",
+      "jin",
+      "orran",
+      "vale",
+      "yuna"
+    ],
+    "flags": {
+      "route": "A",
+      "zero": true,
+      "trueRoute": true,
+      "sparedLucien": false,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 67115
+  },
+  {
+    "chapter": "c1",
+    "route": "B",
+    "trueRoute": true,
+    "seed": 71,
+    "result": "win",
+    "turns": 3,
+    "actions": 4,
+    "losses": [],
+    "events": [
+      "e2",
+      "e0",
+      "e1"
+    ],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar"
+    ],
+    "flags": {
+      "route": "B",
+      "zero": false,
+      "trueRoute": false,
+      "sparedLucien": false,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 17520
+  },
+  {
+    "chapter": "i1",
+    "route": "B",
+    "trueRoute": true,
+    "seed": 71,
+    "result": "win",
+    "turns": 2,
+    "actions": 8,
+    "losses": [],
+    "events": [],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar",
+      "anika",
+      "corin"
+    ],
+    "flags": {
+      "route": "B",
+      "zero": false,
+      "trueRoute": false,
+      "sparedLucien": false,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 14500
+  },
+  {
+    "chapter": "c2",
+    "route": "B",
+    "trueRoute": true,
+    "seed": 71,
+    "result": "win",
+    "turns": 3,
+    "actions": 16,
+    "losses": [],
+    "events": [
+      "e0",
+      "e1"
+    ],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar",
+      "anika",
+      "corin",
+      "odessa"
+    ],
+    "flags": {
+      "route": "B",
+      "zero": false,
+      "trueRoute": false,
+      "sparedLucien": false,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 16190
+  },
+  {
+    "chapter": "i2",
+    "route": "B",
+    "trueRoute": true,
+    "seed": 71,
+    "result": "win",
+    "turns": 2,
+    "actions": 17,
+    "losses": [],
+    "events": [],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar",
+      "anika",
+      "corin",
+      "odessa",
+      "leda",
+      "hugo"
+    ],
+    "flags": {
+      "route": "B",
+      "zero": false,
+      "trueRoute": false,
+      "sparedLucien": false,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 17070
+  },
+  {
+    "chapter": "c3",
+    "route": "B",
+    "trueRoute": true,
+    "seed": 71,
+    "result": "win",
+    "turns": 2,
+    "actions": 12,
+    "losses": [],
+    "events": [
+      "e1"
+    ],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar",
+      "anika",
+      "corin",
+      "odessa",
+      "leda",
+      "hugo",
+      "brann"
+    ],
+    "flags": {
+      "route": "B",
+      "zero": false,
+      "trueRoute": false,
+      "sparedLucien": false,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 25435
+  },
+  {
+    "chapter": "i3",
+    "route": "B",
+    "trueRoute": true,
+    "seed": 71,
+    "result": "win",
+    "turns": 3,
+    "actions": 24,
+    "losses": [],
+    "events": [],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar",
+      "anika",
+      "corin",
+      "odessa",
+      "leda",
+      "hugo",
+      "brann",
+      "noor",
+      "emi"
+    ],
+    "flags": {
+      "route": "B",
+      "zero": false,
+      "trueRoute": false,
+      "sparedLucien": false,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 21815
+  },
+  {
+    "chapter": "c4",
+    "route": "B",
+    "trueRoute": true,
+    "seed": 71,
+    "result": "win",
+    "turns": 3,
+    "actions": 22,
+    "losses": [
+      "odessa"
+    ],
+    "events": [
+      "e0"
+    ],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar",
+      "anika",
+      "corin",
+      "odessa",
+      "leda",
+      "hugo",
+      "brann",
+      "noor",
+      "emi"
+    ],
+    "flags": {
+      "route": "B",
+      "zero": false,
+      "trueRoute": false,
+      "sparedLucien": true,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 22655
+  },
+  {
+    "chapter": "i4",
+    "route": "B",
+    "trueRoute": true,
+    "seed": 71,
+    "result": "win",
+    "turns": 2,
+    "actions": 19,
+    "losses": [],
+    "events": [],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar",
+      "anika",
+      "corin",
+      "odessa",
+      "leda",
+      "hugo",
+      "brann",
+      "noor",
+      "emi"
+    ],
+    "flags": {
+      "route": "B",
+      "zero": false,
+      "trueRoute": false,
+      "sparedLucien": false,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 22650
+  },
+  {
+    "chapter": "c5b",
+    "route": "B",
+    "trueRoute": true,
+    "seed": 71,
+    "result": "win",
+    "turns": 3,
+    "actions": 21,
+    "losses": [
+      "mira"
+    ],
+    "events": [
+      "e0"
+    ],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar",
+      "anika",
+      "corin",
+      "odessa",
+      "leda",
+      "hugo",
+      "brann",
+      "noor",
+      "emi",
+      "yuna"
+    ],
+    "flags": {
+      "route": "B",
+      "zero": false,
+      "trueRoute": false,
+      "sparedLucien": false,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 31220
+  },
+  {
+    "chapter": "c6b",
+    "route": "B",
+    "trueRoute": true,
+    "seed": 71,
+    "result": "win",
+    "turns": 3,
+    "actions": 24,
+    "losses": [],
+    "events": [
+      "e2"
+    ],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar",
+      "anika",
+      "corin",
+      "odessa",
+      "leda",
+      "hugo",
+      "brann",
+      "noor",
+      "emi"
+    ],
+    "flags": {
+      "route": "B",
+      "zero": false,
+      "trueRoute": false,
+      "sparedLucien": false,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 45050
+  },
+  {
+    "chapter": "i5",
+    "route": "B",
+    "trueRoute": true,
+    "seed": 71,
+    "result": "win",
+    "turns": 3,
+    "actions": 21,
+    "losses": [],
+    "events": [],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar",
+      "anika",
+      "corin",
+      "odessa",
+      "leda",
+      "hugo",
+      "brann",
+      "noor",
+      "emi",
+      "orran",
+      "vale"
+    ],
+    "flags": {
+      "route": "B",
+      "zero": false,
+      "trueRoute": false,
+      "sparedLucien": false,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 31015
+  },
+  {
+    "chapter": "c7",
+    "route": "B",
+    "trueRoute": true,
+    "seed": 71,
+    "result": "win",
+    "turns": 4,
+    "actions": 32,
+    "losses": [
+      "brann",
+      "corin"
+    ],
+    "events": [
+      "e0",
+      "e1",
+      "e2",
+      "e3"
+    ],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar",
+      "anika",
+      "corin",
+      "odessa",
+      "leda",
+      "hugo",
+      "brann",
+      "noor",
+      "emi",
+      "orran",
+      "vale",
+      "jin",
+      "sera"
+    ],
+    "flags": {
+      "route": "B",
+      "zero": true,
+      "trueRoute": false,
+      "sparedLucien": false,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 31220
+  },
+  {
+    "chapter": "i6",
+    "route": "B",
+    "trueRoute": true,
+    "seed": 71,
+    "result": "win",
+    "turns": 4,
+    "actions": 34,
+    "losses": [],
+    "events": [],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar",
+      "anika",
+      "corin",
+      "odessa",
+      "leda",
+      "hugo",
+      "brann",
+      "noor",
+      "emi",
+      "orran",
+      "vale",
+      "jin"
+    ],
+    "flags": {
+      "route": "B",
+      "zero": true,
+      "trueRoute": false,
+      "sparedLucien": false,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 41998
+  },
+  {
+    "chapter": "c8",
+    "route": "B",
+    "trueRoute": true,
+    "seed": 71,
+    "result": "win",
+    "turns": 4,
+    "actions": 37,
+    "losses": [
+      "brann"
+    ],
+    "events": [
+      "e0",
+      "e1"
+    ],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar",
+      "anika",
+      "corin",
+      "odessa",
+      "leda",
+      "hugo",
+      "brann",
+      "noor",
+      "emi",
+      "orran",
+      "vale",
+      "jin",
+      "lucien"
+    ],
+    "flags": {
+      "route": "B",
+      "zero": true,
+      "trueRoute": false,
+      "sparedLucien": false,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 74285
+  },
+  {
+    "chapter": "i7",
+    "route": "B",
+    "trueRoute": true,
+    "seed": 71,
+    "result": "win",
+    "turns": 3,
+    "actions": 29,
+    "losses": [],
+    "events": [],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar",
+      "anika",
+      "corin",
+      "odessa",
+      "leda",
+      "hugo",
+      "brann",
+      "noor",
+      "emi",
+      "orran",
+      "vale",
+      "jin",
+      "lucien"
+    ],
+    "flags": {
+      "route": "B",
+      "zero": true,
+      "trueRoute": false,
+      "sparedLucien": false,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 40980
+  },
+  {
+    "chapter": "i8",
+    "route": "B",
+    "trueRoute": true,
+    "seed": 71,
+    "result": "win",
+    "turns": 3,
+    "actions": 25,
+    "losses": [],
+    "events": [],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar",
+      "anika",
+      "corin",
+      "odessa",
+      "leda",
+      "hugo",
+      "brann",
+      "noor",
+      "emi",
+      "orran",
+      "vale",
+      "jin",
+      "lucien"
+    ],
+    "flags": {
+      "route": "B",
+      "zero": true,
+      "trueRoute": false,
+      "sparedLucien": false,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 41540
+  },
+  {
+    "chapter": "c9",
+    "route": "B",
+    "trueRoute": true,
+    "seed": 71,
+    "result": "win",
+    "turns": 4,
+    "actions": 47,
+    "losses": [
+      "jin",
+      "lucien"
+    ],
+    "events": [
+      "e0",
+      "e1"
+    ],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar",
+      "anika",
+      "corin",
+      "odessa",
+      "leda",
+      "hugo",
+      "brann",
+      "noor",
+      "emi",
+      "orran",
+      "vale",
+      "jin",
+      "lucien"
+    ],
+    "flags": {
+      "route": "B",
+      "zero": true,
+      "trueRoute": true,
+      "sparedLucien": false,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 71535
+  },
+  {
+    "chapter": "c10",
+    "route": "B",
+    "trueRoute": true,
+    "seed": 71,
+    "result": "win",
+    "turns": 5,
+    "actions": 39,
+    "losses": [
+      "brann",
+      "gunnar",
+      "odessa",
+      "jin",
+      "lucien",
+      "anika",
+      "corin",
+      "hugo"
+    ],
+    "events": [
+      "e1",
+      "e0"
+    ],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar",
+      "anika",
+      "corin",
+      "odessa",
+      "leda",
+      "hugo",
+      "brann",
+      "noor",
+      "emi",
+      "orran",
+      "vale",
+      "jin",
+      "lucien"
+    ],
+    "flags": {
+      "route": "B",
+      "zero": true,
+      "trueRoute": true,
+      "sparedLucien": false,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 68915
+  },
+  {
+    "chapter": "c9",
+    "route": "A",
+    "trueRoute": false,
+    "seed": 17,
+    "result": "win",
+    "turns": 5,
+    "actions": 51,
+    "losses": [
+      "mira",
+      "brann",
+      "odessa",
+      "jin",
+      "yuna",
+      "corin"
+    ],
+    "events": [
+      "e0",
+      "e1"
+    ],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar",
+      "anika",
+      "corin",
+      "odessa",
+      "leda",
+      "hugo",
+      "brann",
+      "noor",
+      "emi",
+      "jin",
+      "orran",
+      "vale",
+      "yuna"
+    ],
+    "flags": {
+      "route": "A",
+      "zero": true,
+      "trueRoute": false,
+      "sparedLucien": false,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 110195
+  },
+  {
+    "chapter": "c9",
+    "route": "B",
+    "trueRoute": false,
+    "seed": 17,
+    "result": "win",
+    "turns": 5,
+    "actions": 56,
+    "losses": [
+      "gunnar",
+      "odessa",
+      "jin",
+      "lucien",
+      "corin",
+      "hugo"
+    ],
+    "events": [
+      "e0",
+      "e1"
+    ],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar",
+      "anika",
+      "corin",
+      "odessa",
+      "leda",
+      "hugo",
+      "brann",
+      "noor",
+      "emi",
+      "orran",
+      "vale",
+      "jin",
+      "lucien"
+    ],
+    "flags": {
+      "route": "B",
+      "zero": true,
+      "trueRoute": false,
+      "sparedLucien": false,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 110195
+  },
+  {
+    "chapter": "c9",
+    "route": "A",
+    "trueRoute": false,
+    "seed": 29,
+    "result": "win",
+    "turns": 5,
+    "actions": 50,
+    "losses": [
+      "brann",
+      "odessa",
+      "jin",
+      "corin"
+    ],
+    "events": [
+      "e0",
+      "e1"
+    ],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar",
+      "anika",
+      "corin",
+      "odessa",
+      "leda",
+      "hugo",
+      "brann",
+      "noor",
+      "emi",
+      "jin",
+      "orran",
+      "vale",
+      "yuna"
+    ],
+    "flags": {
+      "route": "A",
+      "zero": true,
+      "trueRoute": false,
+      "sparedLucien": false,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 110195
+  },
+  {
+    "chapter": "c9",
+    "route": "B",
+    "trueRoute": false,
+    "seed": 29,
+    "result": "win",
+    "turns": 7,
+    "actions": 69,
+    "losses": [
+      "brann",
+      "jin",
+      "corin",
+      "hugo"
+    ],
+    "events": [
+      "e0",
+      "e1"
+    ],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar",
+      "anika",
+      "corin",
+      "odessa",
+      "leda",
+      "hugo",
+      "brann",
+      "noor",
+      "emi",
+      "orran",
+      "vale",
+      "jin",
+      "lucien"
+    ],
+    "flags": {
+      "route": "B",
+      "zero": true,
+      "trueRoute": false,
+      "sparedLucien": false,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 110195
+  },
+  {
+    "chapter": "c9",
+    "route": "A",
+    "trueRoute": false,
+    "seed": 71,
+    "result": "win",
+    "turns": 4,
+    "actions": 47,
+    "losses": [
+      "brann",
+      "jin",
+      "corin"
+    ],
+    "events": [
+      "e0",
+      "e1"
+    ],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar",
+      "anika",
+      "corin",
+      "odessa",
+      "leda",
+      "hugo",
+      "brann",
+      "noor",
+      "emi",
+      "jin",
+      "orran",
+      "vale",
+      "yuna"
+    ],
+    "flags": {
+      "route": "A",
+      "zero": true,
+      "trueRoute": false,
+      "sparedLucien": false,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 110195
+  },
+  {
+    "chapter": "c9",
+    "route": "B",
+    "trueRoute": false,
+    "seed": 71,
+    "result": "win",
+    "turns": 6,
+    "actions": 59,
+    "losses": [
+      "brann",
+      "gunnar",
+      "odessa",
+      "jin",
+      "lucien"
+    ],
+    "events": [
+      "e0",
+      "e1"
+    ],
+    "roster": [
+      "rei",
+      "mira",
+      "ilse",
+      "gunnar",
+      "anika",
+      "corin",
+      "odessa",
+      "leda",
+      "hugo",
+      "brann",
+      "noor",
+      "emi",
+      "orran",
+      "vale",
+      "jin",
+      "lucien"
+    ],
+    "flags": {
+      "route": "B",
+      "zero": true,
+      "trueRoute": false,
+      "sparedLucien": false,
+      "scarredLucien": false
+    },
+    "defeat": "",
+    "credits": 110195
+  }
+]

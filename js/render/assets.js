@@ -23,7 +23,7 @@ const ASSETS = (() => {
   }
   function canvasOf(w, h) { const c = document.createElement('canvas'); c.width = Math.max(1, Math.round(w)); c.height = Math.max(1, Math.round(h)); return c; }
   // ---- background removal: flood fill from a cell's border with colour tolerance, soft edge ----
-  function keyCell(img, sx, sy, sw, sh) {
+  function keyCell(img, sx, sy, sw, sh, tolerance) {
     const c = canvasOf(sw, sh), x = c.getContext('2d'); x.drawImage(img, sx, sy, sw, sh, 0, 0, sw, sh);
     let d; try { d = x.getImageData(0, 0, sw, sh); } catch (e) { tainted = true; return { canvas: c, box: [0, 0, sw, sh] }; }
     const px = d.data, N = sw * sh;
@@ -38,7 +38,7 @@ const ASSETS = (() => {
     // Generated charcoal is slightly textured. Adapt to the sampled border,
     // then remove only connected matte so dark interior armor stays intact.
     const deviations = samp.map(dist).sort((a, b) => a - b);
-    const TOL = Math.min(80, Math.max(34, deviations[Math.floor(deviations.length * .95)] + 12)), SOFT = TOL + 24;
+    const TOL = Number.isFinite(tolerance)?Math.max(1,tolerance):Math.min(80, Math.max(34, deviations[Math.floor(deviations.length * .95)] + 12)), SOFT = TOL + 24;
     const mark = new Uint8Array(N), q = new Int32Array(N); let qh = 0, qt = 0;
     const push = i => { if (!mark[i] && dist(i) <= TOL) { mark[i] = 1; q[qt++] = i; } };
     for (let i = 0; i < sw; i++) { push(i); push(i + (sh - 1) * sw); } for (let j = 0; j < sh; j++) { push(j * sw); push(j * sw + sw - 1); }
@@ -54,19 +54,30 @@ const ASSETS = (() => {
   }
   function bbox(px, w, h) { let x0 = w, y0 = h, x1 = -1, y1 = -1; for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) if (px[(y * w + x) * 4 + 3] > 40) { if (x < x0) x0 = x; if (x > x1) x1 = x; if (y < y0) y0 = y; if (y > y1) y1 = y; } return x1 < 0 ? [0, 0, w, h] : [x0, y0, x1 - x0 + 1, y1 - y0 + 1]; }
   // ---- unit sheets: 2x2 frames -> 4 aligned transparent frames ----
-  function processUnit(img, layout) {
+  function processUnit(img, layout, meta={}) {
     const cw = Math.floor(img.width / (layout ? 4 : 2)), chh = Math.floor(img.height / (layout ? 4 : 2));
     const origins = layout ? [0, 1, 2, 3].map(col => [col * cw, layout.row * chh]) : [[0, 0], [cw, 0], [0, chh], [cw, chh]];
-    const cells = origins.map(([sx, sy]) => keyCell(img, sx, sy, cw, chh));
+    const cells = origins.map(([sx, sy]) => keyCell(img, sx, sy, cw, chh,meta.keyTolerance));
     let x0 = cw, y0 = chh, x1 = 0, y1 = 0; cells.forEach(c => { const [bx, by, bw, bh] = c.box; x0 = Math.min(x0, bx); y0 = Math.min(y0, by); x1 = Math.max(x1, bx + bw); y1 = Math.max(y1, by + bh); });
     const pad = 4; x0 = Math.max(0, x0 - pad); y0 = Math.max(0, y0 - pad); x1 = Math.min(cw, x1 + pad); y1 = Math.min(chh, y1 + pad);
     const w = x1 - x0, h = y1 - y0;
     const frames = cells.map(c => { const f = canvasOf(w, h); f.getContext('2d').drawImage(c.canvas, x0, y0, w, h, 0, 0, w, h); return f; });
     // the idle frame's own extent drives map icons & anchors
     const ib = cells[0].box; const ground = (ib[1] + ib[3] - y0) / h;
-    return { frames, w, h, ground, keyed: !tainted };
+    return { frames, w, h, ground:meta.ground??ground, meta, keyed: !tainted };
   }
-  function grid(img, cols, rows) { const cw = img.width / cols, ch = img.height / rows; const out = []; for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) { const k = canvasOf(cw, ch); k.getContext('2d').drawImage(img, c * cw, r * ch, cw, ch, 0, 0, cw, ch); out.push(k); } return out; }
+  function grid(img, cols, rows) {
+    const cells = [];
+    for (let row = 0; row < rows; row++) for (let col = 0; col < cols; col++) {
+      const left = Math.round(col * img.width / cols), top = Math.round(row * img.height / rows);
+      const width = Math.round((col + 1) * img.width / cols) - left;
+      const height = Math.round((row + 1) * img.height / rows) - top;
+      const cell = canvasOf(width, height);
+      cell.getContext('2d').drawImage(img, left, top, width, height, 0, 0, width, height);
+      cells.push(cell);
+    }
+    return cells;
+  }
 
   // ---- lists of what to look for ----
   const BG_KEYS = ['base', 'fire', 'hangar', 'bridge', 'sky', 'lab', 'elevator', 'space', 'colony', 'hive', 'vael', 'ice', 'void', 'dawn', 'ruins', 'city'];
@@ -75,6 +86,7 @@ const ASSETS = (() => {
   const ICON_SHEETS = ['skills', 'capstones', 'spirits', 'parts', 'types'];
   const EVENT_KEYS = ['ev_ashfall', 'ev_tower', 'ev_kaiser', 'ev_mural', 'ev_okonkwo', 'ev_zero', 'ev_reach', 'ev_dawn'];
   const UNIT_ALIAS = { carmine_e: 'carmine' };
+  const ATLAS_PORTRAITS = { ...EXPANSION.portraits, ...OUROBOR_PORTRAITS };
   let loaded = false, count = 0;
   async function load(onProgress) {
     const units = Object.keys(MECHS).filter(k => MECHS[k] && !UNIT_ALIAS[k]);
@@ -83,8 +95,8 @@ const ASSETS = (() => {
     units.filter(id => !MECHS[id].atlas).forEach(id => jobs.push(['units', id, 'assets/units/' + id]));
     const atlases = [...new Set(units.map(id => MECHS[id].atlas?.sheet).filter(Boolean))];
     atlases.forEach(id => jobs.push(['atlases', id, 'assets/units/' + id]));
-    portraits.filter(id => !EXPANSION.portraits[id]).forEach(id => jobs.push(['portraits', id, 'assets/portraits/' + id]));
-    [...new Set(Object.values(EXPANSION.portraits).map(x => x.sheet))].forEach(id => jobs.push(['portraitAtlases', id, 'assets/portraits/' + id]));
+    portraits.filter(id => !ATLAS_PORTRAITS[id]).forEach(id => jobs.push(['portraits', id, 'assets/portraits/' + id]));
+    [...new Set(Object.values(ATLAS_PORTRAITS).map(x => x.sheet))].forEach(id => jobs.push(['portraitAtlases', id, 'assets/portraits/' + id]));
     BG_KEYS.forEach(k => jobs.push(['backgrounds', k, 'assets/backgrounds/' + k]));
     BATTLE_KEYS.forEach(k => jobs.push(['battle', k, 'assets/battle/' + k]));
     TILE_SETS.forEach(k => jobs.push(['tiles', k, 'assets/tiles/tiles_' + k]));
@@ -100,10 +112,19 @@ const ASSETS = (() => {
   }
   function ingest(kind, id, img) {
     switch (kind) {
-      case 'units': store.units[id] = processUnit(img); break;
-      case 'atlases': Object.keys(MECHS).filter(mid => MECHS[mid].atlas?.sheet === id).forEach(mid => { store.units[mid] = processUnit(img, MECHS[mid].atlas); }); break;
+      case 'units': store.units[id] = processUnit(img,null,window.IRON_ART_META?.units?.[id]||{}); break;
+      case 'atlases': Object.keys(MECHS).filter(mid => MECHS[mid].atlas?.sheet === id).forEach(mid => { store.units[mid] = processUnit(img, MECHS[mid].atlas,window.IRON_ART_META?.units?.[mid]||{}); }); break;
       case 'portraits': { const cells = grid(img, 2, 2); store.portraits[id] = { normal: cells[0], angry: cells[1], smile: cells[2], shock: cells[3], sad: cells[3] }; break; }
-      case 'portraitAtlases': { const cells = grid(img, 4, 4); Object.entries(EXPANSION.portraits).filter(([,v]) => v.sheet === id).forEach(([pid,v]) => { const row = cells.slice(v.row * 4, v.row * 4 + 4); store.portraits[pid] = {normal:row[0],angry:row[1],smile:row[2],shock:row[3],sad:row[0]}; }); break; }
+      case 'portraitAtlases': {
+        const cells = grid(img, 4, 4);
+        for (const [pid, mapping] of Object.entries(ATLAS_PORTRAITS)) {
+          if (mapping.sheet !== id) continue;
+          const [normal, angry, alternate, hurt] = cells.slice(mapping.row * 4, mapping.row * 4 + 4);
+          const brood = !!OUROBOR_PORTRAITS[pid];
+          store.portraits[pid] = { normal, angry, smile: alternate, shock: brood ? alternate : hurt, sad: brood ? hurt : normal, hurt };
+        }
+        break;
+      }
       case 'tiles': store.tiles[id] = grid(img, 4, 4); break;
       case 'icons': store.icons[id] = grid(img, 4, 4).map(c => { const k = keyCell(c, 0, 0, c.width, c.height); return k.canvas; }); break;
       default: store[kind][id] = img;
@@ -130,6 +151,8 @@ const ASSETS = (() => {
   function portrait(pid, expr, w, h) {
     const p = store.portraits[pid]; if (!p) return null;
     const src = p[expr] || p.normal; const c = canvasOf(w, h);
+    const face=window.IRON_ART_META?.portraits?.[pid]?.face;
+    if(face){const [fx,fy,size]=face,s=w*.6/(src.width*size),dw=src.width*s,dh=src.height*s;c.getContext('2d').drawImage(src,w*.5-fx*dw,h*.38-fy*dh,dw,dh);return c;}
     // cover-crop biased to the upper part (faces)
     const s = Math.max(w / src.width, h / src.height); const dw = src.width * s, dh = src.height * s;
     c.getContext('2d').drawImage(src, (w - dw) / 2, Math.min(0, (h - dh) * 0.2), dw, dh); return c;
@@ -141,7 +164,7 @@ const ASSETS = (() => {
     const S = size * 2, c = canvasOf(S, S), x = c.getContext('2d'), f = u.frames[frame] || u.frames[0];
     const big = ['XL', 'L'].includes(MECHS[id].size) ? 1 : 0.86; const sc = Math.min(S * 0.94 * big / f.width, S * 0.8 * big / f.height);
     const w = f.width * sc, hh = f.height * sc;
-    x.save(); x.translate(S / 2, 0); if (flip) x.scale(-1, 1);
+    x.save(); x.translate(S / 2, 0); if (!!flip !== !!u.meta?.facesLeft) x.scale(-1, 1);
     x.shadowColor = 'rgba(0,0,0,0.6)'; x.shadowBlur = S * 0.03;
     x.drawImage(f, -w / 2, S * 0.77 - hh * u.ground, w, hh); x.restore();
     iconCache[key] = c; return c;
@@ -161,6 +184,7 @@ const ASSETS = (() => {
   }
   // icons by name -> [sheet, index]
   const ICON = {
+    guard: ['skills', 5],
     a1: ['skills', 0], a3: ['skills', 1], a4: ['skills', 2], b1: ['skills', 3], b2: ['skills', 4], b3: ['skills', 5], b5: ['skills', 6], c1: ['skills', 7], c2: ['skills', 8], c4: ['skills', 9], c5: ['skills', 10],
     branch0: ['skills', 11], branch1: ['skills', 12], branch2: ['skills', 13], pp: ['skills', 14], locked: ['skills', 15],
     cap_rei: ['capstones', 0], cap_mira: ['capstones', 1], cap_gunnar: ['capstones', 2], cap_ilse: ['capstones', 3], cap_brann: ['capstones', 4], cap_odessa: ['capstones', 5], cap_jin: ['capstones', 6], cap_yuna: ['capstones', 7], cap_lucien: ['capstones', 8], cap_sera: ['capstones', 9],

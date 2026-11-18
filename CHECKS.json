@@ -83,11 +83,29 @@
   },
   "newWeapons": 53,
   "newSkillNodes": 120,
-  "mechs": 47,
+  "mechs": 62,
   "pilots": 18,
   "chapterDefinitions": 20,
-  "pngAssets": 106,
-  "spriteDesignsChecked": 46,
+  "mapSizes": [
+    "18×10",
+    "17×11",
+    "20×12",
+    "18×14",
+    "19×15",
+    "20×14",
+    "22×12",
+    "22×14",
+    "22×16",
+    "24×16",
+    "16×11",
+    "20×11",
+    "23×11",
+    "20×16",
+    "18×13"
+  ],
+  "ouroborPortraits": 8,
+  "pngAssets": 112,
+  "spriteDesignsChecked": 61,
   "sprites": [
     {
       "id": "alteon",
@@ -268,6 +286,96 @@
       "width": 638,
       "height": 488,
       "ground": 0.969
+    },
+    {
+      "id": "spitter",
+      "width": 282,
+      "height": 224,
+      "ground": 0.982
+    },
+    {
+      "id": "burrower",
+      "width": 313,
+      "height": 175,
+      "ground": 0.977
+    },
+    {
+      "id": "broodmaw",
+      "width": 285,
+      "height": 229,
+      "ground": 0.983
+    },
+    {
+      "id": "skyray",
+      "width": 308,
+      "height": 250,
+      "ground": 0.956
+    },
+    {
+      "id": "valkyr",
+      "width": 313,
+      "height": 232,
+      "ground": 0.983
+    },
+    {
+      "id": "aegisdrone",
+      "width": 281,
+      "height": 219,
+      "ground": 0.936
+    },
+    {
+      "id": "siegecrawler",
+      "width": 313,
+      "height": 162,
+      "ground": 0.975
+    },
+    {
+      "id": "shade",
+      "width": 313,
+      "height": 274,
+      "ground": 0.985
+    },
+    {
+      "id": "rigger",
+      "width": 289,
+      "height": 289,
+      "ground": 0.976
+    },
+    {
+      "id": "harpoon",
+      "width": 313,
+      "height": 287,
+      "ground": 0.986
+    },
+    {
+      "id": "breaker",
+      "width": 312,
+      "height": 292,
+      "ground": 0.983
+    },
+    {
+      "id": "gale",
+      "width": 313,
+      "height": 185,
+      "ground": 0.957
+    },
+    {
+      "id": "seraphlancer",
+      "width": 313,
+      "height": 247,
+      "ground": 0.984
+    },
+    {
+      "id": "monolith",
+      "width": 313,
+      "height": 280,
+      "ground": 0.986
+    },
+    {
+      "id": "echo",
+      "width": 313,
+      "height": 276,
+      "ground": 0.986
     },
     {
       "id": "aegis",
