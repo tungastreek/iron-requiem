@@ -101,10 +101,47 @@ const SFX = (() => {
     track.step++;track.next+=step;
   }
   function stopTrack(track,fade=.8){if(!track||track.stopping)return;track.stopping=true;clearInterval(track.timer);const t=ac.currentTime;track.gain.gain.cancelScheduledValues(t);track.gain.gain.setValueAtTime(track.gain.gain.value,t);track.gain.gain.linearRampToValueAtTime(0,t+fade);setTimeout(()=>{track.nodes.forEach(n=>{try{n.stop();}catch{}});if(track.audio){track.audio.pause();track.audio.removeAttribute('src');track.audio.load();}track.gain.disconnect();tracks.delete(track);},fade*1000+80);}
-  function optionalFile(track,key){
-    if(typeof Audio==='undefined')return;const audio=new Audio();audio.loop=true;audio.preload='auto';let ext=0;
-    const next=()=>{if(track.stopping)return;if(ext>=2){audio.onerror=null;return;}audio.src='assets/music/'+key+'.'+['ogg','mp3'][ext++];audio.load();};
-    audio.onerror=next;audio.oncanplay=()=>{if(track.stopping||track.fileActive)return;let source;try{source=ac.createMediaElementSource(audio);source.connect(track.gain);}catch{return;}audio.play().then(()=>{if(track.stopping){audio.pause();return;}track.fileActive=true;track.synth.gain.linearRampToValueAtTime(0,ac.currentTime+.4);clearInterval(track.timer);}).catch(()=>{try{source.disconnect();}catch{}});};track.audio=audio;next();
+  function optionalFile(track, key) {
+    const recordings = typeof IRON_MUSIC_TRACKS === 'undefined' ? null : IRON_MUSIC_TRACKS[key];
+    if (!recordings?.length || typeof Audio === 'undefined') return;
+    const audio = new Audio();
+    audio.loop = true;
+    audio.preload = 'auto';
+    let index = 0;
+    let source;
+    let tryingPlayback = false;
+    const next = () => {
+      if (track.stopping || track.fileActive) return;
+      const filename = recordings[index++];
+      if (!filename) {
+        audio.onerror = audio.oncanplay = null;
+        return;
+      }
+      audio.src = 'assets/music/' + filename;
+      audio.load();
+    };
+    audio.onerror = next;
+    audio.oncanplay = async () => {
+      if (track.stopping || track.fileActive || tryingPlayback) return;
+      tryingPlayback = true;
+      try {
+        if (!source) {
+          source = ac.createMediaElementSource(audio);
+          source.connect(track.gain);
+        }
+        await audio.play();
+        if (track.stopping) { audio.pause(); return; }
+        track.fileActive = true;
+        track.synth.gain.linearRampToValueAtTime(0, ac.currentTime + .4);
+        clearInterval(track.timer);
+      } catch {
+        // A blocked or unsupported recording leaves the procedural score running.
+      } finally {
+        tryingPlayback = false;
+      }
+    };
+    track.audio = audio;
+    next();
   }
   function startMusic(key,chapter){
     key=normalKey(key);if(!key||!THEMES[key]){stopTrack(currentTrack);currentTrack=null;musicKey=null;return;}

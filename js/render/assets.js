@@ -6,13 +6,16 @@ const ASSETS = (() => {
   let tainted = false;
   const EXT = ['png', 'webp'];
   function loadImage(base) {
+    const inventory = window.IRON_ART_META?.images;
+    const formats = inventory ? inventory[base] : EXT;
+    if (!formats?.length) return Promise.resolve(null);
     return new Promise(res => {
       let i = 0; const img = new Image();
-      const next = () => { if (i >= EXT.length) { res(null); return; } img.src = base + '.' + EXT[i++]; };
+      const next = () => { if (i >= formats.length) { res(null); return; } img.src = base + '.' + formats[i++]; };
       img.onload = () => res(img); img.onerror = next;
       // file:// images taint canvases in Safari/Chrome. A local script delivers
       // the same PNG bytes as a data URL, which is safe for both canvas and WebGL.
-      if (location.protocol === 'file:') {
+      if (location.protocol === 'file:' && formats.includes('png')) {
         const script = document.createElement('script');
         script.src = 'assets/offline/' + base.replace(/^assets\//, '') + '.js';
         script.onload = () => { const data = window.IRON_OFFLINE?.[base]; if (data) { delete window.IRON_OFFLINE[base]; img.src = data; } else next(); script.remove(); };

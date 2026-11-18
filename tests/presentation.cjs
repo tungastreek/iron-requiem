@@ -26,10 +26,16 @@ function audioTests(){
   S.music('title');assert.equal(contexts,0);assert.equal(S.pendingMusic,'title');S.ensure();assert.equal(contexts,1);assert.equal(S.musicKey,'title');assert.equal(S.pendingMusic,null);
   assert.equal(Object.keys(S.themeInfo()).length,12);assert.equal(S.faction({mech:'crawler'}),'ourobor');assert.equal(S.faction({mech:'knight'}),'vael');assert.equal(S.faction({mech:'zephyr'}),'free_states');assert.equal(S.faction({mech:'hollow'}),'final_boss');
   const start=nodes.length;for(let i=0;i<32;i++){clock+=.2;for(const fn of [...timers.values()])fn();}assert.ok(nodes.length-start>50,'Score must schedule lead, bass, harmony and percussion');
-  for(const key of Object.keys(S.themeInfo())){S.music(key,{num:'04'});clock+=.2;for(const fn of [...timers.values()])fn();}assert.equal(S.musicKey,'final_boss');assert.ok(attempts.some(s=>s==='assets/music/title.ogg'));assert.ok(attempts.some(s=>s==='assets/music/title.mp3'));
+  for(const key of Object.keys(S.themeInfo())){S.music(key,{num:'04'});clock+=.2;for(const fn of [...timers.values()])fn();}
+  assert.equal(S.musicKey,'final_boss');
+  assert.deepEqual(attempts, [], 'Synthesized themes must make no file requests');
+  vm.runInContext('const IRON_MUSIC_TRACKS = { calm: ["calm.mp3"], tense: ["tense.ogg", "tense.mp3"] };', c);
+  S.music('calm');
+  S.music('tense');
+  assert.deepEqual(attempts, ['assets/music/calm.mp3', 'assets/music/tense.ogg', 'assets/music/tense.mp3']);
   S.phase('player',{num:'02'});assert.equal(S.musicKey,'player');const restore=S.battle({team:'player',mech:'lancer'},{team:'enemy',mech:'crawler'},{num:'02'});assert.equal(S.musicKey,'ourobor');restore();assert.equal(S.musicKey,'player');S.setMusicVol(0);
   ['shot','laser','cannon','boom','bigboom','missile','hit','slash','whoosh','dash','charge','beam','megabeam','rocket','drill','fireball','rail','zap','shriek','choir','barrier','alarm','cutin','select','confirm','cancel','spirit','levelup','step','text','sonar','spores','nullring'].forEach(k=>S.play(k));
-  for(const fn of delayed)fn();return {themes:12,userGestureGate:true,sequencer:true,crossfadeLifecycle:true,optionalFileFallback:true,factionAndPhaseSelection:true,soundCues:33};
+  for(const fn of delayed)fn();return {themes:12,userGestureGate:true,sequencer:true,crossfadeLifecycle:true,noUnlistedRecordings:true,optionalFileFallback:true,factionAndPhaseSelection:true,soundCues:33};
 }
 function touchTests(){
   const document=documentMock(),wrap=fakeElement(),canvas=fakeElement('canvas');wrap.append(canvas);document.elements.mapBody=fakeElement();document.elements.battle=fakeElement();let now=0,id=0;const delayed=new Map(),commands=[],inspections=[];

@@ -1,6 +1,6 @@
 # Optional local score
 
-The game synthesizes all twelve themes in WebAudio. Optional local recordings can override a theme: save a looping file at `assets/music/<key>.ogg` or `assets/music/<key>.mp3`. The game tries Ogg then MP3, retaining the synthesized score when no recording can play. Keep the beginning and end suitable for a seamless loop, omit vocals and copyrighted melodies, and normalize all files to comparable loudness.
+The game synthesizes all twelve themes in WebAudio. To override a theme, save a looping recording as `assets/music/<key>.ogg` or `assets/music/<key>.mp3`, run `python3 tools/build_offline.py` to update the track list, then reload the page. If both recordings are present, the game tries Ogg first. Themes without a recording use the synthesized score. Keep the beginning and end suitable for a seamless loop, omit vocals and copyrighted melodies, and normalize all files to comparable loudness.
 
 | Key | Procedural theme and prompt for a replacement recording |
 | --- | --- |

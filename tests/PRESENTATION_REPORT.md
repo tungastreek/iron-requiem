@@ -5,7 +5,7 @@ The dependency-free checks in `presentation.cjs` pass. `node --check` also passe
 | Area | Evidence |
 | --- | --- |
 | Graphics policy | A simulated SwiftShader renderer selects Low; sustained 34 ms intervals select Low; manual High stays High; Low caps DPR to 1, disables renderer shadows and retains every second particle attempt. |
-| Music | Twelve themes schedule finite note/percussion parameters. Music requested before the gesture does not construct an audio context. Gesture activation starts the pending theme. All faction/phase selectors work; optional-file errors try Ogg, then MP3, then retain synthesis. Volume routing and old-track disposal run without exceptions in the mocked graph. |
+| Music | Twelve synthesized themes run without requesting any recordings. Music requested before the gesture does not construct an audio context. Gesture activation starts the pending theme. All faction and phase selectors work. A theme with one indexed recording requests only that file. With two indexed recordings, a load error falls back from Ogg to MP3 and then to synthesis. Volume routing and old-track disposal run without exceptions in the mocked graph. |
 | Sound effects | All 33 named sound cues execute against the parameter-checking WebAudio mock. |
 | Touch | A destination tap previews without moving; a second tap sends exactly one movement command. Long press and pinch issue no tactical command. Pinch changes zoom; coordinate conversion reverses the transformed canvas. |
 

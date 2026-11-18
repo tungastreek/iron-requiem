@@ -12,6 +12,7 @@
     "userGestureGate": true,
     "sequencer": true,
     "crossfadeLifecycle": true,
+    "noUnlistedRecordings": true,
     "optionalFileFallback": true,
     "factionAndPhaseSelection": true,
     "soundCues": 33
