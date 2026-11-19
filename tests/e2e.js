@@ -9,7 +9,7 @@ const viewports = { desktop: { width: 1440, height: 900 }, phone: { width: 844, 
 async function main() {
   assert(url && viewports[profile], 'Pass URL, output folder, run, desktop|phone|tablet, and auto|low|high.');
   fs.mkdirSync(folder, { recursive: true });
-  const browser = await chromium.launch();
+  const browser = await chromium.launch({ executablePath: process.env.IRON_BROWSER_EXECUTABLE });
   try {
     const page = await browser.newPage({ viewport: viewports[profile], hasTouch: profile !== 'desktop' });
     const errors = [];

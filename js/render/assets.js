@@ -115,11 +115,12 @@ const ASSETS = (() => {
   }
 
   // ---- lists of what to look for ----
-  const BG_KEYS = ['base', 'fire', 'hangar', 'bridge', 'sky', 'lab', 'elevator', 'space', 'colony', 'hive', 'vael', 'ice', 'void', 'dawn', 'ruins', 'city'];
+  const BG_KEYS = ['base', 'fire', 'bridge', 'sky', 'lab', 'elevator', 'space', 'colony', 'hive', 'vael', 'ice', 'void', 'dawn', 'ruins', 'city'];
   const BATTLE_KEYS = ['city', 'fire', 'ruins', 'sky', 'elevator', 'space', 'colony', 'hive', 'vael', 'ice', 'void'];
   const TILE_SETS = ['earth', 'snow', 'hive', 'space'];
   const ICON_SHEETS = ['skills', 'capstones', 'spirits', 'parts', 'types'];
-  const EVENT_KEYS = ['ev_ashfall', 'ev_tower', 'ev_kaiser', 'ev_mural', 'ev_okonkwo', 'ev_zero', 'ev_reach', 'ev_dawn'];
+  // Ashfall's old event art also uses the off-model hangar machine.
+  const EVENT_KEYS = ['ev_tower', 'ev_kaiser', 'ev_mural', 'ev_okonkwo', 'ev_zero', 'ev_reach', 'ev_dawn'];
   const UNIT_ALIAS = { carmine_e: 'carmine' };
   const ATLAS_PORTRAITS = { ...EXPANSION.portraits, ...OUROBOR_PORTRAITS };
   let loaded = false, count = 0;
@@ -176,7 +177,13 @@ const ASSETS = (() => {
     ctx.drawImage(img, (W - w) / 2 - px, (H - h) / 2, w, h);
   }
   // returns true if drawn
-  function drawStoryBG(ctx, W, H, key, t) { const img = store.backgrounds[key]; if (!img) return false; coverDraw(ctx, img, W, H, Math.sin(t * 0.05) * 20, 1.04); return true; }
+  function drawStoryBG(ctx, W, H, key, t) {
+    // Use the bridge until the R-01 hangar replacement is reviewed.
+    const img = store.backgrounds[key === 'hangar' ? 'bridge' : key];
+    if (!img) return false;
+    coverDraw(ctx, img, W, H, Math.sin(t * 0.05) * 20, 1.04);
+    return true;
+  }
   function drawBattleBG(ctx, W, H, key, off) {
     const img = store.battle[key]; if (!img) return false;
     // wide pan: wrap-around ping-pong across the image
@@ -185,6 +192,7 @@ const ASSETS = (() => {
     ctx.drawImage(img, -x, (H - h) * 0.62, w, h); return true;
   }
   function drawEvent(ctx, W, H, key) { const img = store.events[key]; if (!img) return false; coverDraw(ctx, img, W, H); return true; }
+  function drawMissionBG(ctx, W, H, key) { return drawBattleBG(ctx, W, H, key, 0) || drawStoryBG(ctx, W, H, key, 0); }
   function title() { return store.key.title || null; }
   function portrait(pid, expr, w, h) {
     const p = store.portraits[pid]; if (!p) return null;
@@ -241,5 +249,5 @@ const ASSETS = (() => {
   // small <canvas> element for the DOM (or null)
   function iconEl(name, px = 28) { const ic = icon(name); if (!ic) return null; const c = canvasOf(px * 2, px * 2); c.getContext('2d').drawImage(ic, 0, 0, px * 2, px * 2); c.className = 'ico'; c.style.width = c.style.height = px + 'px'; return c; }
   function summary() { const o = {}; for (const k in store) o[k] = Object.keys(store[k]).length; return o; }
-  return { load, unit, mapIcon, portrait, drawStoryBG, drawBattleBG, drawEvent, title, tileFor, icon, iconEl, summary, get loaded() { return loaded; }, get count() { return count; }, get tainted() { return tainted; } };
+  return { load, unit, mapIcon, portrait, drawStoryBG, drawBattleBG, drawMissionBG, drawEvent, title, tileFor, icon, iconEl, summary, get loaded() { return loaded; }, get count() { return count; }, get tainted() { return tainted; } };
 })();

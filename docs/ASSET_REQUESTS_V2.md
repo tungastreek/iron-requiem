@@ -170,6 +170,7 @@ Make sheets for: `rei`, `rina`, `mira`, `gunnar`, `ilse`, `brann`, `odessa`, `ji
 
 | key | Moment | Prompt |
 |---|---|---|
+| `ev_ashfall` (replacement, P0) | c1, first breach | `Ourobor breach a cracked runway at Kestrel Base at sunset. Frame the first creature in the foreground, with broken lights and distant crews running to cover. Close the hangar doors in the background so no robot is visible. Keep the bottom quarter calm for dialogue.` |
 | `ev_launch` | c1 end | `The battered cruiser Halcyon lifting off from a burning mountain base at night, searchlights sweeping the smoke, small mechs on its deck.` |
 | `ev_shelter` | i1 | `Civilians filing into a mountain shelter tunnel at night while two mechs stand guard at the entrance under emergency lights.` |
 | `ev_hound` | c4 | `A crimson robotic wolf mech crouched on the girders of a space elevator, red eyes glowing, the tower vanishing into the clouds.` |

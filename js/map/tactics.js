@@ -33,7 +33,7 @@ function genMap(theme, w, h, seed) {
 }
 
 const MAP = (() => {
-  let cv, ctx, terrCv, T = 48, ox = 0, oy = 0, raf = 0, hover = null, threatOn = false, threatSet = null, t0 = 0;
+  let cv, ctx, terrCv, backdrop, T = 48, ox = 0, oy = 0, raf = 0, hover = null, threatOn = false, threatSet = null, t0 = 0;
   const floaters = [];
   let st = null; // map state
   let ui = { mode: 'idle', sel: null, range: null, atkRange: null, path: null, origin: null, weapon: null, target: null };
@@ -127,6 +127,18 @@ const MAP = (() => {
     cv.width = W * dpr; cv.height = H * dpr; cv.style.width = W + 'px'; cv.style.height = H + 'px';
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     ox = Math.floor((W - T * st.w) / 2); oy = Math.floor((H - T * st.h) / 2);
+    if (!backdrop) backdrop = document.createElement('canvas');
+    const scale = 512 / Math.max(1, W, H);
+    backdrop.width = Math.max(1, Math.round(W * scale));
+    backdrop.height = Math.max(1, Math.round(H * scale));
+    const b = backdrop.getContext('2d');
+    if (b) {
+      ASSETS.drawMissionBG(b, backdrop.width, backdrop.height, st.ch.bg);
+      const shade = b.createLinearGradient(0, 0, 0, backdrop.height);
+      shade.addColorStop(0, '#07101bc9');
+      shade.addColorStop(1, '#050910e8');
+      b.fillStyle = shade; b.fillRect(0, 0, backdrop.width, backdrop.height);
+    }
     buildTerrain();
   }
   function toTile(e) { const r=cv.getBoundingClientRect(),p=typeof TOUCH!=='undefined'?TOUCH.localPoint(e,cv):{x:e.clientX-r.left,y:e.clientY-r.top};const x=Math.floor((p.x-ox)/T),y=Math.floor((p.y-oy)/T);return st&&(x>=0&&y>=0&&x<st.w&&y<st.h)?{x,y}:null; }
@@ -212,6 +224,7 @@ const MAP = (() => {
   function draw(t) {
     const W = cv.clientWidth, H = cv.clientHeight;
     ctx.fillStyle = '#05080f'; ctx.fillRect(0, 0, W, H);
+    ctx.drawImage(backdrop, 0, 0, W, H);
     ctx.save(); ctx.translate(ox, oy);
     ctx.drawImage(terrCv, 0, 0, T * st.w, T * st.h);
     // water shimmer

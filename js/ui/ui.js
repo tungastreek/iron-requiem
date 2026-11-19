@@ -110,6 +110,7 @@ const UI = (() => {
     if (el.classList.contains('cgshow')) { el.classList.remove('cgshow'); cancelAnimationFrame(story.raf); } story.cg = null;
     el.hidden = true; el.classList.remove('overlay');
     if (!opts.overlay) cancelAnimationFrame(story.raf);
+    moveToastToMap();
     return result;
   }
   function initStoryCtl() {
@@ -120,7 +121,19 @@ const UI = (() => {
 
   // ================= TOAST / NOTICE =================
   let toastT = 0;
-  function toast(msg) { const t = $('#toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('show'), 2600); }
+  function toast(msg) {
+    const onMap = !$('#mapScreen').hidden && $('#story').hidden;
+    const t = $(onMap ? '#mapNotice' : '#toast');
+    $(onMap ? '#toast' : '#mapNotice').classList.remove('show');
+    t.textContent = msg;
+    t.classList.add('show');
+    clearTimeout(toastT);
+    toastT = setTimeout(() => { t.classList.remove('show'); t.textContent = ''; }, 2600);
+  }
+  function moveToastToMap() {
+    const current = $('#toast');
+    if (!$('#mapScreen').hidden && current.classList.contains('show')) toast(current.textContent);
+  }
   function modal(content, cls = '') {
     return new Promise(res => {
       const m = $('#modal'); m.innerHTML = ''; m.className = 'modal ' + cls; m.hidden = false;
@@ -136,6 +149,11 @@ const UI = (() => {
     const ch = st.ch;
     $('#mapTitle').textContent = `${ch.num} · ${ch.title}`;
     $('#mapSize').textContent = `${st.w} × ${st.h}`;
+    const goal = objectiveText(ch);
+    $('#mapGoal').textContent = goal;
+    $('#mapGoal').title = goal;
+    $('#mapNotice').classList.remove('show');
+    moveToastToMap();
     $('#btnEnd').onclick = () => { SFX.play('confirm'); MAP.endPlayerPhase(); };
     $('#btnThreat').onclick = () => MAP.toggleThreat();
     $('#btnObj').onclick = () => objectiveCard(ch);
@@ -277,8 +295,16 @@ const UI = (() => {
     b.hidden = false; void b.offsetWidth; b.classList.add('go'); SFX.play('cutin');
     await sleep(1100); b.hidden = true; b.classList.remove('go');
   }
+  function objectiveText(ch) {
+    if (ch.win === 'rout') return 'Defeat all enemies.';
+    if (ch.win.boss) {
+      const boss = ch.enemies.find(e => e.tag === ch.win.boss);
+      return `Defeat ${boss?.name || MECHS[boss?.m || 'aurelion'].name}.`;
+    }
+    return 'Destroy both cruisers.';
+  }
   function objectiveCard(ch) {
-    const win = ch.win === 'rout' ? 'Defeat all enemies.' : ch.win.boss ? `Defeat ${MECHS[(ch.enemies.find(e => e.tag === ch.win.boss) || {}).m || 'aurelion'].name}.` : 'Destroy both cruisers.';
+    const win = objectiveText(ch);
     const lose = 'Lose if ' + ch.vital.map(v => NAMES[v]).join(' or ') + ' is shot down.' + (ch.lose && ch.lose.turn ? ` Lose after turn ${ch.lose.turn}.` : '');
     return modal(close => h('div', { class: 'card obj' }, h('div', { class: 'eyebrow' }, `Mission ${ch.num}` + (ch.route ? ' · ' + ch.route : '')), h('h3', {}, ch.title), h('p', {}, ch.brief),
       h('div', { class: 'kv two' }, h('span', {}, 'Victory'), h('b', {}, win), h('span', {}, 'Defeat'), h('b', {}, lose), ch.bonus ? h('span', {}, 'Bonus') : null, ch.bonus ? h('b', { class: 'gold' }, ch.bonus.text + (ch.bonus.part ? ` → ${PARTS[ch.bonus.part].name}, +2 PP all` : '')) : null),
@@ -336,7 +362,9 @@ const UI = (() => {
   }
   function tabSortie(b, ch) {
     if (!ch) { b.appendChild(h('div', { class: 'card' }, h('h2', {}, 'Campaign complete'), h('p', {}, 'Thank you for playing.'))); return; }
-    const bgc = h('canvas', { class: 'sortieBg', width: 900, height: 360 }); ART.drawBG(bgc.getContext('2d'), 900, 360, ch.bg, 1, 0);
+    const bgc = h('canvas', { class: 'sortieBg', width: 1100, height: 340, 'aria-hidden': 'true' });
+    const ctx = bgc.getContext('2d');
+    if (ctx && !ASSETS.drawMissionBG(ctx, bgc.width, bgc.height, ch.bg)) ART.drawBG(ctx, bgc.width, bgc.height, ch.bg, 1, 0);
     const roster = h('div', { class: 'rosterRow' }, SAVE.roster.map(p => { const c = h('canvas', { width: 72, height: 90 }); c.getContext('2d').drawImage(ART.portrait(p, 'normal', 72, 90), 0, 0); return h('div', { class: 'rmini' }, c, h('span', {}, `${NAMES[p].split(' ').pop()} ${SAVE.pilots[p].lvl}`)); }));
     b.appendChild(h('section', { class: 'sortie' }, h('div', { class: 'sortieHero' }, bgc, h('div', { class: 'sortieTxt' }, h('div', { class: 'eyebrow' }, `Next mission ${ch.num}` + (ch.route ? ' · ' + ch.route : '')), h('h2', {}, ch.title), h('p', {}, ch.brief), ch.bonus ? h('p', { class: 'gold small' }, 'Bonus: ' + ch.bonus.text) : null,
       h('button', { class: 'btn primary big', onclick: () => { SFX.play('confirm'); $('#inter').hidden = true; GAME.startChapter(); } }, 'Sortie ▸'))),
@@ -381,7 +409,18 @@ const UI = (() => {
     const upRows = Object.keys(UPG).map(k => { const lv = md.up[k] || 0; const cost = upgCost(lv); return h('div', { class: 'uprow' }, h('span', { class: 'upn' }, UPG[k].name), h('div', { class: 'pips' }, Array.from({ length: UPG_MAX }, (_, i) => h('i', { class: i < lv ? 'on' : '' }))), h('span', { class: 'upv' }, k === 'wpn' ? `+${lv * UPG.wpn.per}` : k === 'hp' ? ms.hp : k === 'en' ? ms.en : k === 'arm' ? ms.arm : ms.mob), h('button', { class: 'btn sm', disabled: (lv >= UPG_MAX || SAVE.credits < cost) ? 'disabled' : null, onclick: () => { SAVE.credits -= cost; md.up[k] = lv + 1; SFX.play('confirm'); GAME.persist(); renderInter(); } }, lv >= UPG_MAX ? 'MAX' : `+ ${cost.toLocaleString()}`)); });
     const slots = [0, 1].map(i => { const cur = md.parts[i]; const sel = h('select', { id: 'part' + i, onchange: e => { const v = e.target.value || null; if (cur) SAVE.inventory[cur] = (SAVE.inventory[cur] || 0) + 1; if (v) SAVE.inventory[v]--; md.parts[i] = v; GAME.persist(); renderInter(); } }, h('option', { value: '' }, '— empty —'), Object.keys(PARTS).filter(p => p === cur || (SAVE.inventory[p] || 0) > 0).map(p => { const o = h('option', { value: p }, `${PARTS[p].name} (${p === cur ? 'equipped' : SAVE.inventory[p] + ' left'})`); if (p === cur) o.selected = true; return o; })); return h('div', { class: 'slot' }, h('span', { class: 'muted small' }, `Slot ${i + 1}`), sel, cur ? h('div', { class: 'small muted' }, ASSETS.iconEl(cur, 28), PARTS[cur].desc) : null); });
     const ter = CB.ter(mid);
-    const wt = h('div', { class: 'wlist big' }, CB.weapons(u).map(w => h('div', { class: 'wrow' + (w.finisher ? ' fin' : '') }, chip(w.type), h('span', { class: 'wn' }, w.name + (w.post ? ' ᴾ' : '')), h('span', { class: 'wp' }, w.pow), h('span', { class: 'wr2' }, `${w.rmin}-${w.rmax}`), h('span', { class: 'we' }, w.en ? `${w.en}EN` : w.ammo ? `${w.ammo} rds` : '—'), h('span', { class: 'we' }, w.will ? `Will ${w.will}` : ''), w.status ? h('span', { class: 'stchip', style: `--c:${STATUS[w.status.id].color}` }, `${STATUS[w.status.id].name} ${w.status.ch}%`) : h('span', {}))));
+    const columns = ['Type', 'Weapon', 'Power', 'Range', 'Cost', 'Will', 'Effect'];
+    const wt = h('div', { class: 'armamentScroll', tabindex: '0', role: 'region', 'aria-label': 'Weapon specifications' },
+      h('table', { class: 'armamentTable' },
+        h('thead', {}, h('tr', {}, columns.map(label => h('th', { scope: 'col' }, label)))),
+        h('tbody', {}, CB.weapons(u).map(w => h('tr', { class: w.finisher ? 'fin' : '' },
+          h('td', {}, chip(w.type)),
+          h('th', { scope: 'row', class: 'wn' }, w.name, w.post ? h('sup', { title: 'Can fire after moving', 'aria-label': 'Can fire after moving' }, ' P') : null),
+          h('td', { class: 'wp' }, w.pow),
+          h('td', { class: 'wr2' }, `${w.rmin}–${w.rmax}`),
+          h('td', { class: 'we' }, w.en ? `${w.en} EN` : w.ammo ? `${w.ammo} rds` : '—'),
+          h('td', { class: 'we' }, w.will || '—'),
+          h('td', {}, w.status ? h('span', { class: 'stchip', style: `--c:${STATUS[w.status.id].color}` }, `${STATUS[w.status.id].name} ${w.status.ch}%`) : '—'))))));
     const weak = Object.keys(ATK).filter(k => CHART[k][M.armor] > 1), res = Object.keys(ATK).filter(k => CHART[k][M.armor] < 1);
     b.appendChild(h('section', { class: 'pilots' }, list, h('div', { class: 'pdetail' },
       h('div', { class: 'ptop' }, art, h('div', { class: 'pinfo' }, h('h2', {}, M.name), h('div', { class: 'muted' }, M.cls + ' · pilot ' + NAMES[pid]), h('p', { class: 'small' }, M.desc),
