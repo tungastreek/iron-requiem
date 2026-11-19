@@ -7,7 +7,7 @@ const TOUCH=(()=>{
   function localPoint(e,canvas){const r=canvas.getBoundingClientRect();return {x:(e.clientX-r.left)*(canvas.clientWidth/r.width),y:(e.clientY-r.top)*(canvas.clientHeight/r.height)};}
   function button(text,fn,cls=''){const b=document.createElement('button');b.type='button';b.className='btn sm '+cls;b.textContent=text;b.addEventListener('click',e=>{e.stopPropagation();fn();});return b;}
   function apply(s){
-    const margin=small()?110:0,maxX=s.canvas.clientWidth*(s.scale-1)/2+margin,maxY=s.canvas.clientHeight*(s.scale-1)/2+margin;
+    const margin=small()&&s.api.ui().mode!=='target'?110:0,maxX=s.canvas.clientWidth*(s.scale-1)/2+margin,maxY=s.canvas.clientHeight*(s.scale-1)/2+margin;
     s.panX=clamp(s.panX,-maxX,maxX);s.panY=clamp(s.panY,-maxY,maxY);s.canvas.style.transform=`translate(${s.panX}px,${s.panY}px) scale(${s.scale})`;s.canvas.style.transformOrigin='center';s.label.textContent=Math.round(s.scale*100)+'%';
   }
   function clearPending(s){s.pending=null;s.confirm.hidden=true;}
@@ -44,7 +44,7 @@ const TOUCH=(()=>{
   function resetMap(){if(!current)return;current.scale=1;current.panX=current.panY=0;clearPending(current);apply(current);showInfo(false);}
   function showInfo(on){document.getElementById('mapBody')?.classList.toggle('touchInfoOpen',!!on);const b=document.getElementById('touchInfoToggle');if(b)b.setAttribute('aria-expanded',String(!!on));}
   function revealUnit(u,geom){
-    const s=current;if(!s||!small()||!u||!geom)return;const width=s.canvas.clientWidth,height=s.canvas.clientHeight,x=(geom.ox+(u.x+.5)*geom.T-width/2)*s.scale+width/2+s.panX,y=(geom.oy+(u.y+.5)*geom.T-height/2)*s.scale+height/2+s.panY;
+    const s=current;if(!s||!small()||!u||!geom||s.api.ui().mode==='target')return;const width=s.canvas.clientWidth,height=s.canvas.clientHeight,x=(geom.ox+(u.x+.5)*geom.T-width/2)*s.scale+width/2+s.panX,y=(geom.oy+(u.y+.5)*geom.T-height/2)*s.scale+height/2+s.panY;
     // Menus sit on the right; keep the selected frame in the open upper-left area.
     if(x>width*.55)s.panX-=x-width*.35;if(y>height*.55)s.panY-=y-height*.35;apply(s);
   }
@@ -53,5 +53,5 @@ const TOUCH=(()=>{
     const battle=document.getElementById('battle');if(battle&&!document.getElementById('battleControls')){const bar=document.createElement('div');bar.id='battleControls';bar.className='battleControls';bar.append(button('Fast-forward',()=>actions.fastBattle?.()),button('Skip animation',()=>actions.skipBattle?.(),'primary'));battle.append(bar);}
     window.addEventListener('resize',()=>{if(current)apply(current);});
   }
-  return {init,attachMap,localPoint,resetMap,revealUnit,showInfo,cancelMove:()=>{if(current)clearPending(current)},get scale(){return current?.scale||1},get pendingMove(){return current?.pending||null}};
+  return {init,attachMap,localPoint,resetMap,revealUnit,showInfo,refreshMap:()=>{if(current)apply(current)},cancelMove:()=>{if(current)clearPending(current)},get scale(){return current?.scale||1},get pendingMove(){return current?.pending||null}};
 })();

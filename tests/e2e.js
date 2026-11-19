@@ -5,9 +5,9 @@ const fs = require('node:fs');
 const path = require('node:path');
 
 const [, , url, folder = '/tmp/iron-requiem-shots', , profile = 'desktop', mode = 'auto'] = process.argv;
-const viewports = { desktop: { width: 1440, height: 900 }, phone: { width: 844, height: 390 }, tablet: { width: 1024, height: 768 } };
+const viewports = { desktop: { width: 1440, height: 900 }, phone: { width: 844, height: 390 }, portrait: { width: 390, height: 844 }, tablet: { width: 1024, height: 768 } };
 async function main() {
-  assert(url && viewports[profile], 'Pass URL, output folder, run, desktop|phone|tablet, and auto|low|high.');
+  assert(url && viewports[profile], 'Pass URL, output folder, run, desktop|phone|portrait|tablet, and auto|low|high.');
   fs.mkdirSync(folder, { recursive: true });
   const browser = await chromium.launch({ executablePath: process.env.IRON_BROWSER_EXECUTABLE });
   try {
@@ -33,20 +33,50 @@ async function main() {
     assert.equal(await page.locator('#mapSize').textContent(), '18 × 10');
     await shot('map');
     const fixture = await page.evaluate(() => {
-      const battle = G.map, ally = battle.units.find(u => u.pilot === 'rei'), enemy = battle.units.find(u => u.mech === 'crawler');
-      enemy.x = ally.x + 1; enemy.y = ally.y;
-      const weapon = CB.weapons(ally)[0];
-      MAP.ui.sel = ally;
-      MAP.beginAttack(ally, weapon);
-      MAP.ui.target = enemy;
-      UI.forecast(ally, enemy, weapon, true);
-      return { hero: ally.mech, art: !!ASSETS.portrait('beast', 'normal', 40, 50) };
+      const ally = G.map.find('rei');
+      const [first, second] = G.map.units.filter(u => u.team === 'enemy' && u.mech === 'crawler');
+      first.x = ally.x + 1; first.y = ally.y; first.nameOverride = 'Crawler East';
+      second.x = ally.x; second.y = ally.y - 1; second.nameOverride = 'Crawler North';
+      return { hero: ally.mech, ally: [ally.x, ally.y], first: [first.x, first.y], second: [second.x, second.y],
+        weapon: CB.weapons(ally)[0].name, art: !!ASSETS.portrait('beast', 'normal', 40, 50) };
     });
     assert.equal(fixture.hero, 'alteon_s');
     assert.equal(fixture.art, true);
+    async function point([x, y]) {
+      return page.evaluate(([x, y]) => {
+        const canvas = document.getElementById('mapCanvas');
+        const rect = canvas.getBoundingClientRect(), { T, ox, oy } = MAP.geom;
+        return [
+          rect.left + (ox + (x + .5) * T) * rect.width / canvas.clientWidth,
+          rect.top + (oy + (y + .5) * T) * rect.height / canvas.clientHeight,
+        ];
+      }, [x, y]);
+    }
+    async function select(tile) {
+      const [x, y] = await point(tile);
+      if (profile === 'desktop') await page.mouse.click(x, y);
+      else await page.touchscreen.tap(x, y);
+    }
+    await select(fixture.ally);
+    await select(fixture.ally);
+    await page.locator('#actMenu').getByRole('button', { name: 'Attack' }).click();
+    await page.locator('#wpnPanel').getByRole('button', { name: new RegExp(fixture.weapon) }).click();
+    if (profile === 'desktop') await page.mouse.move(...await point(fixture.first));
+    assert.equal(await page.locator('#forecast').isHidden(), true, 'Hover keeps the map clear');
+    await select(fixture.first);
+    const target = page.locator('#forecast .fside.enemy .fname');
+    assert.equal(await target.textContent(), 'Crawler East');
+    await select(fixture.second);
+    assert.equal(await target.textContent(), 'Crawler North', 'Select a different target with the forecast open');
+    await page.getByRole('button', { name: 'Clear target' }).click();
+    assert.equal(await page.evaluate(() => MAP.ui.mode), 'target');
+    assert.equal(await page.locator('#forecast').isHidden(), true);
+    await select(fixture.first);
     await shot('forecast');
     const forecast = await page.locator('#forecast').boundingBox();
+    const board = await page.locator('#mapWrap').boundingBox();
     const attack = await page.locator('#forecast').getByRole('button', { name: 'Attack' }).boundingBox();
+    assert(forecast.x >= board.x + board.width - 1 || forecast.y >= board.y + board.height - 1, 'Forecast leaves the full board clickable');
     assert(forecast.x >= 0 && forecast.x + forecast.width <= viewports[profile].width + 1, 'Forecast fits the viewport');
     assert(attack.x >= 0 && attack.x + attack.width <= viewports[profile].width + 1, 'Attack button fits the viewport');
     await page.locator('#forecast').getByRole('button', { name: 'Attack' }).click();

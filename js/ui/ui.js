@@ -245,8 +245,9 @@ const UI = (() => {
     pnl.appendChild(h('button', { class: 'btn sm', onclick: () => { pnl.hidden = true; actionMenu(u, u.moved); } }, 'Back'));
   }
   function pickAlly(list) { return modal(close => h('div', { class: 'card' }, h('h3', {}, 'Mend which ally?'), h('div', { class: 'list' }, list.map(a => h('button', { class: 'btn', onclick: () => close(a) }, `${NAMES[a.pilot]} — ${a.hp}/${CB.mstats(a).hp}`))), h('button', { class: 'btn sm', onclick: () => close(null) }, 'Cancel'))); }
-  function forecast(a, d, w, confirmable) {
-    const f = $('#forecast'); f.innerHTML = ''; f.hidden = false;
+  function forecast(a, d, w) {
+    const f = $('#forecast'), opening = f.hidden;
+    f.innerHTML = '';
     const fa = CB.forecast(a, d, w, 'counter'); const cw = CB.bestWeapon(d, a, false, true); const fd = cw ? CB.forecast(d, a, cw, 'counter') : null;
     const eff = effLabel(fa.mult); const pm = CB.posMods(a, d);
     const side = (u, wp, fc, isAtk) => h('div', { class: 'fside ' + u.team }, h('div', { class: 'frole' }, isAtk ? 'Attack' : 'Response'), h('div', { class: 'fname' }, u.nameOverride || MECHS[u.mech].name), h('div', { class: 'fhp' }, bar(u.hp, CB.mstats(u).hp, 'hp')),
@@ -254,7 +255,9 @@ const UI = (() => {
       fc ? h('div', { class: 'fstats' }, h('div', {}, h('span', {}, 'DMG'), h('b', {}, fc.dmg)), h('div', {}, h('span', {}, 'HIT'), h('b', {}, fc.hit + '%')), h('div', {}, h('span', {}, 'CRIT'), h('b', {}, fc.crit + '%'))) : null,
       fc && isAtk ? h('div', { class: 'eff', style: `--c:${eff.c}` }, eff.t + (fa.mult !== 1 ? ` ×${fa.mult.toFixed(2)}` : '')) : null);
     f.appendChild(h('h2', { class: 'forecastTitle' }, 'Combat forecast'));
-    f.appendChild(h('div', { class: 'fgrid' }, side(a, w, fa, true), h('div', { class: 'fvs', 'aria-hidden': 'true' }, 'VS'), side(d, cw, fd, false)));
+    const body = h('div', { class: 'forecastScroll', tabindex: '0', role: 'region', 'aria-label': 'Damage and counterattack details' },
+      h('div', { class: 'fgrid' }, side(a, w, fa, true), side(d, cw, fd, false)));
+    f.appendChild(body);
     const mods = [];
     for(const unit of [a,d]){const v=typeof ENEMIES!=='undefined'?ENEMIES.label(unit):null;if(v)mods.push(v.name+' · '+v.description);}
     if(w.combo){const p=COMBOS.partner(a,w);mods.push('COMBO · '+NAMES[p?.pilot]+' · both actions and '+w.en+' EN each');}
@@ -263,10 +266,23 @@ const UI = (() => {
     if (pm.eva) mods.push(`Target formation −${pm.eva} hit`);
     if (w.status) mods.push(`${STATUS[w.status.id].name} ${w.status.ch}%`);
     if (CB.pushes(w) && !['XL'].includes(MECHS[d.mech].size)) mods.push('KNOCKBACK');
-    if (mods.length) f.appendChild(h('div', { class: 'fmods' }, mods.map(m => h('span', { class: 'tag' }, m))));
-    if (confirmable) f.appendChild(h('div', { class: 'frow' }, h('button', { class: 'btn primary', onclick: () => MAP.confirmAttack() }, 'Attack'), h('button', { class: 'btn', onclick: () => MAP.cancel() }, 'Back')));
+    if (mods.length) body.appendChild(h('div', { class: 'fmods' }, mods.map(m => h('span', { class: 'tag' }, m))));
+    f.appendChild(h('div', { class: 'frow' },
+      h('button', { class: 'btn primary', onclick: () => MAP.confirmAttack() }, 'Attack'),
+      h('button', { class: 'btn', onclick: () => MAP.cancel() }, 'Clear target')));
+    if (opening) {
+      f.hidden = false;
+      $('#mapBody').classList.add('forecasting');
+      MAP.resize();
+    }
   }
-  function hideForecast() { $('#forecast').hidden = true; }
+  function hideForecast() {
+    const f = $('#forecast');
+    if (f.hidden) return;
+    f.hidden = true;
+    $('#mapBody').classList.remove('forecasting');
+    MAP.resize();
+  }
   function defensePrompt(a, d, w) {
     return new Promise(res => {
       const weps = CB.weapons(d).filter(x => CB.usable(d, x, CB.dist(a, d), false, true) === null);

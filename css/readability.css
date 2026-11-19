@@ -56,14 +56,8 @@ body { font-size: 16px; line-height: 1.4; }
 .dopt { min-width: 0; font-size: 14px; overflow-wrap: anywhere; }
 .defopts { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 
-#forecast {
-  inset-inline: 0; margin-inline: auto; transform: none;
-  width: min(950px, calc(100% - 32px)); max-height: calc(100% - 86px);
-  padding: clamp(12px, 2vw, 24px); overflow: auto;
-  box-shadow: 0 10px 40px #000a;
-}
 .forecastTitle { font-size: clamp(18px, 2vw, 24px); margin: 0 0 10px; }
-.fgrid { grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: start; gap: clamp(8px, 1.8vw, 20px); }
+.fgrid { grid-template-columns: minmax(0, 1fr); align-items: start; gap: 8px; }
 .fside { min-width: 0; padding: clamp(8px, 1.3vw, 15px); background: #0d1a2c; border: 1px solid var(--line2); overflow-wrap: anywhere; }
 .frole { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: .08em; }
 .fside .fname { font-size: clamp(17px, 2vw, 24px); line-height: 1.15; margin: 4px 0 9px; }
@@ -72,15 +66,27 @@ body { font-size: 16px; line-height: 1.4; }
 .fstats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px; }
 .fstats span { font-size: 11px; }
 .fstats b { font-size: clamp(17px, 2.2vw, 27px); line-height: 1.1; white-space: nowrap; }
-.fvs { align-self: center; font-weight: 800; font-size: clamp(16px, 2.3vw, 28px); }
 .eff { font-size: 13px; }
 .fmods .tag { font-size: 12px; white-space: normal; }
-.frow { flex-wrap: wrap; }
-.frow .btn { flex: 0 1 135px; }
+.frow { flex: 0 0 auto; }
+.frow .btn { flex: 0 1 140px; }
 .frow .primary { order: 1; }
 
 @media (max-width: 900px) {
-  #forecast { left: max(8px, env(safe-area-inset-left)) !important; right: max(8px, env(safe-area-inset-right)) !important; width: auto; max-width: 700px; transform: none; }
+  #mapBody.forecasting { flex-direction: column; }
+  #forecast { flex: 0 0 min(160px, 36dvh); width: 100%; padding: 4px 8px; }
+  .forecastTitle { display: none; }
+  .fgrid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .fside { padding: 4px 8px; }
+  .fside .fname { font-size: 15px; margin: 0 0 3px; }
+  .frole { display: none; }
+  .fside .meter { margin: 3px 0; }
+  .fside .meter .bar { height: 5px; }
+  .fw, .eff { font-size: 11px; }
+  .fw { margin-block: 3px; }
+  .fstats b { font-size: 15px; }
+  .frow { margin-top: 4px; }
+  .frow .btn { flex: 1 1 0; min-width: 0; padding-inline: 6px; font-size: 14px; white-space: nowrap; }
   #mapSize { font-size: 11px; }
   .dlg { --dialogue-height: 130px; width: calc(100% - 16px); }
   .dlg .text { font-size: clamp(17px, 2.55vw, 23px); }
@@ -89,10 +95,14 @@ body { font-size: 16px; line-height: 1.4; }
   .frameOptions canvas { height: auto; }
 }
 @media (max-width: 460px) {
-  .fgrid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .fvs { display: none; }
+  #forecast { flex-basis: min(240px, 38dvh); }
   .fstats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .defopts { grid-template-columns: 1fr; }
+}
+@media (min-width: 640px) and (max-width: 900px) and (orientation: landscape) {
+  #mapBody.forecasting { flex-direction: row; --map-sidebar: 245px; }
+  #forecast { flex: 0 0 var(--map-sidebar); width: auto; }
+  .fgrid { grid-template-columns: minmax(0, 1fr); }
 }
 @media (max-height: 500px) {
   .setupOptions canvas { height: 180px; object-fit: contain; }

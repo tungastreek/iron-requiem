@@ -123,7 +123,7 @@ const MAP = (() => {
     if(!st)return;
     const wrap = document.getElementById('mapWrap'); const W = wrap.clientWidth, H = wrap.clientHeight;
     const dpr = typeof QUALITY!=='undefined'?QUALITY.dpr:Math.min(2, window.devicePixelRatio || 1);
-    T = Math.max(20, Math.floor(Math.min(W / st.w, H / st.h)));
+    T = Math.max(1, Math.floor(Math.min(W / st.w, H / st.h)));
     cv.width = W * dpr; cv.height = H * dpr; cv.style.width = W + 'px'; cv.style.height = H + 'px';
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     ox = Math.floor((W - T * st.w) / 2); oy = Math.floor((H - T * st.h) / 2);
@@ -140,6 +140,7 @@ const MAP = (() => {
       b.fillStyle = shade; b.fillRect(0, 0, backdrop.width, backdrop.height);
     }
     buildTerrain();
+    if (typeof TOUCH !== 'undefined') TOUCH.refreshMap();
   }
   function toTile(e) { const r=cv.getBoundingClientRect(),p=typeof TOUCH!=='undefined'?TOUCH.localPoint(e,cv):{x:e.clientX-r.left,y:e.clientY-r.top};const x=Math.floor((p.x-ox)/T),y=Math.floor((p.y-oy)/T);return st&&(x>=0&&y>=0&&x<st.w&&y<st.h)?{x,y}:null; }
   function terrColor(tl) {
@@ -234,6 +235,14 @@ const MAP = (() => {
     const pulse = 0.5 + Math.sin(t * 4) * 0.15;
     if (ui.range) { ui.range.tiles.forEach(k => { const [x, y] = k.split(',').map(Number); ctx.fillStyle = `rgba(60,170,255,${0.25 * pulse + 0.1})`; ctx.fillRect(x * T + 1, y * T + 1, T - 2, T - 2); ctx.strokeStyle = 'rgba(120,210,255,0.5)'; ctx.strokeRect(x * T + 1.5, y * T + 1.5, T - 3, T - 3); }); }
     if (ui.atkRange) { ui.atkRange.forEach(k => { const [x, y] = k.split(',').map(Number); ctx.fillStyle = `rgba(255,70,90,${0.22 * pulse + 0.08})`; ctx.fillRect(x * T + 1, y * T + 1, T - 2, T - 2); }); }
+    if (ui.target) {
+      ctx.save();
+      ctx.strokeStyle = '#ffb4c1'; ctx.lineWidth = 2;
+      ctx.setLineDash([6, 5]); ctx.beginPath();
+      ctx.moveTo((ui.sel.x + .5) * T, (ui.sel.y + .5) * T);
+      ctx.lineTo((ui.target.x + .5) * T, (ui.target.y + .5) * T);
+      ctx.stroke(); ctx.restore();
+    }
     if (ui.path && ui.path.length) { ctx.strokeStyle = 'rgba(255,255,255,0.85)'; ctx.lineWidth = 3; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(ui.sel.x * T + T / 2, ui.sel.y * T + T / 2); ui.path.forEach(([x, y]) => ctx.lineTo(x * T + T / 2, y * T + T / 2)); ctx.stroke(); }
     // secrets (sensor sweep shimmer)
     for (const s of st.secrets) {
@@ -290,7 +299,6 @@ const MAP = (() => {
     const u = st.unitAt(hover.x, hover.y);
     UI.showTileInfo(hover.x, hover.y, st.tile(hover.x, hover.y), u);
     if (ui.mode === 'moving' && ui.range && ui.range.tiles.has(hover.x + ',' + hover.y)) ui.path = pathTo(ui.range, ui.sel, hover.x, hover.y);
-    if (ui.mode === 'target' && !ui.target && ui.weapon && u && foeOf(u, ui.sel) && ui.atkRange.has(u.x + ',' + u.y) && !CB.usable(ui.sel, ui.weapon, CB.dist(ui.sel,u), ui.sel.moved, false, u)) UI.forecast(ui.sel, u, ui.weapon);
   }
   async function onClick(x, y) {
     if (busy || st.phase !== 'player') return;
@@ -313,7 +321,7 @@ const MAP = (() => {
         break;
       case 'target':
         if (u && foeOf(u, ui.sel) && ui.atkRange.has(x + ',' + y) && CB.usable(ui.sel,ui.weapon,CB.dist(ui.sel,u),ui.sel.moved,false,u)===null) {
-          if (ui.target === u) { await confirmAttack(); } else { ui.target = u; UI.forecast(ui.sel, u, ui.weapon, true); }
+          if (ui.target === u) { await confirmAttack(); } else { ui.target = u; UI.forecast(ui.sel, u, ui.weapon); }
         }
         break;
       case 'enemyview': clearSel(); break;
@@ -325,16 +333,20 @@ const MAP = (() => {
   function cancel() {
     if(typeof TOUCH!=='undefined')TOUCH.cancelMove();
     if (busy) return; SFX.play('cancel');
-    if (ui.mode === 'target') { ui.mode = 'menu'; ui.atkRange = null; ui.target = null; ui.weapon = null; UI.hideForecast(); UI.actionMenu(ui.sel, ui.sel.moved); return; }
+    if (ui.mode === 'target') {
+      if (ui.target) { ui.target = null; UI.hideForecast(); return; }
+      ui.mode = 'menu'; ui.atkRange = null; ui.weapon = null;
+      UI.actionMenu(ui.sel, ui.sel.moved);
+      return;
+    }
     if (ui.mode === 'menu' && ui.origin && ui.sel.moved && !ui.sel.acted) { ui.sel.x = ui.origin.x; ui.sel.y = ui.origin.y; ui.sel.moved = false; const u = ui.sel; UI.hideMenus(); selectUnit(u); return; }
     clearSel();
   }
   // called by UI action menu
   function beginAttack(u, w) {
     ui.mode = 'target'; ui.weapon = w; ui.atkRange = rangeTiles(u.x, u.y, w.rmin, w.rmax); ui.target = null;
-    const foes = st.units.filter(o => o.hp > 0 && foeOf(o, u) && ui.atkRange.has(o.x + ',' + o.y) && CB.usable(u,w,CB.dist(u,o),u.moved,false,o)===null);
-    if (foes.length === 1) { ui.target = foes[0]; UI.forecast(u, foes[0], w, true); }
-    else UI.toast('Select a target in red range. Click it twice (or confirm) to attack.');
+    if (typeof TOUCH !== 'undefined') TOUCH.refreshMap();
+    UI.toast('Select a target in red range.');
   }
   function targetsFor(u, moved) {
     const res = [];
