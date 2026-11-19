@@ -1,0 +1,8 @@
+:root {color-scheme:dark;font:16px system-ui;color:#e4f5ff;background:#080f1c}
+main {max-width:1060px;margin:auto;padding:22px}
+h1 {margin:0;color:#92f5ff} p {color:#bacde1}
+canvas {display:block;width:100%;background:#040914;border:1px solid #315a73}
+.controls {display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin:12px 0}
+button,select,textarea {background:#101f32;color:inherit;border:1px solid #3e6e8a;border-radius:4px;padding:8px}
+button {cursor:pointer} :focus-visible {outline:2px solid #ffc77a}
+#scrub {flex:1;min-width:100px} #notice {color:#ffbd8e} .editor {display:grid;gap:8px} textarea {font-family:monospace}

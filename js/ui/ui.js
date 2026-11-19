@@ -39,15 +39,37 @@ const UI = (() => {
       story.wake = fin;
     });
   }
-  async function typeText(el, text) {
-    el.textContent = ''; if (story.skip) { el.textContent = text; return; }
-    const characters = Array.from(text);
-    let i = 0, stop = false;
-    const el2 = $('#story'); const skipper = e => { if (e.target.closest('.storyCtl')) return; stop = true; };
-    el2.addEventListener('click', skipper, { once: true });
-    while (i < characters.length && !stop) { i += 2; el.textContent = characters.slice(0, i).join(''); if (i % 6 === 0) SFX.play('text'); await sleep(16); }
-    el.textContent = text; el2.removeEventListener('click', skipper);
-    await sleep(30);
+  async function typeText(el, source, speaker) {
+    const lines = DIALOGUE.segments(source);
+    const storyEl = $('#story'), dlg = $('#story .dlg');
+    el.replaceChildren();
+    dlg.classList.toggle('radio',lines.some(line=>line.tags.includes('comm')));
+    dlg.classList.toggle('shouted',lines.some(line=>line.tags.includes('shout')));
+    let stop = false, blip = 0;
+    const skipTyping = e=>{ if (!e.target.closest('.storyCtl')) stop = true; };
+    const skipKey = e=>{ if (e.key===' ' || e.key==='Enter') { e.preventDefault(); stop=true; } };
+    storyEl.addEventListener('click',skipTyping);
+    window.addEventListener('keydown',skipKey);
+    try {
+      for (const line of lines) {
+        if (line.pause && !story.skip && !stop) { await sleep(line.pause); continue; }
+        const span = h('span',{class:line.tags.map(key=>'cue-'+key).join(' ')});
+        el.appendChild(span);
+        if (!story.skip && !stop) {
+          const characters = Array.from(line.text);
+          const step = line.tags.includes('whisper') ? 29 : speaker==='mira' ? 12 : speaker==='beast' ? 22 : 16;
+          for (let i=2;i<=characters.length+1 && !stop && !story.skip;i+=2) {
+            span.textContent = characters.slice(0,i).join('');
+            if (++blip%3===0) SFX.play('text');
+            await sleep(step);
+          }
+        }
+        span.textContent = line.text;
+      }
+    } finally {
+      storyEl.removeEventListener('click',skipTyping);
+      window.removeEventListener('keydown',skipKey);
+    }
   }
   function showChoices(opts) {
     return new Promise(res => {
@@ -81,7 +103,7 @@ const UI = (() => {
       if (c.res) SAVE.flags.res = (SAVE.flags.res || 0) + c.res;
       if (c.join) { MAP.addRoster(c.join); toast(NAMES[c.join] + ' joined the Halcyon!'); }
       if (c.remove && G.map) { const u = G.map.find(c.remove); if (u) { u.hp = 0; u.retreated = true; G.map.defeatedTurn[u.tag] = G.map.turn; } }
-      if (c.fx) { if (c.fx === 'shake') { el.classList.remove('shake'); void el.offsetWidth; el.classList.add('shake'); SFX.play('boom'); } else { const f = $('#storyFlash'); f.className = c.fx === 'white' ? 'white' : 'flash'; void f.offsetWidth; f.classList.add('go'); SFX.play(c.fx === 'white' ? 'choir' : 'zap'); await sleep(c.fx === 'white' ? 900 : 250); } }
+      if (c.fx && !QUALITY.reducedMotion) { if (c.fx === 'shake') { el.classList.remove('shake'); void el.offsetWidth; el.classList.add('shake'); SFX.play('boom'); } else { const f = $('#storyFlash'); f.className = c.fx === 'white' ? 'white' : 'flash'; void f.offsetWidth; f.classList.add('go'); SFX.play(c.fx === 'white' ? 'choir' : 'zap'); await sleep(c.fx === 'white' ? 900 : 250); } }
       if (c.title) { $('#story .dlg').hidden = true; await titleCard(c.title, c.sub); }
       if (c.endmap) { result = 'endmap:' + c.endmap; break; }
       if (c.end) { result = 'end:' + c.end; break; }
@@ -94,8 +116,8 @@ const UI = (() => {
           $('#portL').classList.toggle('dim', side !== 'L'); $('#portR').classList.toggle('dim', side !== 'R');
           $('#story .name').textContent = fmt(NAMES[c.s] || c.s); $('#story .name').style.setProperty('--nc', (PORTRAITS[c.s] || {}).eye || '#62f3ff');
         } else { $('#story .name').textContent = ''; $('#portL').classList.add('dim'); $('#portR').classList.add('dim'); }
-        story.log.push({ n: isN ? '' : fmt(NAMES[c.s] || ''), t: text }); if (story.log.length > 200) story.log.shift();
-        await typeText($('#story .text'), text);
+        story.log.push({ n: isN ? '' : fmt(NAMES[c.s] || ''), t: DIALOGUE.plain(text) }); if (story.log.length > 200) story.log.shift();
+        await typeText($('#story .text'), text,c.s);
         await clickWait();
       }
       if (c.choice) {
@@ -167,9 +189,21 @@ const UI = (() => {
     $('#mapPhase').textContent = st.phase === 'player' ? 'PLAYER PHASE' : st.phase === 'ally' ? 'ALLY PHASE' : 'ENEMY PHASE';
     $('#mapPhase').className = 'phase ' + st.phase;
     $('#mapCredits').textContent = `${(SAVE.credits + st.credits).toLocaleString()} CR`;
-    const left = st.units.filter(u => u.team === 'enemy' && u.hp > 0).length; $('#mapEnemies').textContent = `${left} hostile`;
+    const left = st.units.filter(u=>u.team==='enemy' && u.hp>0 && (!st.fog || MAP.revealed(u.x,u.y))).length;
+    $('#mapEnemies').textContent = `${left} ${st.fog?'contacts':'hostile'}`;
   }
   function chip(type) { return h('span', { class: 'chip', style: `--c:${ATK[type].color}` }, ASSETS.iconEl(type, 14), ATK[type].short); }
+  function skin(u) {
+    if (u.team !== 'enemy') return 'skin-halcyon';
+    const m = MECHS[u.mech];
+    if (m.armor === 'BIO') return 'skin-ourobor';
+    if (m.armor === 'VOID') return 'skin-vael';
+    return m.faction === 'free_states' || ['zephyr','tyrant','carmine_e'].includes(u.mech) ? 'skin-freestates' : 'skin-concord';
+  }
+  function classBadge(u) {
+    const frame = CLASSES.get(u.mech);
+    return h('span',{class:'classBadge',style:'--class-ink:'+frame.color,title:frame.intro},ASSETS.iconEl('class_'+frame.id,16),frame.name);
+  }
   function bar(value, max, kind) {
     const percent = Math.max(0, Math.min(100, value / max * 100));
     return h('div', { class: 'meter ' + kind },
@@ -191,6 +225,10 @@ const UI = (() => {
     const pm = CB.formation(u);
     p.appendChild(h('div', { class: 'uhead ' + u.team }, pimg, h('div', {}, h('div', { class: 'uname' }, name), h('div', { class: 'upilot' }, (u.pname || NAMES[u.pilot] || '') + ` · Lv ${u.lvl}`), h('div', { class: 'ucls' }, m.cls), h('div', { class: 'armorTag', style: `--c:${ARMOR[ms.armor].color}` }, ARMOR[ms.armor].name + ' · ' + m.size))));
     const variant=typeof ENEMIES!=='undefined'?ENEMIES.label(u):null;if(variant)p.appendChild(h('p',{class:'muted small'},variant.description));
+    if (u.team === 'player') p.appendChild(classBadge(u));
+    const assist = COMBOS.remaining(u,'attack'), guard = COMBOS.remaining(u,'guard');
+    p.appendChild(h('div',{class:'tags'},assist?h('span',{class:'tag green'},'Assist '+assist):null,guard?h('span',{class:'tag'},'Guard '+guard):null,
+      CB.classFx(u).resonance?h('span',{class:'tag'},'Core '+(u.resonance || 0)+'%'):null));
     p.appendChild(bar(u.hp, ms.hp, 'hp')); p.appendChild(bar(u.en, ms.en, 'en'));
     if (u.escortPath) {
       p.appendChild(h('p', { class: 'hint' }, 'Follows the marked road during the ally phase. Keep its next tile clear.'));
@@ -216,6 +254,28 @@ const UI = (() => {
     const add = (label, fn, dis, hint) => menu.appendChild(h('button', { class: 'act', disabled: dis ? 'disabled' : null, title: hint || '', onclick: () => { SFX.play('select'); fn(); } }, label));
     add('Attack', () => weaponPanel(u, moved), !canAtk, canAtk ? '' : 'No target in range');
     add('Spirit', () => spiritPanel(u));
+    const fx = CB.classFx(u);
+    if (fx.fieldService) {
+      const allies = MAP.serviceTargets(u);
+      for (const [label,restore] of [['Repair',false],['Resupply',true]]) add(label,async () => {
+        const target = await pickAlly(allies,label+' which ally?');
+        if (target) await MAP.service(u,target,restore);
+      },!allies.length,'Needs an ally within service range');
+    }
+    if (fx.fieldOrders) {
+      const allies = G.map.units.filter(o => o !== u && o.team === u.team && o.hp > 0 && CB.dist(u,o) <= 3);
+      add('Command order',async () => {
+        const target = await pickAlly(allies,'Issue an order to whom?');
+        if (target) { MAP.order(u,target); actionMenu(u,moved); }
+      },u.orderUsed || !allies.length,'Once per phase · Focus and Will');
+    }
+    if (fx.taunt) {
+      const foes = G.map.units.filter(o => o.team === 'enemy' && o.hp > 0 && CB.dist(u,o) <= 3);
+      add('Taunt',async () => {
+        const target = await pickAlly(foes,'Draw whose fire?');
+        if (target) { MAP.taunt(u,target); actionMenu(u,moved); }
+      },u.tauntUsed || !foes.length);
+    }
     if (u.mech === 'sylph' && !u.transformed) add(u.mode === 'fighter' ? 'Robot Mode' : 'Fighter Mode', () => MAP.transform(u));
     if (!moved) add('Move', () => { hideMenus(); MAP.ui.mode = 'moving'; MAP.ui.range = MAP.reach(u); });
     add('Wait', () => { hideMenus(); MAP.waitUnit(u); });
@@ -240,21 +300,21 @@ const UI = (() => {
     const pnl = $('#wpnPanel'); pnl.innerHTML = ''; pnl.hidden = false;
     pnl.appendChild(h('div', { class: 'phead' }, `Spirit commands · SP ${u.sp}`));
     for (const sid of pilotSpirits(u.pilot)) {
-      const sp = SPIRITS[sid]; const active = u.buf[sid];
-      pnl.appendChild(h('button', { class: 'wbtn spirit', disabled: (u.sp < sp.cost || active) ? 'disabled' : null, title: sp.desc, onclick: async () => {
+      const sp = SPIRITS[sid], cost = CLASSES.spiritCost(u,sid,SAVE), active = u.buf[sid];
+      pnl.appendChild(h('button', { class: 'wbtn spirit', disabled: (u.sp < cost || active) ? 'disabled' : null, title: sp.desc, onclick: async () => {
         if (sid === 'mend') { const allies = G.map.units.filter(o => o.team === 'player' && o.hp > 0); const t = await pickAlly(allies); if (!t) return; MAP.useSpirit(u, sid, t); } else MAP.useSpirit(u, sid);
         spiritPanel(u);
-      } }, ASSETS.iconEl(sid, 22), h('span', { class: 'wn' }, sp.name), h('span', { class: 'we' }, sp.cost + ' SP'), h('span', { class: 'desc' }, sp.desc)));
+      } }, ASSETS.iconEl(sid, 22), h('span', { class: 'wn' }, sp.name), h('span', { class: 'we' }, cost + ' SP'), h('span', { class: 'desc' }, sp.desc)));
     }
     pnl.appendChild(h('button', { class: 'btn sm', onclick: () => { pnl.hidden = true; actionMenu(u, u.moved); } }, 'Back'));
   }
-  function pickAlly(list) { return modal(close => h('div', { class: 'card' }, h('h3', {}, 'Mend which ally?'), h('div', { class: 'list' }, list.map(a => h('button', { class: 'btn', onclick: () => close(a) }, `${NAMES[a.pilot]} — ${a.hp}/${CB.mstats(a).hp}`))), h('button', { class: 'btn sm', onclick: () => close(null) }, 'Cancel'))); }
+  function pickAlly(list,title='Mend which ally?') { return modal(close => h('div', { class: 'card' }, h('h3', {}, title), h('div', { class: 'list' }, list.map(a => h('button', { class: 'btn', onclick: () => close(a) }, `${NAMES[a.pilot] || a.nameOverride || MECHS[a.mech].name} · ${a.hp}/${CB.mstats(a).hp}`))), h('button', { class: 'btn sm', onclick: () => close(null) }, 'Cancel'))); }
   function forecast(a, d, w) {
     const f = $('#forecast'), opening = f.hidden;
     f.innerHTML = '';
-    const fa = CB.forecast(a, d, w, 'counter'); const cw = CB.bestWeapon(d, a, false, true); const fd = cw ? CB.forecast(d, a, cw, 'counter') : null;
+    const fa = CB.forecast(a, d, w, 'counter'); const cw = CB.bestWeapon(d, a, false, true); const fd = cw ? CB.forecast(d, a, {...cw,counter:true}, 'none') : null;
     const eff = effLabel(fa.mult); const pm = CB.posMods(a, d);
-    const side = (u, wp, fc, isAtk) => h('div', { class: 'fside ' + u.team }, h('div', { class: 'frole' }, isAtk ? 'Attack' : 'Response'), h('div', { class: 'fname' }, u.nameOverride || MECHS[u.mech].name), h('div', { class: 'fhp' }, bar(u.hp, CB.mstats(u).hp, 'hp')),
+    const side = (u, wp, fc, isAtk) => h('div', { class: 'fside ' + u.team + ' ' + skin(u) }, h('div', { class: 'frole' }, isAtk ? 'Attack' : 'Response'), h('div', { class: 'fname' }, u.nameOverride || MECHS[u.mech].name), h('div', { class: 'fhp' }, bar(u.hp, CB.mstats(u).hp, 'hp')),
       wp ? h('div', { class: 'fw' }, chip(wp.type), ' ', wp.name) : h('div', { class: 'fw muted' }, 'No counter'),
       fc ? h('div', { class: 'fstats' }, h('div', {}, h('span', {}, 'DMG'), h('b', {}, fc.dmg)), h('div', {}, h('span', {}, 'HIT'), h('b', {}, fc.hit + '%')), h('div', {}, h('span', {}, 'CRIT'), h('b', {}, fc.crit + '%'))) : null,
       fc && isAtk ? h('div', { class: 'eff', style: `--c:${eff.c}` }, eff.t + (fa.mult !== 1 ? ` ×${fa.mult.toFixed(2)}` : '')) : null);
@@ -263,6 +323,9 @@ const UI = (() => {
       h('div', { class: 'fgrid' }, side(a, w, fa, true), side(d, cw, fd, false)));
     f.appendChild(body);
     const mods = [];
+    const assist = COMBOS.support(a,d,w);
+    if (assist && fa.dmg < d.hp) mods.push('Support · '+(NAMES[assist.unit.pilot] || MECHS[assist.unit.mech].name)+' ('+COMBOS.remaining(assist.unit,'attack')+')');
+    if (d.team === 'enemy' && COMBOS.guards(d).length) mods.push('Enemy guard in range');
     for(const unit of [a,d]){const v=typeof ENEMIES!=='undefined'?ENEMIES.label(unit):null;if(v)mods.push(v.name+' · '+v.description);}
     if(w.combo){const p=COMBOS.partner(a,w);mods.push('COMBO · '+NAMES[p?.pilot]+' · both actions and '+w.en+' EN each');}
     if (pm.flank.pincer) mods.push('PINCER +25% dmg'); else if (pm.flank.n) mods.push('FLANK +10% dmg, +10 hit');
@@ -293,7 +356,7 @@ const UI = (() => {
       let cw = CB.bestWeapon(d, a, false, true);
       const render = close => {
         const fa = CB.forecast(a, d, w, 'counter'), fe = CB.forecast(a, d, w, 'evade'), fdf = CB.forecast(a, d, w, 'defend');
-        const fc = cw ? CB.forecast(d, a, cw, 'counter') : null;
+        const fc = cw ? CB.forecast(d, a, {...cw,counter:true}, 'none') : null;
         const box = h('div', { class: 'card defp' },
           h('div', { class: 'eyebrow red' }, 'Enemy attack'),
           h('h3', {}, `${a.nameOverride || MECHS[a.mech].name} → ${MECHS[d.mech].name}`),
@@ -303,7 +366,7 @@ const UI = (() => {
             h('button', { class: 'dopt', onclick: () => close('evade') }, h('b', {}, 'Evade'), h('span', {}, `Hit chance halved: ${fe.hit}%`), h('span', {}, `Damage ${fe.dmg}`)),
             h('button', { class: 'dopt', onclick: () => close('defend') }, h('b', {}, 'Defend'), h('span', {}, `Damage halved: ${fdf.dmg}`), h('span', {}, `Hit ${fdf.hit}%`))),
           weps.length > 1 ? h('div', { class: 'cwsel' }, h('span', { class: 'muted small' }, 'Counter with: '), weps.map(x => h('button', { class: 'btn sm' + (cw && x.idx === cw.idx ? ' on' : ''), onclick: () => { cw = x; const m = $('#modal'); m.innerHTML = ''; m.appendChild(render(close)); } }, x.name))) : null);
-        for(const guard of COMBOS.guards(d)){const f=CB.forecast(a,guard,w,'defend');box.appendChild(h('button',{class:'btn supportDefend',onclick:()=>close('guard:'+guard.uid)},ASSETS.iconEl('guard',22),'Support Defend by '+NAMES[guard.pilot]+' · '+f.dmg+' damage / '+f.hit+'%'));}
+        for(const guard of COMBOS.guards(d)){const f=CB.forecast(a,guard,{...w,intercepted:true},'defend');box.appendChild(h('button',{class:'btn supportDefend',onclick:()=>close('guard:'+guard.uid)},ASSETS.iconEl('guard',22),'Support Defend by '+NAMES[guard.pilot]+' ('+COMBOS.remaining(guard,'guard')+') · '+f.dmg+' damage / '+f.hit+'%'));}
         return box;
       };
       modal(render, 'defense').then(res);
@@ -327,11 +390,20 @@ const UI = (() => {
     }
     return 'Destroy both cruisers.';
   }
+  async function missionStamp(ch) {
+    const card = $('#phaseBanner');
+    card.replaceChildren(h('div',{class:'pbt'},ch.title),
+      h('div',{class:'pbs'},'MISSION '+ch.num+' · CONCORD YEAR 0089'));
+    card.className='pb player missionStamp';
+    card.hidden=false; void card.offsetWidth; card.classList.add('go');
+    SFX.play('cutin'); await sleep(QUALITY.reducedMotion?300:1100);
+    card.hidden=true;
+  }
   function objectiveCard(ch) {
     const win = objectiveText(ch, G.map);
-    const lose = 'Lose if ' + ch.vital.map(v => NAMES[v]).join(' or ') + ' is shot down.' + (ch.win.escort ? ' Keep both carriers alive.' : '') + (ch.lose && ch.lose.turn ? ` Lose after turn ${ch.lose.turn}.` : '');
+    const lose = (G.map?.assisted ? 'Assisted retry · +10% damage, enemy levels −1. ' : '') + (ch.map.fog ? 'Sensor interference · Scout to reveal contacts. ' : '') + 'Lose if ' + ch.vital.map(v => NAMES[v]).join(' or ') + ' is shot down.' + (ch.win.escort ? ' Keep both carriers alive.' : '') + (ch.lose && ch.lose.turn ? ` Lose after turn ${ch.lose.turn}.` : '');
     return modal(close => h('div', { class: 'card obj' }, h('div', { class: 'eyebrow' }, `Mission ${ch.num}` + (ch.route ? ' · ' + ch.route : '')), h('h3', {}, ch.title), h('p', {}, ch.brief),
-      h('div', { class: 'kv two' }, h('span', {}, 'Victory'), h('b', {}, win), h('span', {}, 'Defeat'), h('b', {}, lose), ch.bonus ? h('span', {}, 'Bonus') : null, ch.bonus ? h('b', { class: 'gold' }, ch.bonus.text + (ch.bonus.part ? ` → ${PARTS[ch.bonus.part].name}, +2 PP all` : '')) : null),
+      h('div', { class: 'kv two' }, h('span', {}, 'Victory'), h('b', {}, win), h('span', {}, 'Defeat'), h('b', {}, lose), ch.bonus ? h('span', {}, 'Bonus') : null, ch.bonus ? h('b', { class: 'gold' }, ch.bonus.text + (ch.bonus.part ? ` → ${PARTS[ch.bonus.part].name}, +2 Merits` : '')) : null),
       h('p', { class: 'muted small' }, 'Tactics: allies next to your target give FLANK bonuses (an ally directly opposite you is a PINCER). Adjacent allies boost evasion. Heavy blows knock enemies back into obstacles. Gold "?" shimmers mark buried secrets. Press T for threat range.'),
       h('button', { class: 'btn primary', onclick: () => close() }, 'Begin')));
   }
@@ -347,9 +419,15 @@ const UI = (() => {
   }
   function settingsModal() {
     const s = SAVE.settings;
+    const adjustable = ['easy','normal'].includes(SAVE.difficulty || 'normal');
     return modal(close => h('div', { class: 'card' }, h('h3', {}, 'Settings'),
+      h('label',{class:'set'},'Campaign difficulty',h('select',{disabled:adjustable ? null : 'disabled',onchange:e=>{SAVE.difficulty=e.target.value;GAME.persist();}},
+        Object.entries(RULES.modes).filter(([key])=>adjustable ? ['easy','normal'].includes(key) : key === SAVE.difficulty)
+          .map(([key,m])=>h('option',{value:key,selected:key === SAVE.difficulty ? 'selected' : null},m.name)))),
+      h('label',{class:'set'},'Reduce motion',h('select',{onchange:e=>{s.reduceMotion=e.target.value === 'auto' ? null : e.target.value === 'on'; QUALITY.syncMotion(); GAME.persist();}},
+        [['auto','System default'],['on','On'],['off','Off']].map(([key,label])=>h('option',{value:key,selected:(s.reduceMotion == null ? 'auto' : s.reduceMotion ? 'on' : 'off') === key ? 'selected' : null},label)))),
       h('label', { class: 'set' }, 'Battle animations', h('select', { id: 'setAnim', onchange: e => { s.anim = e.target.value; GAME.persist(); } }, ['full', 'fast', 'off'].map(v => { const o = h('option', { value: v }, v === 'full' ? 'Full' : v === 'fast' ? 'Fast (2×)' : 'Off'); if (s.anim === v) o.selected = true; return o; }))),
-      h('label',{class:'set'},'Graphics',h('select',{onchange:e=>{QUALITY.set(e.target.value);MAP.resize?.();}},['auto','high','low'].map(v=>h('option',{value:v,selected:(s.graphics||'auto')===v?'selected':null},v[0].toUpperCase()+v.slice(1))))),
+      h('label',{class:'set'},'Graphics',h('select',{onchange:e=>{QUALITY.set(e.target.value);}},['auto','high','low'].map(v=>h('option',{value:v,selected:(s.graphics||'auto')===v?'selected':null},v[0].toUpperCase()+v.slice(1))))),
       h('p',{class:'muted small'},'Active graphics: '+QUALITY.mode+'. Auto lowers effects on software rendering or sustained slow frames.'),
       h('label', { class: 'set' }, 'Auto-counter when attacked', h('input', { id: 'setDef', type: 'checkbox', checked: s.defAuto ? 'checked' : null, onchange: e => { s.defAuto = e.target.checked; GAME.persist(); } })),
       h('label', { class: 'set' }, 'Auto end turn when all units acted', h('input', { id: 'setEnd', type: 'checkbox', checked: s.autoEnd ? 'checked' : null, onchange: e => { s.autoEnd = e.target.checked; GAME.persist(); } })),
@@ -360,18 +438,22 @@ const UI = (() => {
   function victory(d) {
     SFX.music('hope'); SFX.play('levelup');
     return modal(close => h('div', { class: 'card result win' }, h('div', { class: 'eyebrow' }, 'Mission complete'), h('h2', {}, d.title),
-      h('div', { class: 'kv two' }, h('span', {}, 'Turns'), h('b', {}, d.turn), h('span', {}, 'Kills'), h('b', {}, d.kills), h('span', {}, 'Credits earned'), h('b', { class: 'gold' }, d.credits.toLocaleString()), h('span', {}, 'Secrets found'), h('b', {}, d.secrets),
+      d.rank ? h('div',{class:'rankStamp','aria-label':'Rank '+d.rank},d.rank) : null,
+      h('div', { class: 'kv two' }, h('span', {}, 'Turns'), h('b', {}, d.turn), h('span', {}, 'Kills'), h('b', {}, d.kills), h('span', {}, 'Credits earned'), h('b', { class: 'gold' }, d.credits.toLocaleString()), h('span', {}, 'Secrets found'), h('b', {}, d.secrets), h('span',{},'Squad damage'),h('b',{},(d.damage || 0).toLocaleString()),h('span',{},'Frames lost'),h('b',{},d.losses || 0),h('span',{},'Merits earned'),h('b',{class:'gold'},d.merits || 0),
         d.bonus ? h('span', {}, 'Bonus objective') : null, d.bonus ? h('b', { class: d.bonus.ok ? 'green' : 'muted' }, (d.bonus.ok ? '✔ ' : '✘ ') + d.bonus.text) : null,
         d.parts.length ? h('span', {}, 'Parts') : null, d.parts.length ? h('b', {}, d.parts.map(p => PARTS[p].name).join(', ')) : null),
       h('button', { class: 'btn primary', onclick: () => close() }, 'Continue')));
   }
-  function defeat(text) {
+  function defeat(text, {retry=true, assist=false} = {}) {
     SFX.music('sad');
-    return modal(close => h('div', { class: 'card result lose' }, h('div', { class: 'eyebrow red' }, 'Mission failed'), h('h2', {}, 'Defeat'), h('p', {}, text), h('p', { class: 'muted small' }, 'Experience and skill points earned this attempt are kept.'), h('button', { class: 'btn primary', onclick: () => close() }, 'Retry mission')));
+    return modal(close => h('div',{class:'card result lose'},h('div',{class:'eyebrow red'},'Mission failed'),h('h2',{},'Defeat'),h('p',{},text),
+      assist ? h('p',{class:'muted'},'Assisted retry grants +10% damage and lowers enemy levels by one for this attempt.') : null,
+      h('div',{class:'row'},h('button',{class:'btn primary',onclick:()=>close('retry')},retry ? 'Retry mission' : 'Return to title'),
+        assist ? h('button',{class:'btn',onclick:()=>close('assist')},'Retry with assistance') : null)));
   }
 
   // ================= INTERMISSION =================
-  let interTab = 'sortie', interSel = { pilot: 'rei', mech: null };
+  let interTab = 'hub', interSel = { pilot: 'rei', mech: null };
   function intermission() {
     const el = $('#inter'); el.hidden = false; SFX.music('calm');
     renderInter();
@@ -379,26 +461,47 @@ const UI = (() => {
   function renderInter() {
     const el = $('#inter'); el.innerHTML = '';
     const ch = CHAPTERS[SAVE.chapter];
-    const tabs = [['sortie', 'Sortie'], ['pilots', 'Pilots & Skills'], ['mechs', 'Mechs & Parts'], ['chart', 'Type Chart'], ['codex', 'Codex'], ['system', 'System']];
+    const tabs = [['hub','Bridge'], ['sortie', 'Sortie'], ['pilots', 'Pilots & Skills'], ['mechs', 'Mechs & Parts'], ['refit','Refit Bay'], ['chart', 'Type Chart'], ['codex', 'Codex'], ['system', 'System']];
     el.appendChild(h('header', { class: 'ihead' }, h('div', { class: 'ilogo' }, 'IRON REQUIEM', h('span', {}, 'Intermission · Halcyon')), h('nav', { class: 'itabs' }, tabs.map(([k, l]) => h('button', { class: 'itab' + (interTab === k ? ' on' : ''), onclick: () => { interTab = k; SFX.play('select'); renderInter(); } }, l))), h('div', { class: 'icred' }, `${SAVE.credits.toLocaleString()} CR`)));
     const body = h('main', { class: 'ibody' }); el.appendChild(body);
-    ({ sortie: tabSortie, pilots: tabPilots, mechs: tabMechs, chart: tabChart, codex: tabCodex, system: tabSystem })[interTab](body, ch);
+    ({ hub: tabHub, sortie: tabSortie, pilots: tabPilots, mechs: tabMechs, refit: tabRefit, chart: tabChart, codex: tabCodex, system: tabSystem })[interTab](body, ch);
+  }
+  function tabHub(body,ch) {
+    const image = h('canvas',{class:'bridgeArt',width:1280,height:640,'aria-hidden':'true'});
+    const context = image.getContext('2d');
+    if (!ASSETS.drawHub(context,1280,640)) ART.drawBG(context,1280,640,'space',0,0);
+    const stations = [
+      ['sortie','NAV','Briefing',ch?.title || 'Campaign complete'],
+      ['pilots','CREW','Pilot quarters','Skills and Spirit commands'],
+      ['mechs','HGR','Hangar','Frames, upgrades and parts'],
+      ['refit','ENG','Engineering','Fleet refits and Merits'],
+      ['codex','ARC','Archive','Field reports and mission ranks'],
+      ['system','SYS','Systems','Save files and settings'],
+    ];
+    body.appendChild(h('section',{class:'bridge'},image,
+      h('header',{class:'bridgeTitle'},h('span',{class:'eyebrow'},'Command deck'),h('h2',{},'Halcyon'),
+        h('p',{},RULES.mode(SAVE).name+' · '+SAVE.roster.length+' pilots aboard')),
+      h('div',{class:'bridgeStations'},stations.map(([id,code,heading,detail])=>
+        h('button',{class:'bridgeStation',onclick:()=>{interTab=id;SFX.play('confirm');renderInter();}},
+          h('span',{class:'stationCode'},code),h('span',{},h('b',{},heading),h('small',{},detail)))))));
   }
   function tabSortie(b, ch) {
     if (!ch) { b.appendChild(h('div', { class: 'card' }, h('h2', {}, 'Campaign complete'), h('p', {}, 'Thank you for playing.'))); return; }
+    const slots = RULES.deployLimit(ch,SAVE);
+    const wing = Math.min(4+(SAVE.refits.wing || 0),slots-new Set([...ch.vital,...(ch.escortSlots || [])].filter(p=>ch.deploy.some(d=>d.p===p) && SAVE.roster.includes(p))).size);
     const bgc = h('canvas', { class: 'sortieBg', width: 1100, height: 340, 'aria-hidden': 'true' });
     const ctx = bgc.getContext('2d');
     if (ctx && !ASSETS.drawMissionBG(ctx, bgc.width, bgc.height, ch.bg)) ART.drawBG(ctx, bgc.width, bgc.height, ch.bg, 1, 0);
     const roster = h('div', { class: 'rosterRow' }, SAVE.roster.map(p => { const c = h('canvas', { width: 72, height: 90 }); c.getContext('2d').drawImage(ART.portrait(p, 'normal', 72, 90), 0, 0); return h('div', { class: 'rmini' }, c, h('span', {}, `${NAMES[p].split(' ').pop()} ${SAVE.pilots[p].lvl}`)); }));
     b.appendChild(h('section', { class: 'sortie' }, h('div', { class: 'sortieHero' }, bgc, h('div', { class: 'sortieTxt' }, h('div', { class: 'eyebrow' }, `Next mission ${ch.num}` + (ch.route ? ' · ' + ch.route : '')), h('h2', {}, ch.title), h('p', {}, ch.brief), ch.bonus ? h('p', { class: 'gold small' }, 'Bonus: ' + ch.bonus.text) : null,
       h('button', { class: 'btn primary big', onclick: () => { SFX.play('confirm'); $('#inter').hidden = true; GAME.startChapter(); } }, 'Sortie ▸'))),
-      h('h4', { class: 'sec' }, 'Squadron'), roster,
-      h('h4', { class: 'sec' }, 'Auxiliary wing · deploy up to four'),
+      h('h4', { class: 'sec' }, 'Squadron · '+slots+' deployment slots'), roster,
+      h('h4', { class: 'sec' }, 'Auxiliary wing · deploy up to '+wing),
       h('div', { class: 'auxiliaryPicks' }, EXPANSION.crew.filter(p => SAVE.roster.includes(p)).map(p => {
-        const active = (SAVE.auxiliary || EXPANSION.crew.filter(q => SAVE.roster.includes(q)).slice(0,4)).includes(p);
-        return h('button', {class:'btn'+(active?' primary':''),onclick:()=>{SAVE.auxiliary ||= EXPANSION.crew.filter(q=>SAVE.roster.includes(q)).slice(0,4);if(active)SAVE.auxiliary=SAVE.auxiliary.filter(q=>q!==p);else if(SAVE.auxiliary.length<4)SAVE.auxiliary.push(p);else{toast('Four auxiliary pilots selected. Remove one first.');return;}GAME.persist();renderInter();}}, (active?'✓ ':'')+MECHS[PILOTS[p].mech].name+' · '+NAMES[p]);
+        const active = (SAVE.auxiliary || EXPANSION.crew.filter(q => SAVE.roster.includes(q)).slice(0,wing)).includes(p);
+        return h('button', {class:'btn'+(active?' primary':''),onclick:()=>{SAVE.auxiliary ||= EXPANSION.crew.filter(q=>SAVE.roster.includes(q)).slice(0,wing);if(active)SAVE.auxiliary=SAVE.auxiliary.filter(q=>q!==p);else if(SAVE.auxiliary.length<wing)SAVE.auxiliary.push(p);else{toast('The auxiliary hangar is full.');return;}GAME.persist();renderInter();}}, (active?'✓ ':'')+MECHS[PILOTS[p].mech].name+' · '+NAMES[p]);
       })),
-      h('p', {class:'muted small'}, 'Auxiliary pilots join during the new interludes. Select them here to deploy beside the main story squadron. Their upgrades, parts, spirits and skill trees are managed in the other tabs.'),
+      h('p', {class:'muted small'}, 'Selected auxiliary frames take available deployment slots ahead of reserve story pilots. Pilots required by a mission keep their slots.'),
       h('p', { class: 'muted small' }, `Unspent skill points: ${SAVE.roster.reduce((a, p) => a + SAVE.pilots[p].pp, 0)} · Parts in storage: ${Object.values(SAVE.inventory).reduce((a, b) => a + b, 0)} · Resonance: ${SAVE.flags.res || 0}`)));
   }
   function tabPilots(b) {
@@ -409,17 +512,65 @@ const UI = (() => {
     const st = CB.pstats(u);
     const big = h('canvas', { width: 200, height: 250, class: 'pbig' }); big.getContext('2d').drawImage(ART.portrait(pid, 'normal', 200, 250), 0, 0);
     const stats = h('div', { class: 'kv four' }, ['MEL', 'RNG', 'DEF', 'HIT', 'EVA', 'SKL', 'SP'].flatMap(k => [h('span', {}, k), h('b', {}, st[k])]), h('span', {}, 'Kills'), h('b', {}, ps.kills));
-    const spirits = h('div', { class: 'tags' }, pilotSpirits(pid).map(s => h('span', { class: 'tag green', title: SPIRITS[s].desc }, `${SPIRITS[s].name} ${SPIRITS[s].cost}`)), lockedSpirits(pid).map(([s, l]) => h('span', { class: 'tag muted', title: SPIRITS[s].desc }, `${SPIRITS[s].name} (Lv ${l})`)));
-    const tree = buildTree(pid);
-    const treeEl = h('div', { class: 'tree' }, tree.map((br, bi) => h('div', { class: 'branch', style: `--bc:${br.color}` }, h('div', { class: 'bhead' }, ASSETS.iconEl('branch' + bi, 24) || h('span', { class: 'bico' }, br.icon), br.name),
-      br.nodes.map((n, i) => {
-        const owned = !!ps.nodes[n.id]; const prevOk = i === 0 || ps.nodes[br.nodes[i - 1].id]; const can = !owned && prevOk && ps.pp >= n.cost;
-        return h('button', { class: 'node' + (owned ? ' owned' : can ? ' can' : prevOk ? ' afford' : ' locked') + (n.cap ? ' cap' : ''), disabled: (!can) ? 'disabled' : null, title: n.desc, onclick: () => { ps.pp -= n.cost; ps.nodes[n.id] = true; SFX.play('levelup'); GAME.persist(); renderInter(); } },
-          h('div', { class: 'nname' }, ASSETS.iconEl(n.fx.skill && n.fx.skill.startsWith('cap_') ? n.fx.skill : n.fx.spirit || n.fx.mastery || n.id, 22), n.name), h('div', { class: 'ndesc' }, n.desc), h('div', { class: 'ncost' }, owned ? 'LEARNED' : `${n.cost} PP`));
-      }))));
-    b.appendChild(h('section', { class: 'pilots' }, list, h('div', { class: 'pdetail' },
-      h('div', { class: 'ptop' }, big, h('div', { class: 'pinfo' }, h('h2', {}, NAMES[pid]), h('div', { class: 'muted' }, `Level ${ps.lvl} · EXP ${ps.exp}/100 · ${MECHS[u.mech].name}`), h('div', { class: 'pp' }, h('b', {}, ps.pp), ' skill points'), stats, h('h4', { class: 'sec' }, 'Spirit commands'), spirits)),
-      h('h4', { class: 'sec' }, 'Skill tree — each branch unlocks top to bottom'), treeEl)));
+    const frame = CLASSES.get(u.mech), tree = [...frame.branches,CLASSES.personal[pid]];
+    const spirits = h('div',{class:'tags'},pilotSpirits(pid).map(id=>h('span',{class:'tag green',title:SPIRITS[id].desc},SPIRITS[id].name+' '+CLASSES.spiritCost(u,id,SAVE))),
+      lockedSpirits(pid).map(([id,lvl])=>h('span',{class:'tag muted',title:SPIRITS[id].desc},SPIRITS[id].name+' (Lv '+lvl+')')));
+    const invested = CLASSES.spent(ps);
+    const treeEl = h('div',{class:'classTree'},tree.map(branch => {
+      const tiers = branch.tiers.map((options,tier) => {
+        const cards = options.map(node => {
+          const owned = !!ps.nodes[node.id], available = CLASSES.canBuy(ps,branch,tier,node);
+          const value = node.deed && Math.min(CLASSES.deed(ps,node.deed.key),node.deed.target);
+          return h('button',{class:'node'+(owned?' owned':available?' can':' locked'),disabled:available?null:'disabled',title:node.desc,
+            onclick:()=>{ if (CLASSES.learn(ps,branch,tier,node)) { SFX.play('levelup'); GAME.persist(); renderInter(); } }},
+            h('span',{class:'nname'},node.name),h('span',{class:'ndesc'},node.desc),
+            node.deed ? h('span',{class:'deedTrack'},h('progress',{max:node.deed.target,value}),h('small',{},value+'/'+node.deed.target+' '+CLASSES.deedLabels[node.deed.key])) : null,
+            h('span',{class:'ncost'},owned?'Learned':node.cost+' PP'));
+        });
+        return h('div',{class:'nodeTier'},h('div',{class:'tierLabel'},'Tier '+(tier+1)+(options.length>1?' · Choose one':'')),h('div',{class:'nodeOptions'},cards));
+      });
+      return h('section',{class:'branch',style:'--bc:'+branch.color},h('h3',{class:'bhead'},branch.name),tiers);
+    }));
+    const pairs = COMBOS.pairs.filter(c=>c.pilots.includes(pid)).map(c=>{
+      const other=c.pilots.find(id=>id!==pid), value=SAVE.bonds[COMBOS.bondKey(pid,other)] || 0;
+      return h('span',{class:'tag',title:'Bond 2 at 7 points unlocks the combo'},NAMES[other]+' · Bond '+COMBOS.bondLevel(pid,other)+' · '+value+' pts');
+    });
+    b.appendChild(h('section',{class:'pilots'},list,h('div',{class:'pdetail'},
+      h('div',{class:'ptop'},big,h('div',{class:'pinfo'},h('h2',{},NAMES[pid]),classBadge(u),
+        h('p',{class:'muted'},frame.intro),h('div',{class:'muted'},'Level '+ps.lvl+' · EXP '+ps.exp+'/'+RULES.expCap(ps.lvl)+' · '+MECHS[u.mech].name),
+        h('div',{class:'pp'},h('b',{},ps.pp),' available PP · '+invested+' spent'),stats,
+        h('h4',{class:'sec'},'Spirit commands'),spirits,pairs.length?h('div',{class:'tags'},pairs):null)),
+      h('div',{class:'treeToolbar'},h('h3',{},'Machine proficiency'),h('button',{class:'btn sm',disabled:invested?null:'disabled',onclick:()=>retrain(pid)},'Retrain')),
+      treeEl)));
+  }
+  function retrain(pid) {
+    const pilot = SAVE.pilots[pid], refund = CLASSES.spent(pilot);
+    const free = ['c1','i1'].includes(SAVE.chapter);
+    const voucher = !free && (SAVE.refits.token || 0) > 0;
+    const cost = free || voucher ? 0 : 1800 + (pilot.respecs || 0) * 900;
+    return modal(close=>h('div',{class:'card'},h('h3',{},'Retrain '+NAMES[pid]),h('p',{},'Refund '+refund+' PP. '+(voucher?'Uses one voucher.':cost?'Costs '+cost.toLocaleString()+' CR.':'Free during the opening missions.')),
+      h('div',{class:'row'},h('button',{class:'btn',onclick:()=>close()},'Cancel'),
+        h('button',{class:'btn primary',disabled:SAVE.credits<cost? 'disabled':null,onclick:()=>{
+          pilot.pp += refund; pilot.nodes = {};
+          SAVE.credits -= cost;
+          if (cost) pilot.respecs = (pilot.respecs || 0) + 1;
+          if (voucher) SAVE.refits.token--;
+          GAME.persist(); close(); renderInter();
+        }},'Retrain'))));
+  }
+  function tabRefit(body) {
+    const cards = Object.entries(REFITS).map(([id,refit]) => {
+      const rank = SAVE.refits[id] || 0;
+      return h('article',{class:'refitCard'},h('h3',{},refit.name),h('p',{class:'muted'},refit.desc),
+        h('div',{class:'refitBuy'},h('span',{},id==='token'?rank+' on hand':'Rank '+rank+'/'+refit.max),
+          h('button',{class:'btn',disabled:rank>=refit.max || SAVE.merits<refit.cost?'disabled':null,onclick:()=>{
+            SAVE.merits -= refit.cost; SAVE.refits[id] = rank+1;
+            GAME.persist(); SFX.play('levelup'); renderInter();
+          }},rank>=refit.max?'Max rank':refit.cost+' Merits')));
+    });
+    body.appendChild(h('section',{class:'refitBay'},h('h2',{},'Halcyon Refit Bay'),h('p',{class:'gold'},SAVE.merits+' Merits available'),h('div',{class:'refitGrid'},cards),
+      h('h3',{},'Mission record'),
+      Object.keys(SAVE.ranks).length ? h('div',{class:'tags'},Object.entries(SAVE.ranks).map(([id,grade])=>h('span',{class:'tag'},grade+' · '+CHAPTERS[id]?.title))) : h('p',{class:'muted'},'Clear a mission to record its rank.')));
   }
   function tabMechs(b) {
     const mechs = SAVE.roster.map(p => MAP.pilotMech(p));
@@ -430,8 +581,8 @@ const UI = (() => {
     const ms = CB.mstats(u);
     const list = h('div', { class: 'plist' }, mechs.map(m => { const c = h('canvas', { width: 60, height: 60 }); c.getContext('2d').drawImage(ASSETS.mapIcon(m, 30, false) || (R3D.ok ? R3D.mapSprite : ART.mapSprite)(m, 30, false), 0, 0, 60, 60); return h('button', { class: 'pitem' + (m === mid ? ' on' : ''), onclick: () => { interSel.mech = m; renderInter(); } }, c, h('div', {}, h('b', {}, MECHS[m].name), h('span', {}, ARMOR[MECHS[m].armor].name))); }));
     const art = h('canvas', { width: 320, height: 300, class: 'mechArt' }); { const c = art.getContext('2d'); if (!ASSETS.drawStoryBG(c, 320, 300, 'hangar', 0)) ART.drawBG(c, 320, 300, 'hangar', 0, 0); const su = ASSETS.unit(mid); if (su) { const f = su.frames[0], s = Math.min(290 / f.width, 270 / (f.height * su.ground)); c.drawImage(f, 160 - f.width * s / 2, 285 - f.height * su.ground * s, f.width * s, f.height * s); } else if (R3D.ok) { c.drawImage(R3D.snapshot(mid, 640, 600, { pad: 1.05 }), 0, 0, 320, 300); } else { c.save(); c.translate(160, 270); const s = ['colossus', 'hollow', 'ship'].includes(M.vis.body) ? 1.0 : M.vis.body === 'dragon' ? 1.3 : 1.85; c.scale(s, s); ART.drawMech(c, M.vis, { t: 0.4 }); c.restore(); } }
-    const upRows = Object.keys(UPG).map(k => { const lv = md.up[k] || 0; const cost = upgCost(lv); return h('div', { class: 'uprow' }, h('span', { class: 'upn' }, UPG[k].name), h('div', { class: 'pips' }, Array.from({ length: UPG_MAX }, (_, i) => h('i', { class: i < lv ? 'on' : '' }))), h('span', { class: 'upv' }, k === 'wpn' ? `+${lv * UPG.wpn.per}` : k === 'hp' ? ms.hp : k === 'en' ? ms.en : k === 'arm' ? ms.arm : ms.mob), h('button', { class: 'btn sm', disabled: (lv >= UPG_MAX || SAVE.credits < cost) ? 'disabled' : null, onclick: () => { SAVE.credits -= cost; md.up[k] = lv + 1; SFX.play('confirm'); GAME.persist(); renderInter(); } }, lv >= UPG_MAX ? 'MAX' : `+ ${cost.toLocaleString()}`)); });
-    const slots = [0, 1].map(i => { const cur = md.parts[i]; const sel = h('select', { id: 'part' + i, onchange: e => { const v = e.target.value || null; if (cur) SAVE.inventory[cur] = (SAVE.inventory[cur] || 0) + 1; if (v) SAVE.inventory[v]--; md.parts[i] = v; GAME.persist(); renderInter(); } }, h('option', { value: '' }, '— empty —'), Object.keys(PARTS).filter(p => p === cur || (SAVE.inventory[p] || 0) > 0).map(p => { const o = h('option', { value: p }, `${PARTS[p].name} (${p === cur ? 'equipped' : SAVE.inventory[p] + ' left'})`); if (p === cur) o.selected = true; return o; })); return h('div', { class: 'slot' }, h('span', { class: 'muted small' }, `Slot ${i + 1}`), sel, cur ? h('div', { class: 'small muted' }, ASSETS.iconEl(cur, 28), PARTS[cur].desc) : null); });
+    const upRows = Object.keys(UPG).map(k => { const lv = md.up[k] || 0; const cost = Math.round(upgCost(lv) * (1 - .08 * (SAVE.refits.discount || 0))); return h('div', { class: 'uprow' }, h('span', { class: 'upn' }, UPG[k].name), h('div', { class: 'pips' }, Array.from({ length: UPG_MAX }, (_, i) => h('i', { class: i < lv ? 'on' : '' }))), h('span', { class: 'upv' }, k === 'wpn' ? `+${lv * UPG.wpn.per}` : k === 'hp' ? ms.hp : k === 'en' ? ms.en : k === 'arm' ? ms.arm : ms.mob), h('button', { class: 'btn sm', disabled: (lv >= UPG_MAX || SAVE.credits < cost) ? 'disabled' : null, onclick: () => { SAVE.credits -= cost; md.up[k] = lv + 1; SFX.play('confirm'); GAME.persist(); renderInter(); } }, lv >= UPG_MAX ? 'MAX' : `+ ${cost.toLocaleString()}`)); });
+    const slots = Array.from({length:2+(SAVE.refits.parts || 0)},(_,i)=>i).map(i => { const cur = md.parts[i]; const sel = h('select', { id: 'part' + i, onchange: e => { const v = e.target.value || null; if (cur) SAVE.inventory[cur] = (SAVE.inventory[cur] || 0) + 1; if (v) SAVE.inventory[v]--; md.parts[i] = v; GAME.persist(); renderInter(); } }, h('option', { value: '' }, '— empty —'), Object.keys(PARTS).filter(p => p === cur || (SAVE.inventory[p] || 0) > 0).map(p => { const o = h('option', { value: p }, `${PARTS[p].name} (${p === cur ? 'equipped' : SAVE.inventory[p] + ' left'})`); if (p === cur) o.selected = true; return o; })); return h('div', { class: 'slot' }, h('span', { class: 'muted small' }, `Slot ${i + 1}`), sel, cur ? h('div', { class: 'small muted' }, ASSETS.iconEl(cur, 28), PARTS[cur].desc) : null); });
     const ter = CB.ter(mid);
     const columns = ['Type', 'Weapon', 'Power', 'Range', 'Cost', 'Will', 'Effect'];
     const wt = h('div', { class: 'armamentScroll', tabindex: '0', role: 'region', 'aria-label': 'Weapon specifications' },
@@ -457,10 +608,10 @@ const UI = (() => {
   function tabChart(b) {
     const t = h('table', { class: 'chart' }, h('thead', {}, h('tr', {}, h('th', {}, 'Attack ↓ / Armor →'), Object.keys(ARMOR).map(a => h('th', { style: `color:${ARMOR[a].color}` }, ARMOR[a].name)))),
       h('tbody', {}, Object.keys(ATK).map(k => h('tr', {}, h('th', {}, chip(k), ' ', ATK[k].name), Object.keys(ARMOR).map(a => { const m = CHART[k][a]; const e = effLabel(m); return h('td', { style: `--c:${e.c}`, class: m > 1 ? 'up' : m < 1 ? 'down' : '' }, '×' + m.toFixed(2)); })))));
-    b.appendChild(h('section', { class: 'chartWrap' }, h('h2', {}, 'Damage type chart'), h('p', { class: 'muted' }, 'Every weapon has an attack type and every unit an armor class. Matching a strong attack against a weak armor class multiplies damage. The "Exploit Weakness" skill adds +25% on top of any effective hit.'), h('div', { class: 'tblscroll' }, t),
+    b.appendChild(h('section', { class: 'chartWrap' }, h('h2', {}, 'Damage type chart'), h('p', { class: 'muted' }, 'Every weapon has an attack type and every unit an armor class. Matching a strong attack against a weak armor class multiplies damage. Effectiveness ranges from ×0.60 to ×1.75. Bonuses from positioning, class skills and equipment share the attack and defense caps.'), h('div', { class: 'tblscroll' }, t),
       h('h4', { class: 'sec' }, 'Status effects'), h('div', { class: 'stlist' }, Object.keys(STATUS).map(k => h('div', { class: 'stitem', style: `--c:${STATUS[k].color}` }, h('b', {}, STATUS[k].name), h('span', {}, STATUS[k].desc + ` Lasts ${STATUS[k].turns} phases.`)))),
       h('h4', { class: 'sec' }, 'Attack types'), h('div', { class: 'stlist' }, Object.keys(ATK).map(k => h('div', { class: 'stitem', style: `--c:${ATK[k].color}` }, h('b', {}, ATK[k].name), h('span', {}, ATK[k].desc)))),
-      h('h4', { class: 'sec' }, 'Positioning'), h('div', { class: 'stlist' }, [['Flank', 'An ally adjacent to your target: +10 hit, +10% damage.'], ['Pincer', 'An ally directly opposite you across the target: +25% damage.'], ['Formation', 'Each adjacent ally: +4 evasion (max +12).'], ['High ground', 'Attacking from a mountain: +10 hit, +5% damage.'], ['Knockback', 'Punches, drills and heavy weapons push the target one tile. Hitting a wall or unit deals collision damage to both.'], ['Support attack', 'Pilots with the skill join attacks made by adjacent allies.']].map(([a, c]) => h('div', { class: 'stitem', style: '--c:#ffb347' }, h('b', {}, a), h('span', {}, c))))));
+      h('h4', { class: 'sec' }, 'Positioning'), h('div', { class: 'stlist' }, [['Flank', 'An ally adjacent to your target: +10 hit, +10% damage.'], ['Pincer', 'An ally directly opposite you across the target: +25% damage.'], ['Formation', 'Each adjacent ally: +4 evasion (max +12).'], ['High ground', 'Attacking from a mountain: +10 hit, +5% damage.'], ['Knockback', 'Punches, drills and heavy weapons push the target one tile. Hitting a wall or unit deals collision damage to both.'], ['Support attack', 'Adjacent pilots with Support Attack may follow up once per phase at rank I and twice at rank II.']].map(([a, c]) => h('div', { class: 'stitem', style: '--c:#ffb347' }, h('b', {}, a), h('span', {}, c))))));
   }
   function tabCodex(b) {
     const keys = Object.keys(CODEX);
@@ -475,17 +626,21 @@ const UI = (() => {
         h('button',{class:'btn',onclick:()=>SAVES.openExport()},'Export save'),
         h('button',{class:'btn',onclick:()=>SAVES.openImport()},'Import save'),
         h('button', { class: 'btn', onclick: () => settingsModal() }, 'Settings'),
-        h('button', { class: 'btn danger', onclick: () => { GAME.toTitle(); } }, 'Return to title')),
+        h('button', { class: 'btn danger', onclick: () => { GAME.toTitle(); } }, 'Return to title'),
+        SAVE.endings.length ? h('button',{class:'btn',onclick:()=>{
+          modal(close=>h('div',{class:'card'},h('h3',{},'New Game+'),h('p',{},'Restart with skill points, Merits and refits. Story decisions restart.'),
+            h('div',{class:'row'},h('button',{class:'btn',onclick:()=>close()},'Cancel'),h('button',{class:'btn primary',onclick:()=>{close();GAME.newGamePlus();}},'Begin New Game+'))));
+        }},'New Game+') : null),
       h('p', { class: 'muted small' }, 'Progress autosaves at intermission. Export a backup to take it to another browser or folder.')));
   }
   function pilotSpirits(pid) {
     const p = PILOTS[pid]; if (!p) return [];
     const lvl = SAVE.pilots[pid] ? SAVE.pilots[pid].lvl : 99;
     const out = p.spirits.filter(([s, l]) => lvl >= l).map(([s]) => s);
-    if (SAVE.pilots[pid]) buildTree(pid).forEach(br => br.nodes.forEach(n => { if (SAVE.pilots[pid].nodes[n.id] && n.fx.spirit && !out.includes(n.fx.spirit)) out.push(n.fx.spirit); }));
+    if (SAVE.pilots[pid]) CLASSES.owned({team:'player',pilot:pid,mech:MAP.pilotMech(pid)},SAVE,n=>{ if (n.fx.spirit && !out.includes(n.fx.spirit)) out.push(n.fx.spirit); });
     return out;
   }
   function lockedSpirits(pid) { const lvl = SAVE.pilots[pid].lvl; return PILOTS[pid].spirits.filter(([s, l]) => lvl < l); }
 
-  return { runScript, initStoryCtl, toast, modal, notice, mapHUD, refreshHUD, setThreatBtn, showTileInfo, showUnit, hideMenus, actionMenu, forecast, hideForecast, defensePrompt, phaseBanner, objectiveCard, mapMenu, settingsModal, victory, defeat, intermission, renderInter, pilotSpirits };
+  return { runScript, initStoryCtl, toast, modal, notice, mapHUD, refreshHUD, setThreatBtn, showTileInfo, showUnit, hideMenus, actionMenu, forecast, hideForecast, defensePrompt, phaseBanner, missionStamp, objectiveCard, mapMenu, settingsModal, victory, defeat, intermission, renderInter, pilotSpirits };
 })();

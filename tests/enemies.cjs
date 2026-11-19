@@ -3,7 +3,7 @@ const fs=require('node:fs'),path=require('node:path'),vm=require('node:vm'),asse
 const root=path.resolve(__dirname,'..'),read=p=>fs.readFileSync(path.join(root,p),'utf8');
 const gradient=()=>({addColorStop(){}}),ctx=new Proxy({createLinearGradient:gradient,createRadialGradient:gradient,measureText:s=>({width:String(s).length*8})},{get:(o,k)=>k in o?o[k]:()=>{}});
 const c=vm.createContext({console,document:{createElement:()=>({width:256,height:256,getContext:()=>ctx})}});
-for(const file of ['data/types','data/mechs','data/pilots','data/story','data/expansion','data/enemy-deployments','map/enemy-systems'])vm.runInContext(read('js/'+file+'.js'),c,{filename:file});
+for(const file of ['data/types','data/mechs','data/pilots','data/story','data/expansion','data/classes','data/enemy-deployments','map/enemy-systems'])vm.runInContext(read('js/'+file+'.js'),c,{filename:file});
 const result=vm.runInContext(`(()=>{
  const checks=[],ok=(x,m)=>{if(!x)throw Error(m);checks.push(m)};
  const make=(mech,team='enemy',x=2,y=2)=>ENEMIES.init({mech,team,x,y,uid:Math.random(),hp:MECHS[mech].hp,en:MECHS[mech].en,will:100,status:{},lvl:10},{variant:null});

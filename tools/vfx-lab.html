@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Iron Requiem VFX Lab</title>
+<link rel="stylesheet" href="vfx-lab.css">
+<main>
+  <header><h1>Iron Requiem VFX Lab</h1><p>Preview a combat effect, scrub its timing and export an edited profile.</p></header>
+  <div class="controls">
+    <label>Attacker <select id="actor"><option>alteon</option><option>bastion</option><option>carmine</option><option>seraphyne</option></select></label>
+    <label>Target <select id="target"><option>crawler</option><option>lancer</option><option>aurelion</option><option>behemoth</option></select></label>
+    <label>Backdrop <select id="backdrop"><option>city</option><option>ice</option><option>hive</option><option>space</option><option>vael</option></select></label>
+    <label>Animation <select id="animation"></select></label>
+    <label>Power <select id="tier"><option value="2200">Light</option><option value="3500">Medium</option><option value="5000">Full</option></select></label>
+  </div>
+  <canvas id="preview" width="1000" height="540" aria-label="Battle effect preview"></canvas>
+  <div class="controls">
+    <button id="play">Play</button>
+    <label><input type="checkbox" id="loop"> Loop</label>
+    <label><input type="checkbox" id="low"> Low quality</label>
+    <label for="scrub">Timeline</label><input id="scrub" type="range" min="0" value="0" aria-label="Scrub timeline">
+    <output id="clock"></output>
+  </div>
+  <label class="editor">Effect profile JSON <textarea id="config" rows="8" spellcheck="false"></textarea></label>
+  <div class="controls"><button id="export">Export JSON</button><output id="notice" aria-live="polite"></output></div>
+</main>
+<script src="../js/data/types.js"></script>
+<script src="../js/data/mechs.js"></script>
+<script src="../js/data/pilots.js"></script>
+<script src="../js/data/story.js"></script>
+<script src="../js/data/expansion.js"></script>
+<script src="../assets/art-metadata.js"></script>
+<script src="../js/render/assets.js"></script>
+<script src="../js/render/spectacle.js"></script>
+<script src="vfx-lab.js"></script>
+</html>

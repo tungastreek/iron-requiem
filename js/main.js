@@ -1,23 +1,23 @@
 // ===== Game controller, save/load, title & setup =====
 'use strict';
 const SAVE_KEY = 'iron-requiem-save-v1';
-const SAVE_VERSION = 2;
+const SAVE_VERSION = 3;
 const SAVE_SLOTS = [{ id: 'auto', key: SAVE_KEY, label: 'Autosave' }, ...[1, 2, 3].map(n => ({ id: String(n), key: 'iron-requiem-slot-' + n, label: 'Slot ' + n }))];
 function newPilotSave(pid, lvl) {
   let L = lvl;
   if (L == null) { const ls = (SAVE && SAVE.roster ? SAVE.roster : []).filter(p => SAVE.pilots && SAVE.pilots[p]).map(p => SAVE.pilots[p].lvl); L = ls.length ? Math.round(ls.reduce((a, b) => a + b, 0) / ls.length) : 1; }
   if (pid === 'lucien' || pid === 'sera') L += 2;
-  return { lvl: L, exp: 0, pp: 2 + Math.floor(L / 2), nodes: {}, kills: 0 };
+  return { lvl: L, exp: 0, pp: RULES.earnedPP(L) + (typeof SAVE === 'undefined' ? 0 : SAVE.replay?.[pid] || 0), nodes: {}, kills: 0, deeds: {} };
 }
 function defaultSave() {
-  return { v: SAVE_VERSION, chapter: 'c1', hero: { name: 'Rei Kasuga', gender: 'm', path: 'real' }, flags: { res: 0 }, credits: 5000, roster: ['rei', 'mira'], pilots: { rei: { lvl: 1, exp: 0, pp: 2, nodes: {}, kills: 0 }, mira: { lvl: 1, exp: 0, pp: 2, nodes: {}, kills: 0 } }, mechs: {}, inventory: { plating: 1 }, codex: [], settings: { anim: 'full', defAuto: false, autoEnd: false, sfx: 0.7, music: 0.4, graphics: 'auto' }, endings: [], meta: { savedAt: 0, playtime: 0 } };
+  return { v: SAVE_VERSION, chapter: 'c1', hero: { name: 'Rei Kasuga', gender: 'm', path: 'real' }, flags: { res: 0 }, difficulty: 'normal', merits: 0, refits: {}, bonds: {}, defeats: {}, ranks: {}, credits: 5000, roster: ['rei', 'mira'], pilots: { rei: { lvl: 1, exp: 0, pp: 2, nodes: {}, kills: 0 }, mira: { lvl: 1, exp: 0, pp: 2, nodes: {}, kills: 0 } }, mechs: {}, inventory: { plating: 1 }, codex: [], settings: { anim: 'full', defAuto: false, autoEnd: false, sfx: 0.7, music: 0.4, graphics: 'auto' }, endings: [], meta: { savedAt: 0, playtime: 0 } };
 }
 function migrate(raw) {
   const object = x => x && typeof x === 'object' && !Array.isArray(x), number = (x, min = 0) => Number.isFinite(x) && x >= min;
   if (!object(raw)) throw new Error('This is not an Iron Requiem save.');
   const scan = x => { if (!x || typeof x !== 'object') return; for (const k of Object.keys(x)) { if (['__proto__', 'constructor', 'prototype'].includes(k)) throw new Error('This save contains an invalid field.'); scan(x[k]); } };
   scan(raw);
-  if (raw.v !== 1 && raw.v !== SAVE_VERSION) throw new Error('Unsupported save version. Keep this file for the game version that created it.');
+  if (![1, 2, SAVE_VERSION].includes(raw.v)) throw new Error('Unsupported save version. Keep this file for the game version that created it.');
   if (raw.chapter !== null && (!raw.chapter || !CHAPTERS[raw.chapter])) throw new Error('The saved chapter is not available in this game.');
   if (!Array.isArray(raw.roster) || !raw.roster.length || raw.roster.some(p => typeof p !== 'string' || !PILOTS[p]) || new Set(raw.roster).size !== raw.roster.length) throw new Error('The saved pilot roster is invalid.');
   if (!object(raw.pilots) || !number(raw.credits)) throw new Error('The saved pilot progress or credits are invalid.');
@@ -30,18 +30,43 @@ function migrate(raw) {
     if (Object.values(p.nodes).some(v => typeof v !== 'boolean')) throw new Error('Invalid skill progress: ' + NAMES[pid]);
     if (p.kills == null) p.kills = 0;
     if (!number(p.kills)) throw new Error('Invalid pilot kill count: ' + NAMES[pid]);
+    if (raw.v < SAVE_VERSION) {
+      const legacy = buildTree(pid).flatMap(branch => branch.nodes);
+      const invested = legacy.reduce((sum, node) => sum + (p.nodes[node.id] ? node.cost : 0), 0);
+      p.pp += Math.ceil(invested * 1.1);
+      p.nodes = {};
+    }
+    p.deeds ??= {};
+    if (!object(p.deeds) || Object.values(p.deeds).some(v => !number(v))) throw new Error('Invalid mastery deeds.');
+    p.respecs ??= 0;
+    if (!number(p.respecs) || !Number.isInteger(p.respecs)) throw new Error('Invalid retraining count.');
+
   }
   for (const key of ['flags', 'mechs', 'inventory']) { if (s[key] == null) s[key] = d[key]; if (!object(s[key])) throw new Error('Invalid ' + key + ' data.'); }
   for (const [id, m] of Object.entries(s.mechs)) {
     if (!MECHS[id] || !object(m) || (m.up != null && (!object(m.up) || Object.values(m.up).some(v => !number(v) || !Number.isInteger(v))))) throw new Error('Invalid machine upgrades: ' + id);
-    if (m.parts != null && (!Array.isArray(m.parts) || m.parts.length > 2 || m.parts.some(p => p !== null && !PARTS[p]))) throw new Error('Invalid machine parts: ' + id);
+    if (m.parts != null && (!Array.isArray(m.parts) || m.parts.length > 3 || m.parts.some(p => p !== null && !PARTS[p]))) throw new Error('Invalid machine parts: ' + id);
   }
   for (const [id, count] of Object.entries(s.inventory)) if (!PARTS[id] || !number(count) || !Number.isInteger(count)) throw new Error('Invalid inventory item: ' + id);
+  s.difficulty ??= d.difficulty;
+  s.merits ??= d.merits;
+  if (!Object.hasOwn(RULES.modes,s.difficulty) || !number(s.merits) || !Number.isInteger(s.merits)) throw new Error('Invalid campaign progression.');
+  for (const key of ['refits','bonds','defeats','ranks']) {
+    s[key] ??= {};
+    if (!object(s[key])) throw new Error('Invalid ' + key + ' data.');
+  }
+  for (const key of ['refits','bonds','defeats']) {
+    if (Object.values(s[key]).some(v => !number(v) || !Number.isInteger(v))) throw new Error('Invalid ' + key + ' value.');
+  }
+  if (Object.entries(s.refits).some(([id,v])=>!REFITS[id] || v>REFITS[id].max)) throw new Error('Invalid refit rank.');
+  if (Object.values(s.ranks).some(v => !['S','A','B','C'].includes(v))) throw new Error('Invalid mission rank.');
+  if (raw.v < SAVE_VERSION) s.retrained = true;
   s.codex = s.codex == null ? [] : s.codex; s.endings = s.endings == null ? [] : s.endings;
   if (!Array.isArray(s.codex) || s.codex.some(x => typeof x !== 'string') || !Array.isArray(s.endings) || s.endings.some(x => typeof x !== 'string')) throw new Error('Invalid campaign records.');
-  if (s.auxiliary != null && (!Array.isArray(s.auxiliary) || s.auxiliary.length > 4 || s.auxiliary.some(p => !s.roster.includes(p)) || new Set(s.auxiliary).size !== s.auxiliary.length)) throw new Error('Invalid auxiliary wing.');
+  if (s.auxiliary != null && (!Array.isArray(s.auxiliary) || s.auxiliary.length > 4 + Math.min(1,s.refits.wing || 0) || s.auxiliary.some(p => !s.roster.includes(p)) || new Set(s.auxiliary).size !== s.auxiliary.length)) throw new Error('Invalid auxiliary wing.');
   s.settings = Object.assign({}, d.settings, object(s.settings) ? s.settings : {});
   if (!['full', 'fast', 'off'].includes(s.settings.anim) || !['auto', 'high', 'low'].includes(s.settings.graphics) || !number(s.settings.sfx) || s.settings.sfx > 1 || !number(s.settings.music) || s.settings.music > 1) throw new Error('Invalid sound or animation settings.');
+  s.settings.reduceMotion = s.settings.reduceMotion == null ? null : !!s.settings.reduceMotion;
   s.settings.defAuto = !!s.settings.defAuto; s.settings.autoEnd = !!s.settings.autoEnd;
   s.meta = Object.assign({}, object(s.meta) ? s.meta : {}, { savedAt: number(s.meta?.savedAt) ? s.meta.savedAt : 0, playtime: number(s.meta?.playtime) ? s.meta.playtime : 0 });
   s.v = SAVE_VERSION;
@@ -69,7 +94,7 @@ const GAME = (() => {
   function loadSave() { return slots().filter(s => s.save).sort((a, b) => b.save.meta.savedAt - a.save.meta.savedAt)[0]?.save || null; }
   function saveSlot(id) { const info = slot(id); if (info.id === 'auto') return persist(true); stamp(); return write(info.key, JSON.stringify(SAVE)); }
   function deleteSlot(id) { const info = slot(id); try { localStorage.removeItem(info.key); memory.delete(info.key); return true; } catch (e) { memory.set(info.key, null); storageError(); return false; } }
-  function useSave(s) { if (G.map) MAP.stop(); SAVE = migrate(s); applyHero(); playing = true; sessionAt = Date.now(); hideAll(); toIntermission(); }
+  function useSave(s) { if (G.map) MAP.stop(); SAVE = migrate(s); if(typeof QUALITY!=='undefined') QUALITY.syncMotion(); applyHero(); playing = true; sessionAt = Date.now(); hideAll(); toIntermission(); if (SAVE.retrained) { delete SAVE.retrained; persist(); UI.toast?.('Pilots retrained. Legacy skills were refunded with a 10% bonus.'); } }
   function loadSlot(id) { const s = slots().find(s => s.id === String(id)); if (!s?.save) throw new Error(s?.error || 'This slot is empty.'); useSave(s.save); }
   function exportJSON() { tick(); return JSON.stringify(migrate(playing ? SAVE : loadSave() || SAVE), null, 2); }
   function importJSON(text) { if (typeof text !== 'string' || text.length > 2e6) throw new Error('Paste an Iron Requiem save smaller than 2 MB.'); let s; try { s = JSON.parse(text); } catch (e) { throw new Error('The pasted text is not valid JSON.'); } const clean = migrate(s); useSave(clean); return clean; }
@@ -114,7 +139,7 @@ const GAME = (() => {
   }
   function setup() {
     hideAll(); $('#setup').hidden = false;
-    const st = { gender: 'm', path: 'real', name: 'Rei Kasuga' };
+    const st = { gender: 'm', path: 'real', name: 'Rei Kasuga', difficulty: 'normal' };
     let step = 1;
     const box = $('#setupBody');
     const selectCard = id => {
@@ -171,6 +196,8 @@ const GAME = (() => {
         h('div', { class: 'setupFooter' },
           step === 1 ? h('label', { class: 'set' }, 'Pilot name', h('input', { id: 'heroName', type: 'text', maxlength: 20, value: st.name, oninput: e => { st.name = e.target.value; } }))
             : h('p', { class: 'setupPilot' }, 'Pilot · ' + (st.name.trim() || (st.gender === 'f' ? 'Rina Kasuga' : 'Rei Kasuga'))),
+          step === 2 ? h('label', { class: 'set' }, 'Difficulty', h('select', { id:'difficulty', onchange: e => { st.difficulty = e.target.value; } },
+            Object.entries(RULES.modes).map(([key,value]) => h('option', { value:key, selected: key === st.difficulty ? 'selected' : null }, value.name + (key === 'requiem' ? ' · one attempt per mission' : ''))))) : null,
           h('div', { class: 'row' },
             h('button', { class: 'btn', onclick: () => { if (step === 1) toTitle(); else { step = 1; render('pilot-' + st.gender); } } }, 'Back'),
             h('button', { class: 'btn primary big', onclick: () => { if (step === 2) newGame(st); else { step = 2; render('frame-' + st.path); } } }, step === 1 ? 'Choose robot' : 'Begin the story'))));
@@ -179,8 +206,14 @@ const GAME = (() => {
     render();
   }
   function newGame(st) {
-    SAVE = defaultSave(); SAVE.hero = { name: (st.name || '').trim() || (st.gender === 'f' ? 'Rina Kasuga' : 'Rei Kasuga'), gender: st.gender, path: st.path };
+    const settings = {...SAVE.settings};
+    SAVE = defaultSave(); SAVE.settings = settings; SAVE.hero = { name: (st.name || '').trim() || (st.gender === 'f' ? 'Rina Kasuga' : 'Rei Kasuga'), gender: st.gender, path: st.path };
+    SAVE.difficulty = Object.hasOwn(RULES.modes,st.difficulty) ? st.difficulty : 'normal';
+    if (st.carry) { SAVE.merits = st.carry.merits; SAVE.refits = st.carry.refits; SAVE.replay = st.carry.pilots; SAVE.newGamePlus = true;
+      for (const id of SAVE.roster) SAVE.pilots[id].pp += SAVE.replay[id] || 0;
+    }
     playing = true; sessionAt = Date.now();
+    if (typeof QUALITY!=='undefined') QUALITY.syncMotion();
     applyHero(); persist(); hideAll(); startChapter();
   }
   function cont() { const s = loadSave(); if (s) useSave(s); }
@@ -188,6 +221,11 @@ const GAME = (() => {
     hideAll(); const ch = CHAPTERS[SAVE.chapter]; if (!ch) { toIntermission(); return; }
     SFX.music(ch.mood);
     if (!SAVE.flags['pre_' + SAVE.chapter]) { await UI.runScript(ch.pre); SAVE.flags['pre_' + SAVE.chapter] = true; persist(); }
+    if (!RULES.mode(SAVE).retries && SAVE.failedChapter === SAVE.chapter) {
+      await UI.defeat('Requiem campaign ended on this mission.', { retry: false });
+      toTitle();
+      return;
+    }
     await MAP.start(ch);
   }
   async function afterMap() {
@@ -209,7 +247,7 @@ const GAME = (() => {
       h('button', { class: 'btn primary', onclick: () => close() }, 'Return to title')));
     toTitle();
   }
-  function retryMap() { const ch = CHAPTERS[SAVE.chapter]; MAP.start(ch); }
+  function retryMap(assisted = false) { const ch = CHAPTERS[SAVE.chapter]; MAP.start(ch, assisted); }
   function toIntermission() { hideAll(); persist(); UI.intermission(); }
 
   function boot() {
@@ -236,5 +274,9 @@ const GAME = (() => {
       if (!$('#title').hidden) toTitle();
     });
   }
-  return { boot, persist, toTitle, startChapter, afterMap, retryMap, toIntermission, newGame, migrate, slots, saveSlot, loadSlot, deleteSlot, exportJSON, importJSON, continue: cont };
+  function newGamePlus() {
+    const carry = { merits:SAVE.merits, refits:{...SAVE.refits}, pilots:Object.fromEntries(SAVE.roster.map(id => [id, SAVE.pilots[id].pp + CLASSES.spent(SAVE.pilots[id])])) };
+    newGame({ ...SAVE.hero, difficulty:SAVE.difficulty, carry });
+  }
+  return { boot, newGamePlus, persist, toTitle, startChapter, afterMap, retryMap, toIntermission, newGame, migrate, slots, saveSlot, loadSlot, deleteSlot, exportJSON, importJSON, continue: cont };
 })();

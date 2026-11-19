@@ -11,7 +11,12 @@ const QUALITY=(()=>{
   function detect(gl){
     if(!gl)return;try{const ext=gl.getExtension('WEBGL_debug_renderer_info');rendererName=String(ext?gl.getParameter(ext.UNMASKED_RENDERER_WEBGL):gl.getParameter(gl.RENDERER)||'');if(/SwiftShader|llvmpipe|Software|softpipe|Microsoft Basic Render/i.test(rendererName)){automatic='low';reason='software renderer';emit();}}catch{}
   }
+  const motionPreference = ()=>window.matchMedia?.('(prefers-reduced-motion: reduce)');
+  function reducedMotion(){return (typeof SAVE !== 'undefined' && SAVE.settings?.reduceMotion) ?? !!motionPreference()?.matches;}
+  function syncMotion(){document.documentElement.dataset.motion=reducedMotion()?'reduced':'full';}
   function init(){
+    motionPreference()?.addEventListener?.('change',syncMotion);
+    syncMotion();
     try{const c=document.createElement('canvas'),gl=c.getContext('webgl2',{powerPreference:'low-power'})||c.getContext('webgl',{powerPreference:'low-power'});detect(gl);gl?.getExtension('WEBGL_lose_context')?.loseContext();}catch{}
     if(typeof location!=='undefined'&&new URLSearchParams(location.search).has('debug')){debugEl=document.createElement('div');debugEl.id='graphicsDebug';debugEl.setAttribute('aria-live','off');document.body.append(debugEl);}
     emit();
@@ -29,5 +34,5 @@ const QUALITY=(()=>{
   const low=()=>active()==='low',dpr=()=>Math.min(low()?1:2,window.devicePixelRatio||1);
   function keepParticle(index){return !low()||index%2===0;}
   function notice(){if(low()&&!notified&&requested()==='auto'){notified=true;if(typeof UI!=='undefined')UI.toast('Graphics set to Low for smoother play. Change it in Settings.');}}
-  return {init,set,detect,observe,summary,configureRenderer,keepParticle,notice,onChange:fn=>{listeners.add(fn);return()=>listeners.delete(fn)},get low(){return low()},get mode(){return active()},get setting(){return requested()},get dpr(){return dpr()},get particleScale(){return low()?.5:1}};
+  return {init,set,syncMotion,get reducedMotion(){return reducedMotion()},detect,observe,summary,configureRenderer,keepParticle,notice,onChange:fn=>{listeners.add(fn);return()=>listeners.delete(fn)},get low(){return low()},get mode(){return active()},get setting(){return requested()},get dpr(){return dpr()},get particleScale(){return low()?.5:1}};
 })();

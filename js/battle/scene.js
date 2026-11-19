@@ -6,7 +6,8 @@ const SCENE = (() => {
   let now = 0, last = 0, timeScale = 1, hitstop = 0, running = false, skipAll = false;
   let shake = 0, flashA = 0, flashCol = '#fff', tintA = 0, tintCol = '#000', bgOff = 0, bgSpeed = 20, bgKey = 'sky', zoom = 1, zoomTarget = 1;
   const parts = [], fxs = [], tweens = [], waiters = [], texts = [];
-  let actors = {}; let hud = null; let cut = null; let banner = null;
+  let actors = {}; let cut = null; let banner = null; let weaponTitle = null;
+  const reducedMotion = ()=>typeof QUALITY !== 'undefined' && QUALITY.reducedMotion;
 
   function init() {
     cv = document.getElementById('battleCanvas'); ctx = cv.getContext('2d');
@@ -116,8 +117,22 @@ const SCENE = (() => {
           const r = opt.r || 26; ART.glowDot(e, x, y, r * 2, col); ART.glowDot(e, x, y, r, '#ffffff');
           P({ x, y, vx: (Math.random() - 0.5) * 2, vy: (Math.random() - 0.5) * 2, size: r * 0.8, life: 400, col, type: 'fire' });
         } else if (kind === 'fist') {
-          c.save(); c.translate(x, y); c.rotate(ang); c.fillStyle = opt.c2 || '#c8102e'; c.fillRect(-26, -12, 34, 24); c.fillStyle = opt.c1 || '#333'; c.fillRect(4, -14, 16, 28); c.strokeStyle = '#000'; c.lineWidth = 2; c.strokeRect(-26, -12, 34, 24); c.restore();
-          ART.flame(e, x - Math.cos(ang) * 24, y - Math.sin(ang) * 24, ang + Math.PI, 70, '#ffb347', now / 1000);
+          c.save(); c.translate(x,y); c.rotate(ang);
+          const metal = c.createLinearGradient(0,-20,0,20);
+          metal.addColorStop(0,'#e9f5ff'); metal.addColorStop(.25,opt.c1||'#899dc1'); metal.addColorStop(1,'#14223b');
+          c.fillStyle=metal; c.strokeStyle='#141c29'; c.lineWidth=2;
+          c.beginPath(); c.moveTo(-30,-12); c.lineTo(-8,-19); c.lineTo(16,-17);
+          c.lineTo(27,-9); c.lineTo(24,12); c.lineTo(5,19); c.lineTo(-26,12); c.closePath(); c.fill(); c.stroke();
+          c.fillStyle=opt.c2||'#283f9a';
+          c.beginPath(); c.moveTo(-27,-7); c.lineTo(-9,-13); c.lineTo(2,-6);
+          c.lineTo(0,9); c.lineTo(-23,11); c.closePath(); c.fill();
+          c.strokeStyle='#101523'; c.lineWidth=2;
+          for (let i=0;i<3;i++) {
+            c.beginPath(); c.moveTo(7+i*5,-13+i*2); c.lineTo(3+i*6,15-i*3); c.stroke();
+          }
+          c.fillStyle='#9af8ff'; c.fillRect(-21,-2,13,3); c.restore();
+          ART.flame(e,x-Math.cos(ang)*29,y-Math.sin(ang)*29,ang+Math.PI,85,'#ffb347',now/1000);
+          if (!reducedMotion()) P({x,y,vx:-Math.cos(ang)*6,vy:-Math.sin(ang)*6,life:330,size:12,col:'#ffb768',type:'fire',drag:.92});
         } else if (kind === 'wave') {
           e.strokeStyle = ART.rgba(col, 0.8); e.lineWidth = 4; e.beginPath(); e.arc(x, y, 30, ang - 0.9, ang + 0.9); e.stroke();
         }
@@ -149,22 +164,24 @@ const SCENE = (() => {
     const c = a.cx; c.setTransform(1, 0, 0, 1, 0, 0); c.clearRect(0, 0, 900, 900);
     if (a.spr) {
       // painted sprite: idle A/B at ~3 fps, attack frame while attacking, hit frame while recoiling
-      const fi = HIT_POSES.includes(a.poseName) ? 3 : ATTACK_POSES.includes(a.poseName) ? 2 : (Math.floor(t * 3 + (a.side === 'L' ? 0 : 0.5)) % 2);
+      const fi = HIT_POSES.includes(a.poseName) ? 3 : ATTACK_POSES.includes(a.poseName) ? 2 : (Math.floor((reducedMotion()?0:t) * 3 + (a.side === 'L' ? 0 : 0.5)) % 2);
       const meta=a.spr.meta||{},f = a.spr.frames[fi] || a.spr.frames[0], s = a.sprScale*(meta.scale||1), w = f.width * s, h = f.height * s;
-      const hover = (meta.fly??a.fly) ? -28 + Math.sin(t * 2.2) * 6 : 0, breathe = 1 + Math.sin(t * 2.4) * 0.008;
-      c.translate(450, 700 + hover); c.scale(1, breathe);
+      const still = reducedMotion();
+      const hover = (meta.fly??a.fly) ? -28 + (still ? 0 : Math.sin(t * 2.2) * 6) : 0;
+      const squash = still ? 1 : a.poseName==='dash' ? .95 : a.poseName==='hurt' ? 1.035 : 1 + Math.sin(t*2.4)*.008;
+      c.translate(450, 700 + hover); c.scale(1/squash, squash);
       const paint=typeof ENEMIES!=='undefined'?ENEMIES.paint(a.u):null;
       if(paint){c.filter=paint.filter||'none';c.shadowColor=paint.color;c.shadowBlur=paint.glow;if(paint.aura&&Math.floor(t*30)%3===0)P({x:a.x+(Math.random()-.5)*w,y:a.y-Math.random()*h,vx:0,vy:-1,life:700,size:8,col:paint.color,type:'glow',drag:.99});}
       if(meta.facesLeft)c.scale(-1,1);c.drawImage(f, -w / 2, -h * a.spr.ground, w, h);if(meta.facesLeft)c.scale(-1,1);c.filter='none';c.shadowBlur=0;
       a.scale = 1; const gh = h * a.spr.ground;
       a.anchors = { coreX: 0, coreY: -gh * 0.52 + hover, handX: w * 0.38, handY: -gh * 0.6 + hover, headY: -gh * 0.9 + hover };
       if(meta.anchors){const point=(p)=>[(p[0]-.5)*w*(meta.facesLeft?-1:1),(p[1]-a.spr.ground)*h+hover],core=meta.anchors.core&&point(meta.anchors.core),muzzle=meta.anchors.muzzle&&point(meta.anchors.muzzle),head=meta.anchors.head&&point(meta.anchors.head);if(core){a.anchors.coreX=core[0];a.anchors.coreY=core[1];}if(muzzle){a.anchors.handX=muzzle[0];a.anchors.handY=muzzle[1];}if(head){a.anchors.headX=head[0];a.anchors.headY=head[1];}}
-      if (use3D) { ctx.save(); ctx.fillStyle = 'rgba(0,0,0,0.35)'; ctx.beginPath(); ctx.ellipse(a.x + a.ox, GROUND + 4, w * 0.32, 10, 0, 0, Math.PI * 2); ctx.fill(); ctx.restore(); }
+      { ctx.save(); ctx.fillStyle = 'rgba(0,0,0,0.35)'; ctx.beginPath(); ctx.ellipse(a.x + a.ox, GROUND + 4, w * 0.32, 10, 0, 0, Math.PI * 2); ctx.fill(); ctx.restore(); }
     } else {
       c.translate(450, 700); c.scale(a.scale, a.scale);
       a.anchors = ART.drawMech(c, a.m.vis, Object.assign({ t, pose: a.pose }, a.opts));
     }
-    if (a.flash > 0) { c.setTransform(1, 0, 0, 1, 0, 0); c.globalCompositeOperation = 'source-atop'; c.fillStyle = `rgba(255,255,255,${Math.min(1, a.flash)})`; c.fillRect(0, 0, 900, 900); c.globalCompositeOperation = 'source-over'; }
+    if (!reducedMotion() && a.flash > 0) { c.setTransform(1, 0, 0, 1, 0, 0); c.globalCompositeOperation = 'source-atop'; c.fillStyle = `rgba(255,255,255,${Math.min(1, a.flash)})`; c.fillRect(0, 0, 900, 900); c.globalCompositeOperation = 'source-over'; }
     // afterimages
     a.after.forEach(g => { ctx.save(); ctx.globalAlpha = g.a * 0.5; ctx.translate(g.x, g.y); ctx.scale(a.dir, 1); ctx.filter = 'hue-rotate(160deg) saturate(2)'; ctx.drawImage(g.img, -450, -700); ctx.restore(); });
     ctx.save(); ctx.globalAlpha = a.alpha; ctx.translate(a.x + a.ox, a.y + a.oy); ctx.scale(a.dir, 1); ctx.drawImage(a.cv, -450, -700); ctx.restore();
@@ -194,15 +211,17 @@ const SCENE = (() => {
     ctx.setTransform(1, 0, 0, 1, 0, 0);
     if (use3D) ctx.clearRect(0, 0, W, H);
     ctx.save();
-    const sx = (Math.random() - 0.5) * shake, sy = (Math.random() - 0.5) * shake;
+    const still = reducedMotion();
+    const sx = still ? 0 : (Math.random()-.5)*shake, sy = still ? 0 : (Math.random()-.5)*shake;
+    if (still) zoom = 1;
     ctx.translate(W / 2 + sx, H / 2 + sy); ctx.scale(zoom, zoom); ctx.translate(-W / 2, -H / 2);
     if (use3D) {
-      if (!ASSETS.drawBattleBG(bgCtx, W, H, bgKey, bgOff)) ART.drawBG(bgCtx, W, H, bgKey, t, bgOff); if (bgSpeed > 200) speedLines(bgCtx);
+      if (!ASSETS.drawBattleBG(bgCtx, W, H, bgKey, bgOff)) ART.drawBG(bgCtx, W, H, bgKey, t, bgOff); if (!still && bgSpeed > 200) speedLines(bgCtx);
       R3D.battleFrame(actors, t, sx, sy, zoom, bgOff);
       ctx.clearRect(-W, -H, W * 3, H * 3);
     } else {
       if (!ASSETS.drawBattleBG(ctx, W, H, bgKey, bgOff)) ART.drawBG(ctx, W, H, bgKey, t, bgOff);
-      if (bgSpeed > 200) speedLines(ctx);
+      if (!still && bgSpeed > 200) speedLines(ctx);
       for (const k in actors) { const a = actors[k]; if (!a.visible || a.spr) continue; ctx.fillStyle = 'rgba(0,0,0,0.35)'; ctx.beginPath(); ctx.ellipse(a.x + a.ox, GROUND + 6, 70 * a.scale / 1.6, 10, 0, 0, Math.PI * 2); ctx.fill(); }
     }
     ectx.setTransform(1, 0, 0, 1, 0, 0); ectx.clearRect(0, 0, W, H); ectx.globalCompositeOperation = 'lighter';
@@ -217,6 +236,12 @@ const SCENE = (() => {
         case 'spark': c.strokeStyle = ART.rgba(p.col.startsWith('#') ? p.col : '#ffffff', 1 - k); c.lineWidth = p.size; c.beginPath(); c.moveTo(p.x, p.y); c.lineTo(p.x - p.vx * 3, p.y - p.vy * 3); c.stroke(); break;
         case 'fire': { const col = k < 0.3 ? '#fff3b0' : k < 0.6 ? p.col : '#a02a10'; ART.glowDot(c, p.x, p.y, p.size * (0.6 + k), col, (1 - k) * 0.9); break; }
         case 'smoke': c.fillStyle = `rgba(40,36,40,${0.45 * (1 - k)})`; c.beginPath(); c.arc(p.x, p.y, p.size * (1 + k * 1.5), 0, 7); c.fill(); break;
+        case 'paintShard': {
+          if (p.y>GROUND) { p.y=GROUND; p.vy=-Math.abs(p.vy)*.34; }
+          const [sx,sy,w,h] = p.crop;
+          c.save(); c.globalAlpha=1-k; c.translate(p.x,p.y); c.rotate(p.rot); c.scale(p.dir,1);
+          c.drawImage(p.image,sx,sy,w,h,-w/2,-h/2,w,h); c.restore(); break;
+        }
         case 'debris': c.save(); c.translate(p.x, p.y); c.rotate(p.rot); c.fillStyle = p.col; c.fillRect(-p.size, -p.size / 2, p.size * 2, p.size); c.restore(); break;
         case 'ring': c.strokeStyle = ART.rgba(p.col, 1 - k); c.lineWidth = (p.width || 4) * (1 - k) + 1; c.beginPath(); c.arc(p.x, p.y, p.size + p.grow * p.age / 16, 0, 7); c.stroke(); break;
         case 'feather': c.save(); c.translate(p.x + Math.sin(p.age * 0.005) * 10, p.y); c.rotate(Math.sin(p.age * 0.004)); ART.glowDot(c, 0, 0, p.size * 2, p.col, 1 - k); c.fillStyle = `rgba(255,255,255,${1 - k})`; c.beginPath(); c.ellipse(0, 0, p.size, p.size * 0.3, 0, 0, 7); c.fill(); c.restore(); break;
@@ -226,19 +251,27 @@ const SCENE = (() => {
     }
     for (let i = fxs.length - 1; i >= 0; i--) { const f = fxs[i]; f.age += dt; const k = Math.min(1, f.age / f.life); f.draw(ctx, ectx, k); if (f.age >= f.life) { fxs.splice(i, 1); f.done && f.done(); } }
     // bloom composite
-    bctx.setTransform(1, 0, 0, 1, 0, 0); bctx.clearRect(0, 0, bcv.width, bcv.height); bctx.filter = 'blur(6px)'; bctx.drawImage(ecv, 0, 0, bcv.width, bcv.height); bctx.filter = 'none';
     ctx.globalCompositeOperation = 'lighter';
-    ctx.globalAlpha = 0.9; ctx.drawImage(bcv, 0, 0, W, H); ctx.globalAlpha = 1;
-    ctx.drawImage(ecv, 0, 0);
+    if (!still && !(typeof QUALITY !== 'undefined' && QUALITY.low)) {
+      bctx.clearRect(0,0,bcv.width,bcv.height); bctx.filter='blur(6px)';
+      bctx.drawImage(ecv,0,0,bcv.width,bcv.height); bctx.filter='none';
+      ctx.globalAlpha=.82; ctx.drawImage(bcv,0,0,W,H); ctx.globalAlpha=1;
+    }
+    ctx.drawImage(ecv,0,0);
+    if (!still && typeof QUALITY!=='undefined' && !QUALITY.low && typeof BATTLE_PARTICLES!=='undefined') {
+      const sparks = BATTLE_PARTICLES.frame(now,0,0,1);
+      if (sparks) ctx.drawImage(sparks,0,0);
+    }
     ctx.globalCompositeOperation = 'source-over';
     ctx.restore();
-    if (tintA > 0.01) { ctx.fillStyle = ART.rgba(tintCol, tintA); ctx.fillRect(0, 0, W, H); }
+    if (!still && tintA > 0.01) { ctx.fillStyle = ART.rgba(tintCol, tintA); ctx.fillRect(0, 0, W, H); }
     // vignette
     const vg = ctx.createRadialGradient(W / 2, H / 2, H * 0.4, W / 2, H / 2, H * 0.95); vg.addColorStop(0, 'rgba(0,0,0,0)'); vg.addColorStop(1, 'rgba(0,0,0,0.55)'); ctx.fillStyle = vg; ctx.fillRect(0, 0, W, H);
+    if (weaponTitle) drawWeaponTitle(weaponTitle,still);
     // texts
     for (let i = texts.length - 1; i >= 0; i--) {
       const tx = texts[i]; tx.age += dt; if (tx.age > tx.life) { texts.splice(i, 1); continue; }
-      const k = tx.age / tx.life, pop = k < 0.12 ? 1.6 - k * 5 : 1;
+      const k = tx.age / tx.life, pop = !still && k < 0.12 ? 1.6 - k * 5 : 1;
       ctx.save(); ctx.translate(tx.x, tx.y + tx.vy * tx.age * 0.06); ctx.scale(pop, pop); ctx.globalAlpha = k > 0.75 ? (1 - k) * 4 : 1;
       ctx.font = `${tx.italic ? 'italic ' : ''}800 ${tx.size}px "Chakra Petch", "Arial Black", sans-serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
       ctx.lineWidth = 7; ctx.strokeStyle = 'rgba(0,0,0,0.85)'; ctx.strokeText(tx.str, 0, 0);
@@ -248,7 +281,7 @@ const SCENE = (() => {
     drawHUD(t);
     if (banner) drawBanner(t);
     if (cut) drawCut(t);
-    if (flashA > 0) { ctx.fillStyle = ART.rgba(flashCol, Math.min(1, flashA)); ctx.fillRect(0, 0, W, H); }
+    if (!still && flashA > 0) { ctx.fillStyle = ART.rgba(flashCol, Math.min(1, flashA)); ctx.fillRect(0, 0, W, H); }
     raf = requestAnimationFrame(frame);
   }
   function speedLines(c) {
@@ -257,6 +290,13 @@ const SCENE = (() => {
     c.restore();
   }
   // ---------- HUD ----------
+  function factionInk(a) {
+    if (a.u.team!=='enemy') return '#85f3ff';
+    if (a.m.armor==='BIO') return '#c3fc81';
+    if (a.m.armor==='VOID') return '#dbbbff';
+    if (a.m.faction==='free_states' || ['zephyr','tyrant','carmine_e'].includes(a.u.mech)) return '#ffab81';
+    return '#f4db98';
+  }
   function drawHUD(t) {
     for (const side of ['L', 'R']) {
       const a = actors.S && actors.S.side === side && actors.S.visible ? actors.S : actors[side];
@@ -264,7 +304,7 @@ const SCENE = (() => {
       const x = side === 'L' ? 24 : W - 24 - 470, y = 22;
       ctx.save();
       ctx.fillStyle = 'rgba(6,10,20,0.78)'; ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x + 470, y); ctx.lineTo(x + 450, y + 92); ctx.lineTo(x, y + 92); ctx.closePath(); ctx.fill();
-      ctx.strokeStyle = a.u.team === 'player' ? 'rgba(98,243,255,0.6)' : 'rgba(255,90,90,0.6)'; ctx.lineWidth = 1.5; ctx.stroke();
+      ctx.strokeStyle = ART.rgba(factionInk(a),.70); ctx.lineWidth = 1.5; ctx.stroke();
       const pid = a.u.portrait || a.u.pilot; const pimg = ART.portrait(pid, 'normal', 96, 120);
       ctx.save(); ctx.beginPath(); ctx.rect(x + 6, y + 6, 72, 80); ctx.clip(); ctx.drawImage(pimg, x - 6, y + 2, 96, 120); ctx.restore();
       ctx.fillStyle = '#e9f3ff'; ctx.font = '700 23px system-ui, sans-serif'; ctx.textAlign = 'left'; ctx.fillText(a.u.nameOverride||a.m.name, x + 88, y + 27, 350);
@@ -272,7 +312,7 @@ const SCENE = (() => {
       // HP bar
       const bw = 300, frac = Math.max(0, a.dispHP / a.maxHP);
       ctx.fillStyle = 'rgba(255,255,255,0.12)'; ctx.fillRect(x + 88, y + 56, bw, 9);
-      const hg = ctx.createLinearGradient(x + 88, 0, x + 88 + bw, 0); hg.addColorStop(0, frac < 0.3 ? '#ff3b5c' : '#2bd9a0'); hg.addColorStop(1, frac < 0.3 ? '#ff8a3d' : '#62f3ff');
+      const hg = ctx.createLinearGradient(x + 88, 0, x + 88 + bw, 0); hg.addColorStop(0, frac < 0.3 ? '#ff3b5c' : '#2bd9a0'); hg.addColorStop(1, frac < 0.3 ? '#ff8a3d' : factionInk(a));
       ctx.fillStyle = hg; ctx.fillRect(x + 88, y + 56, bw * frac, 9);
       ctx.fillStyle = '#fff'; ctx.font = '650 15px system-ui, sans-serif'; ctx.fillText(`HP ${Math.max(0, Math.round(a.dispHP))} / ${a.maxHP}`, x + 88, y + 83, 158);
       ctx.fillStyle = '#ffd166'; ctx.fillText(`WILL ${a.u.will}`, x + 253, y + 83, 78);
@@ -280,8 +320,41 @@ const SCENE = (() => {
       ctx.restore();
     }
   }
+  function drawWeaponTitle(ticket,still) {
+    const age = now-ticket.start;
+    if (age>1400) { weaponTitle=null; return; }
+    const x = ticket.side==='L' ? 78 : 790, y = 126, w = 412;
+    ctx.save(); ctx.globalAlpha = Math.min(1,(1400-age)/260);
+    ctx.translate(x+(still ? 0 : Math.max(0,1-age/160)*-22),y);
+    ctx.fillStyle = '#080f24e8'; ctx.strokeStyle = ticket.color; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo(w,0); ctx.lineTo(w-23,60); ctx.lineTo(0,60); ctx.closePath();
+    ctx.fill(); ctx.stroke();
+    ctx.fillStyle = ticket.color; ctx.fillRect(0,0,6,60);
+    ctx.font='700 12px monospace'; ctx.fillText(ticket.kind.toUpperCase(),21,18);
+    ctx.fillStyle='#f0fbff'; ctx.font='800 28px system-ui'; ctx.fillText(ticket.name.toUpperCase(),20,45,w-55);
+    ctx.restore();
+  }
+  function spectacle(stage,kind,weapon,source,target,color) {
+    if (typeof SPECTACLE === 'undefined') return;
+    const profile = SPECTACLE.profile(kind,weapon);
+    if (stage==='impact' && !reducedMotion() && typeof QUALITY!=='undefined' && !QUALITY.low && typeof BATTLE_PARTICLES!=='undefined') {
+      const [x,y] = source(), [tx] = target();
+      BATTLE_PARTICLES.burst(x,y,Math.sign(x-tx) || 1,profile,color,now);
+    }
+    FX({life:profile[stage],draw:(c,e,k)=>{
+      e.save(); e.translate(W/2,H/2); e.scale(zoom,zoom); e.translate(-W/2,-H/2);
+      const texture = !reducedMotion() && ASSETS.vfx?.(profile.family==='missile' ? 'fire' : 'energy',stage==='charge' ? 0 : profile.family==='missile' ? 6 : 4);
+      if (texture) {
+        const [x,y] = source(), size = (90+160*k)*profile.power;
+        e.globalAlpha = (1-k)*.64; e.drawImage(texture,x-size/2,y-size/2,size,size); e.globalAlpha=1;
+      }
+      SPECTACLE.paint(e,profile,stage,k,...source(),...target(),
+        {color,still:reducedMotion(),low:typeof QUALITY !== 'undefined' && QUALITY.low});
+      e.restore();
+    }});
+  }
   function drawBanner(t) {
-    const b = banner; const k = Math.min(1, (now - b.start) / 180);
+    const b = banner; const k = reducedMotion() ? 1 : Math.min(1, (now - b.start) / 180);
     const left = b.side === 'L';
     const y = H - 150, x = left ? -620 + 640 * EASE.out(k) : W - 20 - 620 * EASE.out(k);
     ctx.save();
@@ -326,6 +399,7 @@ const SCENE = (() => {
     if (!res.hit) {
       if (st.dodged) return; st.dodged = true;
       afterimage(d); SFX.play('whoosh');
+      if (!reducedMotion()) spectacle('impact','wave',{},()=>[cx,cy],()=>center(a),'#a2d8ff');
       tween(d, { ox: -d.dir * 70, oy: -50 }, 140, 'out').then(() => { afterimage(d); return wait(260); }).then(() => tween(d, { ox: 0, oy: 0 }, 260, 'io'));
       popText(cx, cy - 60, res.phantom?'PHANTOM':'MISS', '#9fd8ff', 46);
       return;
@@ -338,7 +412,9 @@ const SCENE = (() => {
     SFX.play('hit');
     if (!st.knock) { st.knock = true; setPose(d, ctxo.mode === 'defend' ? 'guard' : 'hurt', 80); tween(d, { ox: -d.dir * 26 }, 90, 'out').then(() => wait(250)).then(() => { tween(d, { ox: 0 }, 300, 'io'); setPose(d, 'idle', 300); }); }
     if (ctxo.final) {
-      hitstop = res.crit ? 140 : 70;
+      hitstop = reducedMotion() ? 0 : res.crit ? 140 : 70;
+      spectacle('impact',ctxo.kind,ctxo.weapon,()=>[cx,cy],()=>center(a),ctxo.col);
+      if (ctxo.mode === 'defend') barrierFX(cx,cy,85,'#a4deff');
       d.hp = st.hpAfter;
       popText(cx, cy - 30, String(res.dmg), res.crit ? '#ffd166' : '#ffffff', res.crit ? 64 : 52, 1400);
       if (res.crit) popText(cx, cy - 100, 'CRITICAL!', '#ffd166', 34, 1200);
@@ -351,7 +427,19 @@ const SCENE = (() => {
     const [cx, cy] = center(d);
     SFX.play('alarm');
     for (let i = 0; i < 6; i++) { explosion(cx + (Math.random() - 0.5) * 120 * d.scale / 1.6, cy + (Math.random() - 0.5) * 120 * d.scale / 1.6, 0.8 + Math.random() * 0.5); d.flash = 1; await wait(150); }
-    hitstop = 200; flashA = 1; flashCol = '#ffffff';
+    hitstop = reducedMotion() ? 0 : 160; flashA = .48; flashCol = '#ffeece';
+    if (d.spr && !reducedMotion()) {
+      const image = document.createElement('canvas');
+      image.width = d.cv.width; image.height = d.cv.height;
+      image.getContext('2d').drawImage(d.cv,0,0);
+      const span = (d.spr.frames[0].width*d.sprScale*(d.spr.meta?.scale||1)), tall = Math.min(400, d.spr.frames[0].height*d.sprScale*(d.spr.meta?.scale||1));
+      for (let row=0;row<3;row++) for (let column=0;column<3;column++) {
+        const w = span/3, h = tall/3, sx = 450-span*.5+column*w, sy = 700-tall+row*h;
+        P({type:'paintShard',image,crop:[sx,sy,w,h],dir:d.dir,
+          x:d.x+d.ox+d.dir*(sx+w*.5-450),y:d.y+d.oy+sy+h*.5-700,
+          vx:(column-1)*3.8*d.dir,vy:-2-row*2.8,grav:.23,drag:.98,vr:(column-1)*.055,life:800,em:false});
+      }
+    }
     explosion(cx, cy, 2.4, '#ffcc66'); ring(cx, cy, '#ffffff', 22, 700, 20, 10);
     d.visible = false;
     await wait(900);
@@ -363,7 +451,8 @@ const SCENE = (() => {
     const col = typeCol(w);
     const tgt = () => center(d);
     const hand = () => anchor(a, 'hand');
-    const R = (o = {}) => react(d, a, res, Object.assign({ state: st, col, mode: st.mode }, o));
+    const R = (o = {}) => react(d, a, res, Object.assign({ state: st, col, mode: st.mode, kind, weapon:w }, o));
+    spectacle('charge',kind,w,hand,tgt,col);
     switch (kind) {
       case 'rifle': {
         setPose(a, 'aim', 200); await wait(260);
@@ -643,15 +732,16 @@ const SCENE = (() => {
   }
   function say(a, kind) {
     const lines = (PILOTS[a.u.pilot] && PILOTS[a.u.pilot].lines) || (EPILOTS[a.u.lineSet] && EPILOTS[a.u.lineSet].lines) || EPILOTS.grunt_c.lines;
-    const pool = lines[kind] || lines.atk; const text = pool[Math.floor(Math.random() * pool.length)];
-    banner = { start: now, side: a.side, pid: a.u.portrait || a.u.pilot, name: a.u.pname || NAMES[a.u.pilot] || '', text, col: a.u.team === 'player' ? '#62f3ff' : '#ff6b6b', expr: kind === 'hit' ? (a.m.armor === 'BIO' ? 'hurt' : 'shock') : kind === 'kill' ? 'smile' : 'angry' };
+    const pool = lines[kind] || lines.atk; const line = pool[Math.floor(Math.random()*pool.length)];
+    const text = typeof DIALOGUE === 'undefined' ? line : DIALOGUE.plain(line);
+    banner = { start: now, side: a.side, pid: a.u.portrait || a.u.pilot, name: a.u.pname || NAMES[a.u.pilot] || '', text, col: factionInk(a), expr: kind === 'hit' ? (a.m.armor === 'BIO' ? 'hurt' : 'shock') : kind === 'kill' ? 'smile' : 'angry' };
   }
 
   async function doAttack(a, d, ev) {
     const st = { mode: ev.mode, hpAfter: ev.hpAfter };
     say(a, 'atk');
     // weapon name flash
-    popText(a.side === 'L' ? 330 : 950, 150, ev.w.name, typeCol(ev.w), 30, 1400, { vy: 0, italic: true });
+    weaponTitle = {side:a.side,start:now,name:ev.w.name,color:typeCol(ev.w),kind:ATK[ev.w.type].name};
     await wait(500);
     if (ev.w.finisher) {
       banner = null; await cutIn(a, ev.w, ev.comboPartner?actors.S:null);
@@ -680,6 +770,8 @@ const SCENE = (() => {
     const el = document.getElementById('battle'); el.hidden = false;
     const restoreScore=typeof SFX.battle==='function'?SFX.battle(opts.left,opts.right,typeof G!=='undefined'?G.map?.ch:null):null;
     running = true; skipAll = false; timeScale = SAVE.settings.anim === 'fast' ? 2 : 1; now = 0; last = 0;
+    weaponTitle = null; hitstop = 0; shake = 0;
+    if (typeof BATTLE_PARTICLES!=='undefined') BATTLE_PARTICLES.reset();
     parts.length = 0; fxs.length = 0; tweens.length = 0; waiters.length = 0; texts.length = 0; cut = null; banner = null; tintA = 0; flashA = 0; zoom = 1; zoomTarget = 1;
     bgKey = opts.bg || 'sky'; bgSpeed = 20; if (use3D) R3D.battleBegin(bgKey, !!ASSETS.drawBattleBG(bgCtx, W, H, bgKey, 0));
     actors = { L: makeActor(opts.left, 'L'), R: makeActor(opts.right, 'R') };

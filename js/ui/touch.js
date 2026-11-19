@@ -11,10 +11,10 @@ const TOUCH=(()=>{
     s.panX=clamp(s.panX,-maxX,maxX);s.panY=clamp(s.panY,-maxY,maxY);s.canvas.style.transform=`translate(${s.panX}px,${s.panY}px) scale(${s.scale})`;s.canvas.style.transformOrigin='center';s.label.textContent=Math.round(s.scale*100)+'%';
   }
   function clearPending(s){s.pending=null;s.confirm.hidden=true;}
-  function moveNow(s){if(!s.pending)return;const p=s.pending,u=s.api.ui();clearPending(s);if(u.sel?.uid!==p.uid||u.mode!=='moving')return;Promise.resolve(s.api.click(p.x,p.y)).catch(e=>console.error('Touch move failed',e));}
+  function moveNow(s){if(!s.pending)return;const p=s.pending,u=s.api.ui();clearPending(s);if(u.sel?.uid!==p.uid||!['moving','redeploy'].includes(u.mode))return;Promise.resolve(s.api.click(p.x,p.y)).catch(e=>console.error('Touch move failed',e));}
   function tap(s,e){
     const t=s.api.toTile(e);if(!t)return;const ui=s.api.ui(),st=s.api.state();if(!st)return;
-    if(ui.mode==='moving'&&ui.sel&&ui.range?.tiles.has(t.x+','+t.y)&&!st.unitAt(t.x,t.y)){
+    if(['moving','redeploy'].includes(ui.mode)&&ui.sel&&ui.range?.tiles.has(t.x+','+t.y)&&!st.unitAt(t.x,t.y)){
       if(s.pending?.x===t.x&&s.pending?.y===t.y&&s.pending?.uid===ui.sel.uid){moveNow(s);return;}
       s.pending={...t,uid:ui.sel.uid};s.api.preview?.(t);s.confirm.hidden=false;s.moveLabel.textContent=`Move to ${t.x+1}, ${t.y+1}?`;return;
     }
@@ -44,7 +44,9 @@ const TOUCH=(()=>{
   function resetMap(){if(!current)return;current.scale=1;current.panX=current.panY=0;clearPending(current);apply(current);showInfo(false);}
   function showInfo(on){document.getElementById('mapBody')?.classList.toggle('touchInfoOpen',!!on);const b=document.getElementById('touchInfoToggle');if(b)b.setAttribute('aria-expanded',String(!!on));}
   function revealUnit(u,geom){
-    const s=current;if(!s||!small()||!u||!geom||s.api.ui().mode==='target')return;const width=s.canvas.clientWidth,height=s.canvas.clientHeight,x=(geom.ox+(u.x+.5)*geom.T-width/2)*s.scale+width/2+s.panX,y=(geom.oy+(u.y+.5)*geom.T-height/2)*s.scale+height/2+s.panY;
+    const s=current;if(!s||!small()||!u||!geom||s.api.ui().mode==='target')return;const width=s.canvas.clientWidth,height=s.canvas.clientHeight;
+    const [px,py]=geom.point(u.x+.5,u.y+.5);
+    const x=(px-width/2)*s.scale+width/2+s.panX,y=(py-height/2)*s.scale+height/2+s.panY;
     // Menus sit on the right; keep the selected frame in the open upper-left area.
     if(x>width*.55)s.panX-=x-width*.35;if(y>height*.55)s.panY-=y-height*.35;apply(s);
   }

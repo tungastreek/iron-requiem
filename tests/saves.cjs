@@ -7,7 +7,7 @@ function fixture(root) {
   const context = vm.createContext({ console, Date: Clock, performance: { now: () => now }, window: { addEventListener() {} }, document: { hidden: false, addEventListener() {} }, requestAnimationFrame() {}, cancelAnimationFrame() {},
     localStorage: { getItem(k) { if (failures.get) throw Error('blocked'); return stored.get(k) || null; }, setItem(k, v) { if (failures.set) throw Error('quota'); stored.set(k, String(v)); }, removeItem(k) { if (failures.remove) throw Error('blocked'); stored.delete(k); } },
     $: element, ART: { clearPortraits() {} }, UI: { toast: s => messages.push(s), intermission() {} }, SFX: {}, G: { map: null }, MAP: { stop() {} } });
-  for (const file of ['data/types', 'data/mechs', 'data/pilots', 'data/story', 'data/expansion', 'battle/combat', 'main']) vm.runInContext(fs.readFileSync(path.join(root, 'js', file + '.js'), 'utf8'), context, { filename: file + '.js' });
+  for (const file of ['data/types', 'data/mechs', 'data/pilots', 'data/story', 'data/expansion', 'data/classes', 'battle/combat', 'main']) vm.runInContext(fs.readFileSync(path.join(root, 'js', file + '.js'), 'utf8'), context, { filename: file + '.js' });
   return { stored, messages, failures, eval: s => vm.runInContext(s, context), setNow: n => now = n };
 }
 function verify(root = path.resolve(__dirname, '..')) {
@@ -17,12 +17,17 @@ function verify(root = path.resolve(__dirname, '..')) {
   legacy.roster.push('anika'); legacy.pilots.anika = { lvl: 12, exp: 440, pp: 7, nodes: { a1: true, b2: true }, kills: 11 };
   legacy.mechs.aegis = { up: { hp: 3, wpn: 2 }, parts: ['repair', null] }; legacy.auxiliary = ['anika']; legacy.extensionRecord = { proof: 'retained' };
   f.eval('var testSave=' + json(legacy)); const migrated = copy(f.eval('migrate(testSave)'));
-  assert.equal(migrated.v, 2); assert.equal(migrated.settings.graphics, 'auto'); assert.equal(migrated.meta.playtime, 0);
-  for (const key of ['chapter', 'credits', 'flags', 'roster', 'pilots', 'mechs', 'inventory', 'auxiliary', 'extensionRecord']) assert.deepEqual(migrated[key], legacy[key], 'Migration preserves ' + key);
+  assert.equal(migrated.v, 3); assert.equal(migrated.settings.graphics, 'auto'); assert.equal(migrated.meta.playtime, 0);
+  for (const key of ['chapter', 'credits', 'flags', 'roster', 'mechs', 'inventory', 'auxiliary', 'extensionRecord']) assert.deepEqual(migrated[key], legacy[key], 'Migration preserves ' + key);
+  const refund=f.eval("Math.ceil(buildTree('anika').flatMap(b=>b.nodes).filter(n=>testSave.pilots.anika.nodes[n.id]).reduce((sum,n)=>sum+n.cost,0)*1.10)");
+  assert.equal(migrated.pilots.anika.pp,legacy.pilots.anika.pp+refund);
+  assert.deepEqual(migrated.pilots.anika.nodes,{});
+  for (const key of ['lvl','exp','kills']) assert.equal(migrated.pilots.anika[key],legacy.pilots.anika[key]);
+  f.eval('var checkV3='+json(migrated)); assert.equal(f.eval("migrate(checkV3).pilots.anika.pp"),migrated.pilots.anika.pp);
   assert.deepEqual(copy(f.eval('testSave')), legacy, 'Migration does not modify its input');
   f.stored.set('iron-requiem-save-v1', json(legacy)); const slots = copy(f.eval('GAME.slots()'));
-  assert.equal(slots.length, 4); assert.deepEqual(slots.map(s => s.id), ['auto', '1', '2', '3']); assert.equal(slots[0].save.v, 2);
-  assert.equal(JSON.parse(f.stored.get('iron-requiem-save-v1')).v, 2, 'Legacy autosave is migrated in place');
+  assert.equal(slots.length, 4); assert.deepEqual(slots.map(s => s.id), ['auto', '1', '2', '3']); assert.equal(slots[0].save.v, 3);
+  assert.equal(JSON.parse(f.stored.get('iron-requiem-save-v1')).v, 3, 'Legacy autosave is migrated in place');
   const manual = { ...migrated, chapter: 'c4', meta: { savedAt: 50000, playtime: 61000 } };
   f.stored.set('iron-requiem-slot-2', json(manual)); f.eval('GAME.continue()'); assert.equal(f.eval('SAVE.chapter'), 'c4', 'Continue chooses newest slot');
   assert.equal(f.eval('SAVE.meta.playtime'), 61000); assert.equal(JSON.parse(f.stored.get('iron-requiem-save-v1')).chapter, 'c4');
@@ -36,7 +41,7 @@ function verify(root = path.resolve(__dirname, '..')) {
   f.stored.set('iron-requiem-slot-2', 'not json'); assert.equal(f.eval('GAME.slots().find(s=>s.id==="2").corrupt'), true); assert.throws(() => f.eval('GAME.loadSlot("2")'));
   const invalids = ['not json', json({ ...legacy, v: 99 }), json({ ...legacy, chapter: 'missing' }), json({ ...legacy, roster: ['missing'] }), json({ ...legacy, credits: -1 }), json({ ...legacy, inventory: { nonexistent: 1 } }), json({ ...legacy, auxiliary: ['mira', 'mira'] }), '{"v":1,"__proto__":{"bad":true}}'];
   for (const text of invalids) { f.eval('var input=' + json(text)); const snapshot = f.eval('JSON.stringify(SAVE)'); assert.throws(() => f.eval('GAME.importJSON(input)')); assert.equal(f.eval('JSON.stringify(SAVE)'), snapshot, 'Invalid import preserves current save'); }
-  f.eval('var input=' + json(json(legacy))); f.eval('GAME.importJSON(input)'); assert.equal(f.eval('SAVE.chapter'), 'i5'); assert.equal(f.eval('SAVE.v'), 2); assert.equal(f.eval('SAVE.flags.archive_public'), true);
+  f.eval('var input=' + json(json(legacy))); f.eval('GAME.importJSON(input)'); assert.equal(f.eval('SAVE.chapter'), 'i5'); assert.equal(f.eval('SAVE.v'), 3); assert.equal(f.eval('SAVE.flags.archive_public'), true);
   const blocked = fixture(root); blocked.failures.get = blocked.failures.set = blocked.failures.remove = true;
   assert.equal(blocked.eval('GAME.persist(true)'), false); assert.equal(blocked.eval('GAME.saveSlot("1")'), false);
   assert.equal(blocked.eval('GAME.slots()[0].save.chapter'), 'c1', 'Storage failure keeps autosave in memory');

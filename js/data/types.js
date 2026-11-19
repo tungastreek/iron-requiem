@@ -93,6 +93,40 @@ const SPIRITS = {
   rally:   { name: 'Rally',    cost: 40, desc: 'All allies gain Will +5.' },
   fortune: { name: 'Fortune',  cost: 25, desc: 'Credits from your next kill are doubled.' },
   insight: { name: 'Insight',  cost: 20, desc: 'EXP from your next battle is doubled.' },
-  resolve: { name: 'Resolve',  cost: 70, desc: 'Focus + Strike + Valor + Accel at once.' },
+  resolve: { name: 'Resolve',  cost: 85, desc: 'Focus + Strike + Valor + Accel at once.' },
   cleanse: { name: 'Cleanse',  cost: 15, desc: 'Remove all status effects from self.' },
+};
+
+// The difficulty settings scale pressure without changing the chapter level curve.
+const RULES = (() => {
+  const modes = {
+    easy: { name: 'Easy', attack: .8, defense: .9, retries: true, assist: true },
+    normal: { name: 'Normal', attack: 1, defense: 1, retries: true, assist: true },
+    hard: { name: 'Hard', attack: 1.2, defense: 1.08, retries: true, assist: false },
+    requiem: { name: 'Requiem', attack: 1.2, defense: 1.08, retries: false, assist: false },
+  };
+  const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
+  const mode = save => modes[save?.difficulty] || modes.normal;
+  function median(save) {
+    const levels = (save?.roster || []).map(id => save.pilots[id]?.lvl).filter(Number.isFinite).sort((a, b) => a - b);
+    if (!levels.length) return 1;
+    return Math.round((levels[Math.floor((levels.length - 1) / 2)] + levels[Math.floor(levels.length / 2)]) / 2);
+  }
+  const enemyLevel = (base, level, assisted = false) => Math.max(1, clamp(base, level - 3, level + 2) - Number(assisted));
+  function deployLimit(ch, save) {
+    return Math.min(10, ch.deploy.length + 2, (Number(ch.num)<4 ? 7 : Number(ch.num)>=9 ? 9 : 8) + (save.refits?.wing || 0));
+  }
+  const expCap = level => 100 + 12 * (level - 1);
+  const levelPP = level => 2 + (level % 5 === 0 ? 3 : 0);
+  const earnedPP = level => 2 * level + 3 * Math.floor(level / 5);
+  const catchUp = (level, partyLevel) => level <= partyLevel - 3 ? 1.5 : level >= partyLevel + 3 ? .75 : 1;
+  return { modes, mode, clamp, median, enemyLevel, deployLimit, expCap, levelPP, earnedPP, catchUp };
+})();
+
+const REFITS = {
+  wing: { name:'Reserve Hangar', cost:4, max:1, desc:'Deploy a fifth auxiliary frame where space permits.' },
+  parts: { name:'Expansion Sockets', cost:5, max:1, desc:'Every frame gains a third equipment slot.' },
+  bay: { name:'Triage Bay', cost:3, max:2, desc:'Restore an extra 3% max HP each friendly phase per rank.' },
+  discount: { name:'Fabrication Shop', cost:3, max:2, desc:'Frame upgrades cost 8% less per rank.' },
+  token: { name:'Retraining Voucher', cost:2, max:99, desc:'Spend one voucher to retrain a pilot for free.' },
 };

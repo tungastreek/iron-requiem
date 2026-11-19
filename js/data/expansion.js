@@ -220,5 +220,6 @@ const EXPANSION = (() => {
   const originalC9Allies=CHAPTERS.c9.allies;
   CHAPTERS.c9.allies=s=>(typeof originalC9Allies==='function'?originalC9Allies(s):originalC9Allies||[]).concat(s.flags.nursery_channel?[{m:'mantle',x:7,y:0,lvl:22,name:'Nursery Guardian'}]:[]);
   CODEX.unbroken={t:'The Unbroken Chorus',b:'Eight crews joined the Halcyon for eight different reasons: shelter, recovery, evidence, work, a message, a home, a remembered friend, a road. Their machines were built for tasks the war tried to erase. The auxiliary wing deploys up to four of them alongside the main squadron.'};
+  CHAPTERS.i8.map.fog = true;
   return {crew:crew.map(x=>x[0]),portraits,units:units.map(x=>x[0]),chapters:extras.map(x=>x.id)};
 })();

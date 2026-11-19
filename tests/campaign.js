@@ -4,7 +4,7 @@ const fs=require('node:fs'),path=require('node:path'),vm=require('node:vm');
 async function simulate(root,id,route='A',trueRoute=true,seed=17,options={}){
   let outcome=null,defeat='',lastState=null;const lines=[],changes=[];
   const cx=new Proxy({createLinearGradient:()=>({addColorStop(){}}),createRadialGradient:()=>({addColorStop(){}}),measureText:s=>({width:String(s).length*8})},{get:(o,k)=>k in o?o[k]:()=>{}});
-  const el=()=>({hidden:false,width:1200,height:800,clientWidth:1200,clientHeight:800,style:{},classList:{add(){},remove(){},toggle(){}},getContext:()=>cx,addEventListener(){},getBoundingClientRect:()=>({left:0,top:0})});const els={};
+  const el=()=>({hidden:false,width:1200,height:800,clientWidth:1200,clientHeight:800,dataset:{},style:{},classList:{add(){},remove(){},toggle(){}},getContext:()=>cx,addEventListener(){},getBoundingClientRect:()=>({left:0,top:0})});const els={};
   const math=Object.create(Math);let random=seed;math.random=()=>{random=(Math.imul(random,1664525)+1013904223)>>>0;return random/4294967296};
   let c;const ui=new Proxy({victory:async data=>{outcome='win';changes.push(data)},defeat:async msg=>{outcome='loss';defeat=msg},runScript:async script=>{c.script=script;return vm.runInContext('runInstant(script)',c)},defensePrompt:async(a,d,w)=>{
     if(options.legacy)return 'defend';
@@ -21,20 +21,34 @@ async function simulate(root,id,route='A',trueRoute=true,seed=17,options={}){
   }},{get:(o,k)=>k in o?o[k]:async()=>{}});
   c=vm.createContext({console,Math:math,performance:{now:()=>0},window:{addEventListener(){},devicePixelRatio:1},document:{getElementById:id=>els[id]||(els[id]=el()),createElement:el},requestAnimationFrame:()=>1,cancelAnimationFrame(){},setTimeout:f=>{queueMicrotask(f);return 1},clearTimeout(){},UI:ui,SFX:new Proxy({},{get:()=>()=>{}}),R3D:{ok:false},ASSETS:new Proxy({},{get:()=>()=>null}),ART:new Proxy({rgba:()=> '#aaccee',shade:x=>x,mapSprite:()=>el()},{get:(o,k)=>k in o?o[k]:()=>{}})});
   const read=p=>fs.readFileSync(path.join(root,p),'utf8');
-  for(const f of ['data/types','data/mechs','data/pilots','data/story','data/expansion','data/combos','data/enemy-deployments','map/enemy-systems','battle/combat'])if(fs.existsSync(path.join(root,'js',f+'.js')))vm.runInContext(read('js/'+f+'.js'),c,{filename:f});
+  for(const f of ['data/types','data/mechs','data/pilots','data/story','data/expansion','data/classes','data/combos','data/enemy-deployments','map/enemy-systems','battle/combat'])if(fs.existsSync(path.join(root,'js',f+'.js')))vm.runInContext(read('js/'+f+'.js'),c,{filename:f});
   let map=read('js/map/tactics.js').replace('return { get geom()', 'return { _qa:{aiAct,battle,finishUnit,runEvents,checkEnd,phaseStart,makeUnit,pathTo,animateMove}, get geom()');vm.runInContext(map,c,{filename:'tactics.js'});
   // main.js owns migration; here only the ordinary default save is needed.
   let main=read('js/main.js');vm.runInContext(main,c,{filename:'main.js'});
-  c.caseRoute=route;c.caseTrue=trueRoute;c.targetChapter=id;c.legacy=!!options.legacy;c.levelOverride=options.level||0;c.upgradeOverride=options.upgrades??-1;
+  c.caseRoute=route;c.caseTrue=trueRoute;c.targetChapter=id;c.legacy=!!options.legacy;c.levelOverride=options.level||0;c.upgradeOverride=options.upgrades??-1;c.mode=options.mode||'normal';
   vm.runInContext(`function runInstant(script){const labels=Object.fromEntries(script.map((x,i)=>[x.label,i]).filter(x=>x[0]));for(let i=0;i<script.length;i++){const x=script[i];if(x.if){if(x.if(SAVE))i=labels[x.go];continue}if(x.go){i=labels[x.go];continue}if(x.set)Object.assign(SAVE.flags,x.set);if(x.res)SAVE.flags.res=(SAVE.flags.res||0)+x.res;if(x.join)MAP.addRoster(x.join);if(x.codex&&!SAVE.codex.includes(x.codex))SAVE.codex.push(x.codex);if(x.choice){let o=x.choice.find(o=>o.set?.route===caseRoute)||x.choice.find(o=>o.set?.true_route===caseTrue)||x.choice[caseTrue?0:x.choice.length-1];if(o.set)Object.assign(SAVE.flags,o.set);if(o.res)SAVE.flags.res=(SAVE.flags.res||0)+o.res;if(o.go)i=labels[o.go];}if(x.remove&&G.map){const u=G.map.find(x.remove);if(u){u.hp=0;G.map.defeatedTurn[u.tag]=G.map.turn;}}if(x.endmap)return 'endmap:'+x.endmap;if(x.end)return 'end:'+x.end;}}
-  SAVE=defaultSave();SAVE.settings.anim='off';SAVE.settings.defAuto=legacy;SAVE.settings.autoEnd=false;SAVE.flags.route=caseRoute;
+  SAVE=defaultSave();SAVE.difficulty=mode;SAVE.settings.anim='off';SAVE.settings.defAuto=legacy;SAVE.settings.autoEnd=false;SAVE.flags.route=caseRoute;
   G.map={find:()=>({hp:1}),units:[],defeatedTurn:{}};let cursor='c1',safe=0;while(cursor!==targetChapter&&cursor&&safe++<40){const ch=CHAPTERS[cursor];runInstant(ch.pre);for(const ev of ch.events||[]){if(!ev.cond||ev.cond(SAVE)){for(const j of ev.join||[])MAP.addRoster(j.p);if(ev.defect){const u=(ch.enemies||[]).find(e=>e.tag===ev.defect);if(u?.p)MAP.addRoster(u.p);}if(ev.upgrade)SAVE.flags.zero=true;}}runInstant(ch.post);cursor=typeof ch.next==='function'?ch.next(SAVE):ch.next;}
   G.map=null;
   SAVE.chapter=targetChapter;SAVE.flags.route=caseRoute;SAVE.flags.true_route=targetChapter==='c10';SAVE.flags.res=caseTrue?5:0;runInstant(CHAPTERS[targetChapter].pre);
   const base=Number(CHAPTERS[targetChapter].num),level=levelOverride||Math.max(1,Math.round(base*2.95-1.5)),up=upgradeOverride>=0?upgradeOverride:Math.max(0,Math.floor(base/2.8));
-  for(const p of SAVE.roster){SAVE.pilots[p]=newPilotSave(p,level);SAVE.pilots[p].nodes={a1:true,b1:true,c1:true};if(level>=10){SAVE.pilots[p].nodes.a2=true;SAVE.pilots[p].nodes.b2=true;}if(level>=19&&['rei','ilse'].includes(p)){SAVE.pilots[p].nodes.b3=true;SAVE.pilots[p].nodes.b4=true;}if(level>=16){SAVE.pilots[p].nodes.a3=true;SAVE.pilots[p].nodes.c2=true;}if(level>=22)SAVE.pilots[p].nodes.a4=true;const m=MAP.pilotMech(p);SAVE.mechs[m]={up:{hp:up,en:up,arm:up,mob:up,wpn:up},parts:base>=8&&p==='ilse'?['plating','repair']:base>=7&&p==='rei'?['repair','plating']:[null,null]};}
+  for(const p of SAVE.roster){
+    const ps = SAVE.pilots[p]=newPilotSave(p,level), m=MAP.pilotMech(p);
+    if(typeof CLASSES!=='undefined') {
+      const frame=CLASSES.get(m);
+      for(const tier of [0,1,2]) for(const branch of frame.branches) {
+        const node=branch.tiers[tier]?.[0];
+        if(node) CLASSES.learn(ps,branch,tier,node);
+      }
+    } else if(!legacy) {
+      const branches = buildTree(p);
+      for(const branch of branches) for(const n of branch.nodes.slice(0,Math.min(3,Math.floor((level+4)/7)))) ps.nodes[n.id]=true;
+    }
+    SAVE.mechs[m]={up:{hp:up,en:up,arm:up,mob:up,wpn:up},parts:base>=8&&p==='ilse'?['plating','repair']:base>=7&&p==='rei'?['repair','plating']:[null,null]};
+  }
   GAME.afterMap=async()=>{};GAME.retryMap=()=>{};`,c);
   await vm.runInContext('MAP.start(CHAPTERS[targetChapter])',c);
+  if(options.measure)return vm.runInContext(options.measure,c);
   let actions=0,turn=0;const cap=options.turnCap||35;
   while(!outcome&&vm.runInContext('!!G.map',c)&&turn<cap){lastState=vm.runInContext('G.map',c);turn=lastState.turn;
     const pilots=lastState.units.filter(u=>u.hp>0&&u.team==='player'&&!u.acted);
@@ -52,7 +66,7 @@ async function simulate(root,id,route='A',trueRoute=true,seed=17,options={}){
             return;
           }
         }
-        const known=id=>PILOTS[actor.pilot].spirits.some(([s,l])=>s===id&&(legacy||actor.lvl>=l))||buildTree(actor.pilot).some(b=>b.nodes.some(n=>n.fx.spirit===id&&SAVE.pilots[actor.pilot].nodes[n.id]));
+        const known=id=>PILOTS[actor.pilot].spirits.some(([s,l])=>s===id&&(legacy||actor.lvl>=l))||(typeof CLASSES!=='undefined'&&(CLASSES.personal[actor.pilot]?.tiers || []).flat().some(n=>n.fx.spirit===id&&SAVE.pilots[actor.pilot].nodes[n.id]));
         const cast=async(id,target)=>{if(known(id)&&actor.sp>=SPIRITS[id].cost&&!actor.buf[id])await MAP.useSpirit(actor,id,target);};
         if(!legacy){
           const patients=G.map.units.filter(u=>u.team==='player'&&u.hp>0&&CB.mstats(u).hp-u.hp>=2600)

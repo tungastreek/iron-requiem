@@ -235,7 +235,7 @@ const MECHS = {
   },
   hollow: {
     name: 'THE HOLLOW', cls: 'Avatar of the Silence', armor: 'VOID', size: 'XL', hp: 80000, en: 999, arm: 1900, mob: 100, move: 3, fly: true,
-    abil: { barrier: { name: 'Unwriting', val: 2200, en: 0, bypass: ['SPIR'] }, regenHP: 0.03 },
+    abil: { barrier: { name: 'Unwriting', val: 1700, en: 0, bypass: ['SPIR'] }, regenHP: 0.02 },
     vis: { body: 'hollow', c1: '#05040a', c2: '#1a1030', c3: '#ffffff', g: '#ffffff' },
     weapons: [W('Erasure', 'GRAV', 4600, 1, 3, { acc: 20, anim: 'gravity', status: { id: 'BREAK', ch: 50 } }), W('Stilled Chorus', 'SPIR', 4600, 2, 8, { en: 35, post: false, anim: 'megabeam', status: { id: 'JAM', ch: 50 } }), W('Entropy Rain', 'EXPL', 4200, 2, 7, { anim: 'missile', status: { id: 'SHOCK', ch: 40 } })],
   },

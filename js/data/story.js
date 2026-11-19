@@ -1,4 +1,5 @@
 // ===== Story: chapters, scripts, maps, events, codex =====
+// Dialogue cues: {shout}, {whisper}, {em}, {beat}, {glitch}, {comm}. Close paired cues with {/name}.
 // Script commands: {bg}, {m:mood}, {n:narration}, {s:speaker,e:expr,t:text}, {title,sub}, {choice:[{t,set,res,go}]},
 // {label}, {go}, {if:fn,go}, {codex}, {fx}, {set}, {join}
 'use strict';
@@ -53,7 +54,7 @@ const CHAPTERS = {
       { cg: 'ev_ashfall' },
       { n: 'The runway split open. From the dark beneath, things climbed out — glistening, segmented, glowing with a sick yellow-green light.' },
       { s: 'mira', e: 'shock', t: 'What... what ARE those?!' },
-      { s: 'beast', e: 'normal', t: '(A sound like a cathedral bell cracking.)' },
+      { s: 'beast', e: 'normal', t: '{glitch}(A sound like a cathedral bell cracking.){/glitch}' },
       { s: 'rei', e: 'shock', t: 'The core... it\'s screaming. They\'re — they\'re coming for the Alteon!' },
       { s: 'solenne', e: 'angry', t: '{P}, get in that machine. Mira, Sylph is fuelled. Hold them at the hangar line until the Halcyon arrives. That\'s an order!' },
       { s: 'mira', e: 'angry', t: 'Understood! {P} — don\'t you dare die on your first sortie!' },
@@ -182,7 +183,7 @@ const CHAPTERS = {
       { at: { defeated: 'behemoth' }, script: [
         { s: 'beast', e: 'normal', t: '(The Behemoth\'s dying cry rolls across the valley — and inside it, words.)' },
         { s: 'rei', e: 'shock', t: '...give... it... back...' },
-        { s: 'mira', e: 'shock', t: '{P}? {P}, you\'re not answering — your vitals just spiked!' },
+        { s: 'mira', e: 'shock', t: '{comm}{shout}{P}, answer me!{/shout}{beat}Your vitals just spiked.{/comm}' },
         { s: 'rei', e: 'sad', t: 'I\'m — I\'m okay. I heard it. Mira, I heard it speak.' },
       ] },
     ],
@@ -290,7 +291,7 @@ const CHAPTERS = {
     enemies: [E('hivemother', 16, 6, 10, { boss: true, tag: 'mother', lineSet: 'mother' }), E('crawler', 11, 4, 8), E('crawler', 12, 8, 8), E('wyrmling', 13, 3, 8), E('wyrmling', 13, 9, 8), E('behemoth', 14, 6, 8), E('crawler', 10, 6, 8)],
     events: [
       { at: { turn: 2, phase: 'enemy' }, repeat: 2, cond: s => G.map.find('mother'), script: [{ s: 'beast', e: 'normal', t: '(The Hive Mother convulses. New shapes tear free of the walls.)' }], add: [E('crawler', 15, 3, 9), E('crawler', 15, 9, 9)] },
-      { at: { defeated: 'mother' }, script: [{ s: 'mother', e: 'normal', t: '(GIVE... IT... ...back...)' }, { s: 'rei', e: 'sad', t: 'I\'m sorry. I\'m so sorry. I don\'t know how.' }] },
+      { at: { defeated: 'mother' }, script: [{ s: 'mother', e: 'normal', t: '(GIVE... IT... ...back...)' }, { s: 'rei', e: 'sad', t: '{whisper}I\'m sorry.{beat}I don\'t know how.{/whisper}' }] },
     ],
     win: { boss: 'mother' }, vital: ['rei', 'ilse'],
     bonus: { text: 'Defeat the Hive Mother by turn 6', check: s => s.turn <= 6, part: 'apsaras' },
@@ -707,7 +708,7 @@ const CHAPTERS = {
   },
   // ------------------------------------------------------------ 10
   c10: {
-    num: '10', title: 'Fourth Dawn', bg: 'void', mood: 'battle', route: 'True Route',
+    num: '10', title: 'Fourth Dawn', bg: 'void', mood: 'battle', route: 'True Route', escortSlots: ['sera','yuna'],
     brief: 'The Silence has manifested. Humanity, Vael and Ourobor stand together. Destroy THE HOLLOW.',
     pre: [
       { bg: 'void', m: 'tense' },

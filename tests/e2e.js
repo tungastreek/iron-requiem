@@ -13,7 +13,7 @@ async function main() {
   try {
     const page = await browser.newPage({ viewport: viewports[profile], hasTouch: profile !== 'desktop' });
     const errors = [];
-    page.on('pageerror', error => errors.push(error.message));
+    page.on('pageerror',error=>{errors.push(error.message);console.error('Browser error',error.message);});
     const shot = name => page.screenshot({ path: path.join(folder, profile + '-' + mode + '-' + name + '.png') });
     await page.goto(url, { waitUntil: 'load' });
     await page.waitForFunction(() => !document.querySelector('#btnNew').disabled, null, { timeout: 120000 });
@@ -31,6 +31,7 @@ async function main() {
     await page.evaluate(value => { QUALITY.set(value); MAP.resize(); }, mode);
     await page.waitForSelector('#phaseBanner', { state: 'hidden' });
     assert.equal(await page.locator('#mapSize').textContent(), '18 × 10');
+    assert.equal(await page.locator('#mapCanvas').getAttribute('data-board'), mode==='high' ? 'diorama' : mode==='low' ? 'flat' : await page.locator('#mapCanvas').getAttribute('data-board'));
     await shot('map');
     const fixture = await page.evaluate(() => {
       const ally = G.map.find('rei');
@@ -45,10 +46,11 @@ async function main() {
     async function point([x, y]) {
       return page.evaluate(([x, y]) => {
         const canvas = document.getElementById('mapCanvas');
-        const rect = canvas.getBoundingClientRect(), { T, ox, oy } = MAP.geom;
+        const rect = canvas.getBoundingClientRect();
+        const [px,py] = MAP.point(x+.5,y+.5);
         return [
-          rect.left + (ox + (x + .5) * T) * rect.width / canvas.clientWidth,
-          rect.top + (oy + (y + .5) * T) * rect.height / canvas.clientHeight,
+          rect.left + px * rect.width / canvas.clientWidth,
+          rect.top + py * rect.height / canvas.clientHeight,
         ];
       }, [x, y]);
     }
@@ -58,7 +60,9 @@ async function main() {
       else await page.touchscreen.tap(x, y);
     }
     await select(fixture.ally);
+    await page.waitForFunction(()=>MAP.ui.mode==='moving');
     await select(fixture.ally);
+    await page.waitForFunction(()=>MAP.ui.mode==='menu');
     await page.locator('#actMenu').getByRole('button', { name: 'Attack' }).click();
     await page.locator('#wpnPanel').getByRole('button', { name: new RegExp(fixture.weapon) }).click();
     if (profile === 'desktop') await page.mouse.move(...await point(fixture.first));
@@ -86,8 +90,14 @@ async function main() {
     await page.locator('#forecast').getByRole('button', { name: 'Attack' }).click();
     await page.locator('#battle').waitFor({ state: 'visible' });
     await shot('battle');
+    if (profile==='desktop') {
+      await page.waitForTimeout(2040);
+      await shot('battle-effects');
+    }
     await page.getByRole('button', { name: 'Skip animation' }).click();
     await page.locator('#battle').waitFor({ state: 'hidden' });
+    const stats = await page.evaluate(()=>QUALITY.summary());
+    console.log(JSON.stringify(stats));
     assert.deepEqual(errors, []);
     console.log('PASS: no page errors');
   } finally { await browser.close(); }

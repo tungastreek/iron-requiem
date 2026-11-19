@@ -1,0 +1,123 @@
+/* Halcyon tactical interface */
+:root {
+  --fleet-ink: #85f3ff;
+  --fleet-signal: #ffc17d;
+  --fleet-panel: #0b1729;
+  --fleet-shadow: #050b16;
+  --fleet-data: ui-monospace, Consolas, monospace;
+}
+.skin-halcyon { --fleet-ink: #85f3ff; }
+.skin-concord { --fleet-ink: #f4db98; --fleet-panel: #252119; --fleet-shadow: #0d101a; }
+.skin-freestates { --fleet-ink: #ffab81; --fleet-panel: #301a18; --fleet-shadow: #171b15; }
+.skin-ourobor { --fleet-ink: #d2ff84; --fleet-panel: #292238; --fleet-shadow: #171020; }
+.skin-vael { --fleet-ink: #d9b3ff; --fleet-panel: #22183e; --fleet-shadow: #0b0d28; }
+:is(.card,.actionMenu,.ihead,#mapHeader,.forecastTitle) {
+  background-image: linear-gradient(145deg, #132742, #070e1f 78%);
+}
+.card, .bridge, .branch, .refitCard {
+  border: 1px solid #345475;
+  border-top: 2px solid var(--fleet-ink);
+  border-radius: 2px 2px 19px 2px;
+  box-shadow: 0 14px 44px #02060c78, inset 0 0 0 3px #040c1840;
+}
+.card :is(h1,h2,h3), .ilogo, .bridgeTitle h2 { letter-spacing: .035em; }
+.eyebrow, .tierLabel, .stationCode, .classBadge, .icred, .phase {
+  font-family: var(--fleet-data);
+}
+.itab.on, .btn.primary {
+  box-shadow: inset 0 0 14px #8df1ff26, inset 0 -3px #73e9ff3a;
+}
+.fside, .uhead[class*="skin-"] {
+  background: linear-gradient(145deg,var(--fleet-panel),var(--fleet-shadow));
+  border-left: 3px solid var(--fleet-ink);
+  padding: 12px;
+}
+.fside.enemy .fname, .uhead[class*="skin-"] .mname {color:var(--fleet-ink);}
+.fside .fstats { font-variant-numeric: tabular-nums; }
+.classBadge {
+  display: inline-flex; align-items: center; gap: 7px; align-self: start;
+  font-size: .8rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
+  color: var(--class-ink); padding: 6px 10px; margin: 5px 0;
+  border: 1px solid color-mix(in srgb,var(--class-ink) 44%,transparent);
+  background: color-mix(in srgb,var(--class-ink) 8%, #0c162b);
+}
+.classBadge:not(:has(canvas))::before {
+  content: '◈'; font-size: 1.1em;
+}
+.classTree { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
+.classTree .branch { background: #09162a; border-top-color: var(--bc); gap: 0; }
+.classTree .bhead { color: var(--bc); padding: 11px 14px; margin: 0; font-size: 1rem; }
+.nodeTier { padding: 8px 10px 10px; border-top: 1px solid #263f5d; }
+.tierLabel { color: #bcd2e8; font-size: .73rem; margin: 0 0 6px; }
+.nodeOptions { display: grid; gap: 6px; }
+.nodeOptions .node { display: grid; gap: 4px; min-height: 74px; border-left: 3px solid var(--bc); }
+.nodeOptions .node::after { display: none; }
+.nodeOptions .node.locked { opacity: .72; }
+.nodeOptions .node.owned { cursor: default; }
+.ndesc { line-height: 1.35; }
+.deedTrack { display: grid; gap: 3px; margin-top: 3px; color: #c7d9ef; }
+.deedTrack progress { width: 100%; height: 7px; accent-color: var(--bc); }
+.treeToolbar,.refitBuy { display:flex; justify-content:space-between; align-items:center; gap:12px; }
+.treeToolbar { padding: 14px 0 10px; }
+.refitCard { background: var(--fleet-panel); padding: 16px; margin: 0 0 12px; }
+.rankStamp {
+  width: 70px; height: 70px; margin: 14px auto;
+  display: grid; place-items: center; border: 2px solid #ffc17d;
+  background: #3b2718; color: #ffdfad; font: 900 2.8rem var(--fleet-data);
+  box-shadow: 0 0 22px #ffbb6850;
+}
+.bridge {
+  isolation: isolate; overflow: hidden; position: relative;
+  min-height: min(640px,72svh); display: grid; align-content: space-between;
+  gap: 36px; background: #09172b;
+}
+.bridgeArt, .bridge::before { position: absolute; inset: 0; width: 100%; height: 100%; }
+.bridgeArt { z-index: -2; object-fit: cover; object-position: center 44%; }
+.bridge::before { content:''; z-index:-1; background:linear-gradient(180deg,#0715258c 10%,transparent 38%,#061020e8 85%); }
+.bridgeTitle { padding: clamp(18px,4vw,50px); text-shadow: 0 3px 16px #000; }
+.bridgeTitle h2 { font-size: clamp(2.5rem,7vw,5.5rem); margin: 2px 0; text-transform: uppercase; }
+.bridgeTitle p { color: #c9e9ff; margin: 0; }
+.bridgeStations {
+  display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 9px; padding: clamp(12px,2vw,26px);
+}
+.bridgeStation {
+  display: flex; align-items: center; gap: 12px; min-height: 70px; text-align:left;
+  border: 1px solid #5383a2; border-left: 3px solid #84eaf6; border-radius: 0 0 13px 0;
+  background: linear-gradient(140deg,#142c45f2,#071121f5); color: #f2f8ff; padding: 10px 12px; cursor: pointer;
+}
+.bridgeStation:hover, .bridgeStation:focus-visible { border-color:#ffc17d; outline:1px solid #ffc17d; }
+.bridgeStation small { display: block; color: #b8ccdf; margin-top: 4px; }
+.stationCode { color: #85f3ff; width: 4ch; }
+.dlg .text { font-family: 'Trebuchet MS', system-ui, sans-serif; }
+.dlg.radio {
+  border-top-color: #ffcf91;
+  background-image: repeating-linear-gradient(0deg,#0b1a32 0 2px,#102038 2px 4px);
+}
+.dlg.radio .name::before { content:'COMMS / '; font: 700 .7em var(--fleet-data); color: #ffcf91; }
+.cue-shout { font-size: 1.18em; font-weight: 900; color: #ffe4af; }
+.cue-whisper { color: #b8cbe3; font-size: .91em; font-style: italic; }
+.cue-em { color: #94f5ff; font-weight: 700; }
+.cue-glitch { color: #dfb6ff; font-family: var(--fleet-data); text-shadow: 2px 1px #7641b3; }
+@media (max-width:900px) {
+  .classTree { grid-template-columns: 1fr; }
+  .bridgeStations { grid-template-columns: repeat(2,minmax(0,1fr)); }
+}
+@media (max-width:480px) {
+  .bridgeStation { gap: 7px; }
+  .bridgeStation small { font-size:.73rem; }
+  .stationCode { font-size:.68rem; }
+  .fside { padding:6px; }
+}
+:root[data-motion='reduced'] *, :root[data-motion='reduced'] *::before, :root[data-motion='reduced'] *::after {
+  animation-duration: .001s !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: .001s !important;
+  scroll-behavior: auto !important;
+}
+#phaseBanner.missionStamp .pbt { font-size:clamp(24px,5vw,67px); }
+#phaseBanner.missionStamp .pbs { color:#ffc17d; font-family:var(--fleet-data); }
+:root[data-motion='reduced'] :is(#phaseBanner.go,#titleCard.show .tc-main,#titleCard.show .tc-sub,.dlg .next) {
+  animation: none;
+}
+.pbig,.mechArt { align-self:flex-start; object-fit:contain; }
+.pbig { width:min(200px,100%); aspect-ratio:4 / 5; }

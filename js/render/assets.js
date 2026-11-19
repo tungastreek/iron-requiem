@@ -2,10 +2,10 @@
 // Every asset is optional. Missing files fall back to the built-in 3D/2D art.
 'use strict';
 const ASSETS = (() => {
-  const store = { units: {}, portraits: {}, backgrounds: {}, battle: {}, tiles: {}, icons: {}, key: {}, events: {} };
+  const store = { units: {}, portraits: {}, backgrounds: {}, battle: {}, tiles: {}, icons: {}, key: {}, events: {}, horizons: {}, battleLayers: {}, vfx: {}, hub: {} };
   let tainted = false;
   const EXT = ['png', 'webp'];
-  function loadImage(base) {
+  function loadImage(base,root='') {
     const inventory = window.IRON_ART_META?.images;
     const formats = inventory ? inventory[base] : EXT;
     if (!formats?.length) return Promise.resolve(null);
@@ -14,7 +14,7 @@ const ASSETS = (() => {
       const next = () => {
         if (i >= formats.length) { res(null); return; }
         retried = false;
-        source = base + '.' + formats[i++];
+        source = root + base + '.' + formats[i++];
         img.src = source;
       };
       img.onload = () => res(img);
@@ -28,7 +28,7 @@ const ASSETS = (() => {
       // the same PNG bytes as a data URL, which is safe for both canvas and WebGL.
       if (location.protocol === 'file:' && formats.includes('png')) {
         const script = document.createElement('script');
-        script.src = 'assets/offline/' + base.replace(/^assets\//, '') + '.js';
+        script.src = root + 'assets/offline/' + base.replace(/^assets\//, '') + '.js';
         script.onload = () => { const data = window.IRON_OFFLINE?.[base]; if (data) { delete window.IRON_OFFLINE[base]; img.src = data; } else next(); script.remove(); };
         script.onerror = () => { script.remove(); next(); };
         document.head.appendChild(script);
@@ -118,7 +118,7 @@ const ASSETS = (() => {
   const BG_KEYS = ['base', 'fire', 'bridge', 'sky', 'lab', 'elevator', 'space', 'colony', 'hive', 'vael', 'ice', 'void', 'dawn', 'ruins', 'city'];
   const BATTLE_KEYS = ['city', 'fire', 'ruins', 'sky', 'elevator', 'space', 'colony', 'hive', 'vael', 'ice', 'void'];
   const TILE_SETS = ['earth', 'snow', 'hive', 'space'];
-  const ICON_SHEETS = ['skills', 'capstones', 'spirits', 'parts', 'types'];
+  const ICON_SHEETS = ['skills', 'capstones', 'spirits', 'parts', 'types', 'classes'];
   // Ashfall's old event art also uses the off-model hangar machine.
   const EVENT_KEYS = ['ev_tower', 'ev_kaiser', 'ev_mural', 'ev_okonkwo', 'ev_zero', 'ev_reach', 'ev_dawn'];
   const UNIT_ALIAS = { carmine_e: 'carmine' };
@@ -137,6 +137,14 @@ const ASSETS = (() => {
     BATTLE_KEYS.forEach(k => jobs.push(['battle', k, 'assets/battle/' + k]));
     TILE_SETS.forEach(k => jobs.push(['tiles', k, 'assets/tiles/tiles_' + k]));
     ICON_SHEETS.forEach(k => jobs.push(['icons', k, 'assets/icons/icons_' + k]));
+    const optional = (kind,id,path) => {
+      if (window.IRON_ART_META?.images?.[path]) jobs.push([kind,id,path]);
+    };
+    const horizons = ['urban_dusk','mountain_day','coast','elevator','snowfield','hive_cavern','orbit','vael_space'];
+    for (const key of horizons) optional('horizons',key,'assets/horizon/'+key);
+    for (const key of BATTLE_KEYS) for (const layer of ['sky','mid','ground']) optional('battleLayers',key+'_'+layer,'assets/battle_layers/'+key+'_'+layer);
+    for (const name of ['energy','fire']) optional('vfx',name,'assets/vfx/vfx_'+name);
+    optional('hub','bridge','assets/hub/hub_bridge');
     jobs.push(['key', 'title', 'assets/key/title']);
     EVENT_KEYS.forEach(k => jobs.push(['events', k, 'assets/events/' + k]));
     let done = 0; const total = jobs.length;
@@ -161,6 +169,11 @@ const ASSETS = (() => {
         }
         break;
       }
+      case 'battleLayers':
+        if (id.endsWith('_sky')) store.battleLayers[id] = img;
+        else store.battleLayers[id] = keyCell(img,0,0,img.width,img.height).canvas;
+        break;
+      case 'vfx': store.vfx[id] = grid(img, 4, 4, 256); break;
       case 'tiles': store.tiles[id] = grid(img, 4, 4, 192); break;
       case 'icons': store.icons[id] = grid(img, 4, 4, 96).map(c => {
         try { return keyCell(c, 0, 0, c.width, c.height).canvas; }
@@ -171,6 +184,16 @@ const ASSETS = (() => {
   }
   // ---- queries ----
   const unit = id => store.units[UNIT_ALIAS[id] || id] || null;
+  async function loadPreviewUnit(id,root='') {
+    const mid = UNIT_ALIAS[id] || id, m = MECHS[mid];
+    if (!m) return null;
+    if (unit(mid)) return unit(mid);
+    const img = await loadImage('assets/units/'+(m.atlas?.sheet || mid),root);
+    if (!img) return null;
+    const sprite = processUnit(img,m.atlas,window.IRON_ART_META?.units?.[mid] || {});
+    store.units[mid] = sprite;
+    return sprite;
+  }
   function coverDraw(ctx, img, W, H, panX = 0, zoom = 1) {
     const s = Math.max(W / img.width, H / img.height) * zoom; const w = img.width * s, h = img.height * s;
     const maxPan = Math.max(0, (w - W) / 2); const px = Math.max(-maxPan, Math.min(maxPan, panX));
@@ -185,11 +208,29 @@ const ASSETS = (() => {
     return true;
   }
   function drawBattleBG(ctx, W, H, key, off) {
+    const layers = ['sky','mid','ground'].map(layer=>store.battleLayers[key+'_'+layer]);
+    if (layers.every(Boolean)) {
+      layers.forEach((img,i)=>coverDraw(ctx,img,W,H,Math.sin(off/600)*18*(i+1),1.10));
+      return true;
+    }
     const img = store.battle[key]; if (!img) return false;
     // wide pan: wrap-around ping-pong across the image
     const s = Math.max(W / img.width, H / img.height) * 1.12, w = img.width * s, h = img.height * s, span = Math.max(1, w - W);
     const ph = (off * 0.6) % (span * 2); const x = ph < span ? ph : span * 2 - ph;
     ctx.drawImage(img, -x, (H - h) * 0.62, w, h); return true;
+  }
+  function drawHorizon(ctx,W,H,theme) {
+    const keys = {urban:'urban_dusk',coast:'coast',elevator:'elevator',ice:'snowfield',hive:'hive_cavern',space:'orbit',colony:'orbit',vael:'vael_space'};
+    const img = store.horizons[keys[theme] || 'mountain_day'];
+    if (!img) return false;
+    coverDraw(ctx,img,W,H);
+    return true;
+  }
+  function drawHub(ctx,W,H) {
+    const img = store.hub.bridge;
+    if (!img) return drawStoryBG(ctx,W,H,'bridge',0);
+    coverDraw(ctx,img,W,H);
+    return true;
   }
   function drawEvent(ctx, W, H, key) { const img = store.events[key]; if (!img) return false; coverDraw(ctx, img, W, H); return true; }
   function drawMissionBG(ctx, W, H, key) { return drawBattleBG(ctx, W, H, key, 0) || drawStoryBG(ctx, W, H, key, 0); }
@@ -234,6 +275,7 @@ const ASSETS = (() => {
   }
   // icons by name -> [sheet, index]
   const ICON = {
+    ...Object.fromEntries(['aurora','titan','interceptor','duelist','artillery','sniper','bulwark','engineer','resonant','command','starborn','keystone','deed','retrain','merit','refit'].map((id,i)=>['class_'+id,['classes',i]])),
     guard: ['skills', 5],
     a1: ['skills', 0], a3: ['skills', 1], a4: ['skills', 2], b1: ['skills', 3], b2: ['skills', 4], b3: ['skills', 5], b5: ['skills', 6], c1: ['skills', 7], c2: ['skills', 8], c4: ['skills', 9], c5: ['skills', 10],
     branch0: ['skills', 11], branch1: ['skills', 12], branch2: ['skills', 13], pp: ['skills', 14], locked: ['skills', 15],
@@ -249,5 +291,5 @@ const ASSETS = (() => {
   // small <canvas> element for the DOM (or null)
   function iconEl(name, px = 28) { const ic = icon(name); if (!ic) return null; const c = canvasOf(px * 2, px * 2); c.getContext('2d').drawImage(ic, 0, 0, px * 2, px * 2); c.className = 'ico'; c.style.width = c.style.height = px + 'px'; return c; }
   function summary() { const o = {}; for (const k in store) o[k] = Object.keys(store[k]).length; return o; }
-  return { load, unit, mapIcon, portrait, drawStoryBG, drawBattleBG, drawMissionBG, drawEvent, title, tileFor, icon, iconEl, summary, get loaded() { return loaded; }, get count() { return count; }, get tainted() { return tainted; } };
+  return { load, unit, loadPreviewUnit, mapIcon, portrait, drawStoryBG, drawBattleBG, drawMissionBG, drawEvent, drawHub, drawHorizon, vfx:(sheet,cell)=>store.vfx[sheet]?.[cell] || null, title, tileFor, icon, iconEl, summary, get loaded() { return loaded; }, get count() { return count; }, get tainted() { return tainted; } };
 })();
