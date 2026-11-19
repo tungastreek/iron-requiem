@@ -100,6 +100,7 @@ const CB = (() => {
     return typeof ENEMIES!=='undefined'?ENEMIES.mechStats(u,o):o;
   }
   function weapons(u) {
+    if (u.escortPath) return [];
     const m = MECHS[u.mech]; let list = m.weapons;
     if (typeof COMBOS !== 'undefined') list=list.concat(COMBOS.weapons(u));
     if (u.mode === 'fighter' && u.mech === 'sylph') list = list.filter(w => w.anim === 'vulcan' || w.name === 'Beam Pistol').concat([W('Strafe Run', 'KIN', 2800, 1, 3, { acc: 15, ammo: 0, en: 15, anim: 'vulcan', crit: 15 })]);

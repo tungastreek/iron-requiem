@@ -149,9 +149,6 @@ const UI = (() => {
     const ch = st.ch;
     $('#mapTitle').textContent = `${ch.num} · ${ch.title}`;
     $('#mapSize').textContent = `${st.w} × ${st.h}`;
-    const goal = objectiveText(ch);
-    $('#mapGoal').textContent = goal;
-    $('#mapGoal').title = goal;
     $('#mapNotice').classList.remove('show');
     moveToastToMap();
     $('#btnEnd').onclick = () => { SFX.play('confirm'); MAP.endPlayerPhase(); };
@@ -163,6 +160,9 @@ const UI = (() => {
   function setThreatBtn(on) { $('#btnThreat').classList.toggle('on', on); }
   function refreshHUD(st) {
     if (!st) return;
+    const goal = objectiveText(st.ch, st);
+    $('#mapGoal').textContent = goal;
+    $('#mapGoal').title = goal;
     $('#mapTurn').textContent = `TURN ${st.turn}`;
     $('#mapPhase').textContent = st.phase === 'player' ? 'PLAYER PHASE' : st.phase === 'ally' ? 'ALLY PHASE' : 'ENEMY PHASE';
     $('#mapPhase').className = 'phase ' + st.phase;
@@ -192,6 +192,10 @@ const UI = (() => {
     p.appendChild(h('div', { class: 'uhead ' + u.team }, pimg, h('div', {}, h('div', { class: 'uname' }, name), h('div', { class: 'upilot' }, (u.pname || NAMES[u.pilot] || '') + ` · Lv ${u.lvl}`), h('div', { class: 'ucls' }, m.cls), h('div', { class: 'armorTag', style: `--c:${ARMOR[ms.armor].color}` }, ARMOR[ms.armor].name + ' · ' + m.size))));
     const variant=typeof ENEMIES!=='undefined'?ENEMIES.label(u):null;if(variant)p.appendChild(h('p',{class:'muted small'},variant.description));
     p.appendChild(bar(u.hp, ms.hp, 'hp')); p.appendChild(bar(u.en, ms.en, 'en'));
+    if (u.escortPath) {
+      p.appendChild(h('p', { class: 'hint' }, 'Follows the marked road during the ally phase. Keep its next tile clear.'));
+      return;
+    }
     p.appendChild(h('div', { class: 'kv four' }, h('span', {}, 'Will'), h('b', { class: 'gold' }, u.will), h('span', {}, 'SP'), h('b', { class: 'green' }, `${u.sp}`), h('span', {}, 'Move'), h('b', {}, ms.move), h('span', {}, 'Mob'), h('b', {}, ms.mob), h('span', {}, 'Armor'), h('b', {}, ms.arm), h('span', {}, 'Terrain'), h('b', { title: 'Air / Land / Sea / Space' }, `${ter.air}${ter.lnd}${ter.sea}${ter.spc}`)));
     if (pm) p.appendChild(h('div', { class: 'tag green' }, `Formation: +${pm} evasion from adjacent allies`));
     const sts = Object.keys(u.status); if (sts.length) p.appendChild(h('div', { class: 'tags' }, sts.map(k => h('span', { class: 'tag', style: `--c:${STATUS[k].color}`, title: STATUS[k].desc }, `${STATUS[k].name} ${u.status[k]}`))));
@@ -311,8 +315,12 @@ const UI = (() => {
     b.hidden = false; void b.offsetWidth; b.classList.add('go'); SFX.play('cutin');
     await sleep(1100); b.hidden = true; b.classList.remove('go');
   }
-  function objectiveText(ch) {
+  function objectiveText(ch, state) {
     if (ch.win === 'rout') return 'Defeat all enemies.';
+    if (ch.win.escort) {
+      const count = state?.units.filter(u => ch.win.escort.includes(u.tag) && u.escorted).length ?? 0;
+      return `Escort to the eastern gate · ${count}/${ch.win.escort.length} clear`;
+    }
     if (ch.win.boss) {
       const boss = ch.enemies.find(e => e.tag === ch.win.boss);
       return `Defeat ${boss?.name || MECHS[boss?.m || 'aurelion'].name}.`;
@@ -320,8 +328,8 @@ const UI = (() => {
     return 'Destroy both cruisers.';
   }
   function objectiveCard(ch) {
-    const win = objectiveText(ch);
-    const lose = 'Lose if ' + ch.vital.map(v => NAMES[v]).join(' or ') + ' is shot down.' + (ch.lose && ch.lose.turn ? ` Lose after turn ${ch.lose.turn}.` : '');
+    const win = objectiveText(ch, G.map);
+    const lose = 'Lose if ' + ch.vital.map(v => NAMES[v]).join(' or ') + ' is shot down.' + (ch.win.escort ? ' Keep both carriers alive.' : '') + (ch.lose && ch.lose.turn ? ` Lose after turn ${ch.lose.turn}.` : '');
     return modal(close => h('div', { class: 'card obj' }, h('div', { class: 'eyebrow' }, `Mission ${ch.num}` + (ch.route ? ' · ' + ch.route : '')), h('h3', {}, ch.title), h('p', {}, ch.brief),
       h('div', { class: 'kv two' }, h('span', {}, 'Victory'), h('b', {}, win), h('span', {}, 'Defeat'), h('b', {}, lose), ch.bonus ? h('span', {}, 'Bonus') : null, ch.bonus ? h('b', { class: 'gold' }, ch.bonus.text + (ch.bonus.part ? ` → ${PARTS[ch.bonus.part].name}, +2 PP all` : '')) : null),
       h('p', { class: 'muted small' }, 'Tactics: allies next to your target give FLANK bonuses (an ally directly opposite you is a PINCER). Adjacent allies boost evasion. Heavy blows knock enemies back into obstacles. Gold "?" shimmers mark buried secrets. Press T for threat range.'),

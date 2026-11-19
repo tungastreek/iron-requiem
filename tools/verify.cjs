@@ -59,11 +59,22 @@ async function verify(root=path.resolve(__dirname,'..')){
     for(const f of sprite.frames){const corners=[0,(f.width-1)*4,(f.width*(f.height-1))*4,(f.width*f.height-1)*4];assert(corners.filter(i=>f.data[i+3]<40).length>=3,'Opaque sprite corner '+id)}
     sprites.push({id,width:sprite.w,height:sprite.h,ground:Number(sprite.ground.toFixed(3))});}
   const maps=vm.runInContext(`(()=>{const errors=[],sizes=new Set();for(const [id,ch] of Object.entries(CHAPTERS)){
-    const {w,h,theme,seed}=ch.map;sizes.add(w+'×'+h);const rows=genMap(theme,w,h,seed);
+    const {w,h,theme,seed}=ch.map;sizes.add(w+'×'+h);const rows=ch.map.rows||genMap(theme,w,h,seed);
     if(rows.length!==h||rows.some(r=>r.length!==w||[...r].some(t=>!TERRAIN[t])))errors.push('Invalid terrain '+id);
     const check=(spawn)=>{if(spawn.x<0||spawn.x>=w||spawn.y<0||spawn.y>=h)errors.push('Off map '+id+' '+JSON.stringify(spawn));};
     [...ch.enemies,...ch.deploy,...(ch.events||[]).flatMap(ev=>[...(ev.add||[]),...(ev.ally||[]),...(ev.join||[])])].forEach(check);
     if(typeof ch.allies==='function')ch.allies({flags:{ourobor_peace:true,nursery_channel:true,archive_public:true}}).forEach(check);
+    if(ch.win.escort)for(const shelter_route of ['checkpoint','pumps']){
+      const convoy=ch.allies({flags:{shelter_route}});
+      for(const tag of ch.win.escort){
+        const unit=convoy.find(u=>u.tag===tag),route=unit?.escortPath;
+        if(!route||route.length<2||route[0].join()!==[unit.x,unit.y].join()){errors.push('Missing escort path '+id+' '+tag);continue;}
+        route.forEach(([x,y],i)=>{
+          check({x,y});
+          if(rows[y]?.[x]==='x'||(i&&Math.abs(x-route[i-1][0])+Math.abs(y-route[i-1][1])!==1))errors.push('Blocked escort route '+id+' '+shelter_route);
+        });
+      }
+    }
   }if(sizes.size<8)errors.push('Too few sizes');const types=CHAPTERS.i1.enemies.map(e=>MECHS[e.m].armor);if(!types.includes('BIO')||types.every(a=>a==='BIO'))errors.push('Early mixed enemies');return {sizes:[...sizes],errors};})()`,c);
   errors.push(...maps.errors);
   const portraitMapping=vm.runInContext('OUROBOR_PORTRAITS',c);

@@ -13,7 +13,7 @@ After adding any file, run `python3 tools/build_offline.py` so the game also loa
 | R-03 | Cockpit cut-ins | 24 sheets | P1 | `assets/cutins/` |
 | R-04 | Finisher and combo splash art | 17 | P1 | `assets/splash/` |
 | R-05 | Extra portrait expressions | 13 sheets + 2 atlases | P2 | `assets/portraits/` |
-| R-06 | New event scenes | 16 | P1 | `assets/events/` |
+| R-06 | New event scenes and Ashfall replacement | 16 + 1 | P0–P1 | `assets/events/` |
 | R-07 | Ending art and epilogue images | 3 + 18 | P2 | `assets/events/`, `assets/epilogues/` |
 | R-08 | Emblems and system icons | 2 sheets | P2 | `assets/icons/` |
 | R-09 | Map tokens (optional) | 4 atlases | P3 | `assets/tokens/` |

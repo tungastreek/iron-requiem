@@ -77,6 +77,10 @@ async function main() {
     const board = await page.locator('#mapWrap').boundingBox();
     const attack = await page.locator('#forecast').getByRole('button', { name: 'Attack' }).boundingBox();
     assert(forecast.x >= board.x + board.width - 1 || forecast.y >= board.y + board.height - 1, 'Forecast leaves the full board clickable');
+    const [left, top] = await point([-.5, -.5]);
+    const [right, bottom] = await point([17.5, 9.5]);
+    assert(left >= board.x - 1 && top >= board.y - 1 && right <= board.x + board.width + 1 && bottom <= board.y + board.height + 1,
+      'Opening the forecast keeps the 100% board in view');
     assert(forecast.x >= 0 && forecast.x + forecast.width <= viewports[profile].width + 1, 'Forecast fits the viewport');
     assert(attack.x >= 0 && attack.x + attack.width <= viewports[profile].width + 1, 'Attack button fits the viewport');
     await page.locator('#forecast').getByRole('button', { name: 'Attack' }).click();

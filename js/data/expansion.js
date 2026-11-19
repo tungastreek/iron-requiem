@@ -135,11 +135,83 @@ const EXPANSION = (() => {
       post:[{bg:i===5?'hive':'bridge',m:'calm'},...script(x.post),{codex:'unbroken'}],next,
       reward:{credits:4500+i*1500,parts:i===0?['repair']:[]}};
   });
+  const shelter = CHAPTERS.i1;
+  // Two roadbeds meet at the eastern gate. Hills and rubble screen the north
+  // checkpoint while the southern causeway passes exposed reservoir tiles.
+  shelter.map.rows = [
+    'ffmfff....mff...',
+    '.ffm...r..c..f..',
+    'b......r.cc..c..',
+    '..f..f.r.c.r.cc.',
+    '...b.f.r..cr....',
+    'b...........bb..',
+    '...c.........b..',
+    '...c..r...ww....',
+    '.f...r..wwww.r..',
+    '..fr..wwww...r..',
+    '...f..ww.w..f...',
+  ];
+  const checkpoint = [[5, 5], [6, 5], [7, 5], [8, 5], [9, 5], [10, 5], [11, 5], [12, 5], [13, 5]];
+  const pumps = [[5, 5], [6, 5], [6, 6], [7, 6], [8, 6], [9, 6], [10, 6], [11, 6], [12, 6], [13, 6]];
+  shelter.allies = save => {
+    const road = save.flags.shelter_route === 'pumps' ? pumps : checkpoint;
+    return [road, [[4, 5], ...road]].map((path, index) => ({
+      m: 'aegis', x: path[0][0], y: path[0][1], lvl: 4, hpMul: 1.65,
+      tag: 'shelter_' + (index + 1), name: 'Shelter Carrier ' + (index + 1), escortPath: path,
+    }));
+  };
+  shelter.win = { escort: ['shelter_1', 'shelter_2'] };
+  shelter.lose = { turn: 12, text: 'The carriers missed the last evacuation window.' };
+  shelter.bonus = { text: 'Evacuate both carriers without taking damage', check: s => s.units.filter(u => u.escortPath).every(u => !u.escortDamaged), part: 'repair' };
+  shelter.brief = 'Escort two shelter carriers to the eastern gate by turn 12. Clear their marked route so both can advance during the ally phase.';
+  shelter.pre.splice(shelter.pre.length - 2, 0,
+    { s: 'anika', t: 'Both carriers can walk as long as there is road in front of them. At the gate, they go off our frequency and into the tunnel.' },
+    { s: 'corin', t: 'The checkpoint is shorter. The pump road is open too, but there is water on one side and no room to pass a stalled carrier.' },
+    { s: 'mira', t: 'I have their two callsigns written down. When one stops answering, I want to know which.' },
+    { choice: [
+      { t: 'Take the checkpoint. Clear the shorter road.', set: { shelter_route: 'checkpoint' } },
+      { t: 'Take the pump road. Approach the gate from the south.', set: { shelter_route: 'pumps' } },
+    ] });
+  shelter.events = [
+    { at: { turn: 1, phase: 'player' }, script: [
+      { s: 'pell', t: 'Both carriers are on the board. Their road is marked in cyan. They advance after us, one space at a time.' },
+      { s: 'anika', t: 'Park on the shoulder. Leave the road clear. Our drivers have never had to do this with a squadron watching.' },
+      { s: 'mira', t: 'Carrier Two, if you need us to wait, say so. We are not on the test flight clock anymore.' },
+    ] },
+    { at: { turn: 2, phase: 'player' }, script: [
+      { s: 'pell', e: 'shock', t: 'Two Concord signatures on the east road. I have marked their approach. They will be in range next turn.' },
+      { s: 'corin', t: 'They will see the carriers before they see Nautilus. Let me stand somewhere they cannot look past me.' },
+      { s: 'ilse', t: 'Take the cover at the junction. Keep the drivers on the civilian channel.' },
+    ] },
+    { at: { turn: 3, phase: 'enemy' }, telegraph: true, add: [
+      E('valkyr', 15, 1, 2), E('lancer', 15, 8, 2),
+    ], script: [
+      { s: 'grunt_c', t: 'Control, we can see people in the rear racks. Confirm seizure authority.' },
+      { s: 'anika', t: 'You can have my name and my frame number. They are not coming off those carriers.' },
+    ] },
+    { at: { escorted: 'shelter_1' }, script: [
+      { s: 'pell', t: 'Carrier One is through. The gate crew is keeping the ramp down for Two.' },
+      { s: 'mira', t: 'I hear Two. I am staying right here until they stop needing me.' },
+    ] },
+  ];
+  shelter.post.push(
+    { s: 'anika', t: 'The shelter registry has a place for names and a place for numbers. Either will tell the next crew how many beds to make.' },
+    { choice: [
+      { t: 'Record names where the survivors give permission.', set: { shelter_consent: 'named' } },
+      { t: 'Send a count. Keep names with the shelter crew.', set: { shelter_consent: 'counted' } },
+    ] });
   // Keep ordinary formations varied as the campaign introduces new opponents.
   const replace={c2:{lancer:['bailiff']},c3:{crawler:['mantle','leech']},c4:{lancer:['bailiff']},c5a:{crawler:['chrysalis','leech']},c6a:{crawler:['mantle','leech'],wyrmling:['chrysalis']},c5b:{zephyr:['marauder']},c6b:{lancer:['bailiff'],zephyr:['marauder']},c7:{crawler:['mantle','leech'],wyrmling:['chrysalis']},c8:{knight:['cantor']},c9:{shard:['cantor']},c10:{shard:['nullmaw']}};
   Object.entries(replace).forEach(([chapter,types])=>{const n={};CHAPTERS[chapter].enemies.forEach(e=>{if(e.boss||e.tag||e.pilot)return;const list=types[e.m];if(list){const k=n[e.m]||0;n[e.m]=k+1;if(k%2===0)e.m=list[Math.floor(k/2)%list.length];}});});
   CHAPTERS.i2.post.push({s:'leda',e:'normal',t:'One more decision. Release the archive now, and relief crews can trace their families. Hold it, and we can protect the surviving witnesses until they leave Concord territory.'},
     {choice:[{t:'Release a searchable record. Give the families a way to answer.',set:{archive_public:true},res:1},{t:'Protect the living witnesses first. Keep a sealed copy.',set:{archive_public:false}}]});
+  CHAPTERS.i2.pre.push(
+    { if: s => s.flags.shelter_consent === 'named', go: 'named_manifest' },
+    { s: 'leda', t: 'I can work from a count. If someone wants to tell us their name later, the door is open.' },
+    { go: 'manifest_reviewed' },
+    { label: 'named_manifest' },
+    { s: 'leda', t: 'The shelter drivers asked me to add their names. They had already marked the others who chose to speak.' },
+    { label: 'manifest_reviewed' });
   CHAPTERS.i7.pre.push({if:s=>s.flags.archive_public,go:'record_response'},{s:'leda',t:'Our witnesses are safe aboard. The records remain sealed until they choose to testify.'},{go:'record_end'},
     {label:'record_response'},{s:'noor',t:'The families used the archive to find each other. A relief escort is answering our channel.'},{label:'record_end'});
   CHAPTERS.i7.allies=s=>s.flags.archive_public?[{m:'aegis',x:6,y:1,lvl:20,name:'Civilian Relief Escort'}]:[];

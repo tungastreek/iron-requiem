@@ -35,10 +35,15 @@
     "trueRoute": true,
     "seed": 17,
     "result": "win",
-    "turns": 2,
-    "actions": 12,
+    "turns": 9,
+    "actions": 54,
     "losses": [],
-    "events": [],
+    "events": [
+      "e0",
+      "e1",
+      "e2",
+      "e3"
+    ],
     "roster": [
       "rei",
       "mira",
@@ -55,7 +60,7 @@
       "scarredLucien": false
     },
     "defeat": "",
-    "credits": 14500
+    "credits": 16630
   },
   {
     "chapter": "c2",
@@ -700,10 +705,15 @@
     "trueRoute": true,
     "seed": 17,
     "result": "win",
-    "turns": 2,
-    "actions": 12,
+    "turns": 9,
+    "actions": 54,
     "losses": [],
-    "events": [],
+    "events": [
+      "e0",
+      "e1",
+      "e2",
+      "e3"
+    ],
     "roster": [
       "rei",
       "mira",
@@ -720,7 +730,7 @@
       "scarredLucien": false
     },
     "defeat": "",
-    "credits": 14500
+    "credits": 16630
   },
   {
     "chapter": "c2",
@@ -1365,10 +1375,15 @@
     "trueRoute": true,
     "seed": 29,
     "result": "win",
-    "turns": 3,
-    "actions": 14,
+    "turns": 9,
+    "actions": 54,
     "losses": [],
-    "events": [],
+    "events": [
+      "e0",
+      "e1",
+      "e2",
+      "e3"
+    ],
     "roster": [
       "rei",
       "mira",
@@ -1385,7 +1400,7 @@
       "scarredLucien": false
     },
     "defeat": "",
-    "credits": 14500
+    "credits": 16630
   },
   {
     "chapter": "c2",
@@ -2033,10 +2048,15 @@
     "trueRoute": true,
     "seed": 29,
     "result": "win",
-    "turns": 3,
-    "actions": 14,
+    "turns": 9,
+    "actions": 54,
     "losses": [],
-    "events": [],
+    "events": [
+      "e0",
+      "e1",
+      "e2",
+      "e3"
+    ],
     "roster": [
       "rei",
       "mira",
@@ -2053,7 +2073,7 @@
       "scarredLucien": false
     },
     "defeat": "",
-    "credits": 14500
+    "credits": 16630
   },
   {
     "chapter": "c2",
@@ -2700,10 +2720,15 @@
     "trueRoute": true,
     "seed": 71,
     "result": "win",
-    "turns": 2,
-    "actions": 8,
+    "turns": 9,
+    "actions": 54,
     "losses": [],
-    "events": [],
+    "events": [
+      "e0",
+      "e1",
+      "e2",
+      "e3"
+    ],
     "roster": [
       "rei",
       "mira",
@@ -2720,7 +2745,7 @@
       "scarredLucien": false
     },
     "defeat": "",
-    "credits": 14500
+    "credits": 16630
   },
   {
     "chapter": "c2",
@@ -3367,10 +3392,15 @@
     "trueRoute": true,
     "seed": 71,
     "result": "win",
-    "turns": 2,
-    "actions": 8,
+    "turns": 9,
+    "actions": 54,
     "losses": [],
-    "events": [],
+    "events": [
+      "e0",
+      "e1",
+      "e2",
+      "e3"
+    ],
     "roster": [
       "rei",
       "mira",
@@ -3387,7 +3417,7 @@
       "scarredLucien": false
     },
     "defeat": "",
-    "credits": 14500
+    "credits": 16630
   },
   {
     "chapter": "c2",

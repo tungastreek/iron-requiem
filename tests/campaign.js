@@ -22,7 +22,7 @@ async function simulate(root,id,route='A',trueRoute=true,seed=17,options={}){
   c=vm.createContext({console,Math:math,performance:{now:()=>0},window:{addEventListener(){},devicePixelRatio:1},document:{getElementById:id=>els[id]||(els[id]=el()),createElement:el},requestAnimationFrame:()=>1,cancelAnimationFrame(){},setTimeout:f=>{queueMicrotask(f);return 1},clearTimeout(){},UI:ui,SFX:new Proxy({},{get:()=>()=>{}}),R3D:{ok:false},ASSETS:new Proxy({},{get:()=>()=>null}),ART:new Proxy({rgba:()=> '#aaccee',shade:x=>x,mapSprite:()=>el()},{get:(o,k)=>k in o?o[k]:()=>{}})});
   const read=p=>fs.readFileSync(path.join(root,p),'utf8');
   for(const f of ['data/types','data/mechs','data/pilots','data/story','data/expansion','data/combos','data/enemy-deployments','map/enemy-systems','battle/combat'])if(fs.existsSync(path.join(root,'js',f+'.js')))vm.runInContext(read('js/'+f+'.js'),c,{filename:f});
-  let map=read('js/map/tactics.js').replace('return { get geom()', 'return { _qa:{aiAct,battle,finishUnit,runEvents,checkEnd,phaseStart,makeUnit}, get geom()');vm.runInContext(map,c,{filename:'tactics.js'});
+  let map=read('js/map/tactics.js').replace('return { get geom()', 'return { _qa:{aiAct,battle,finishUnit,runEvents,checkEnd,phaseStart,makeUnit,pathTo,animateMove}, get geom()');vm.runInContext(map,c,{filename:'tactics.js'});
   // main.js owns migration; here only the ordinary default save is needed.
   let main=read('js/main.js');vm.runInContext(main,c,{filename:'main.js'});
   c.caseRoute=route;c.caseTrue=trueRoute;c.targetChapter=id;c.legacy=!!options.legacy;c.levelOverride=options.level||0;c.upgradeOverride=options.upgrades??-1;
@@ -41,6 +41,17 @@ async function simulate(root,id,route='A',trueRoute=true,seed=17,options={}){
     for(const u of pilots){if(outcome||!vm.runInContext('!!G.map',c))break;c.actor=u;
       await vm.runInContext(`(async()=>{
         if(actor.acted||actor.hp<=0)return;
+        const convoy = G.map.units.filter(u => u.escortPath && u.hp > 0);
+        if (convoy.some(u => u.escortPath[u.escortStep + 1]?.join() === [actor.x, actor.y].join())) {
+          const road = new Set(convoy.flatMap(u => u.escortPath.slice(u.escortStep + 1).map(tile => tile.join())));
+          const range = MAP.reach(actor);
+          const clear = [...range.tiles].find(tile => !road.has(tile));
+          if (clear) {
+            await MAP._qa.animateMove(actor, MAP._qa.pathTo(range, actor, ...clear.split(',').map(Number)));
+            await MAP._qa.finishUnit(actor);
+            return;
+          }
+        }
         const known=id=>PILOTS[actor.pilot].spirits.some(([s,l])=>s===id&&(legacy||actor.lvl>=l))||buildTree(actor.pilot).some(b=>b.nodes.some(n=>n.fx.spirit===id&&SAVE.pilots[actor.pilot].nodes[n.id]));
         const cast=async(id,target)=>{if(known(id)&&actor.sp>=SPIRITS[id].cost&&!actor.buf[id])await MAP.useSpirit(actor,id,target);};
         if(!legacy){

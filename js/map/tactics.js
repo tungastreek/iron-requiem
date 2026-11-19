@@ -62,6 +62,11 @@ const MAP = (() => {
       if (u.pilot && !PILOTS[u.pilot]) { u.pilot = null; }
     }
     if (o.name) u.nameOverride = o.name;
+    if (o.escortPath) {
+      u.pname = 'Shelter crew';
+      u.escortPath = o.escortPath;
+      u.escortStep = 0;
+    }
     if (team !== 'player' && o.p && PILOTS[o.p]) { u.pilot = o.p; u.usePlayerStats = true; u.lvl = o.lvl || Math.max(10, avgLevel()); }
     if (u.boss && team === 'enemy') u.eskills = ['prevail', 'nerves'];
     if(typeof ENEMIES!=='undefined')ENEMIES.init(u,o);
@@ -86,6 +91,7 @@ const MAP = (() => {
   }
   async function start(ch) {
     st = create(ch); G.map = st;
+    hover = null; threatOn = false; threatSet = null; floaters.length = 0;
     for (const d of ch.deploy) if (SAVE.roster.includes(d.p)) st.units.push(makeUnit(d, 'player'));
     // Auxiliary pilots remain selectable throughout the authored campaign.
     const aux = (SAVE.auxiliary || EXPANSION.crew.filter(p => SAVE.roster.includes(p)).slice(0, 4)).filter(p => SAVE.roster.includes(p)).slice(0, 4);
@@ -97,7 +103,9 @@ const MAP = (() => {
     for (const a of allies) st.units.push(makeUnit(a, 'ally'));
     placeSecrets();
     document.getElementById('mapScreen').hidden = false;
-    initCanvas(); resize();
+    initCanvas();
+    clearSel();
+    resize();
     if(typeof TOUCH!=='undefined')TOUCH.resetMap();
     UI.mapHUD(st);
     SFX.music(ch.mood || 'battle');
@@ -233,6 +241,7 @@ const MAP = (() => {
     // overlays
     if (threatOn && threatSet) { ctx.fillStyle = 'rgba(255,60,80,0.16)'; threatSet.forEach(k => { const [x, y] = k.split(',').map(Number); ctx.fillRect(x * T, y * T, T, T); }); }
     const pulse = 0.5 + Math.sin(t * 4) * 0.15;
+    drawObjectiveMarkers(t);
     if (ui.range) { ui.range.tiles.forEach(k => { const [x, y] = k.split(',').map(Number); ctx.fillStyle = `rgba(60,170,255,${0.25 * pulse + 0.1})`; ctx.fillRect(x * T + 1, y * T + 1, T - 2, T - 2); ctx.strokeStyle = 'rgba(120,210,255,0.5)'; ctx.strokeRect(x * T + 1.5, y * T + 1.5, T - 3, T - 3); }); }
     if (ui.atkRange) { ui.atkRange.forEach(k => { const [x, y] = k.split(',').map(Number); ctx.fillStyle = `rgba(255,70,90,${0.22 * pulse + 0.08})`; ctx.fillRect(x * T + 1, y * T + 1, T - 2, T - 2); }); }
     if (ui.target) {
@@ -263,6 +272,37 @@ const MAP = (() => {
     for (let i = floaters.length - 1; i >= 0; i--) { const f = floaters[i]; const k = (performance.now() - f.t) / f.life; if (k >= 1) { floaters.splice(i, 1); continue; } ctx.globalAlpha = k > 0.7 ? (1 - k) / 0.3 : 1; ctx.font = `800 ${f.size}px "Chakra Petch", sans-serif`; ctx.textAlign = 'center'; ctx.lineWidth = 4; ctx.strokeStyle = '#000'; const yy = f.y * T - k * 20; ctx.strokeText(f.s, f.x * T + T / 2, yy); ctx.fillStyle = f.c; ctx.fillText(f.s, f.x * T + T / 2, yy); ctx.globalAlpha = 1; }
     ctx.restore();
   }
+  function drawObjectiveMarkers(t) {
+    if (st.ch.win.escort) {
+      const carrier = st.units.find(u => u.escortPath && !u.escorted && u.hp > 0);
+      if (carrier) {
+        ctx.save();
+        ctx.fillStyle = '#6dfcf7';
+        ctx.globalAlpha = .6;
+        for (const [x, y] of carrier.escortPath.slice(carrier.escortStep + 1)) {
+          ctx.beginPath(); ctx.arc((x + .5) * T, (y + .18) * T, T * .07, 0, Math.PI * 2); ctx.fill();
+        }
+        const [x, y] = carrier.escortPath.at(-1);
+        ctx.strokeStyle = '#6dfcf7'; ctx.lineWidth = 2;
+        ctx.strokeRect(x * T + 3, y * T + 3, T - 6, T - 6);
+        ctx.restore();
+      }
+    }
+    const events = st.ch.events || [];
+    for (const [i, event] of events.entries()) {
+      if (!event.telegraph || st.fired['e' + i] || event.at.turn - st.turn !== 1) continue;
+      ctx.save();
+      ctx.strokeStyle = '#ffc060'; ctx.fillStyle = '#ffc060'; ctx.lineWidth = 2;
+      ctx.globalAlpha = .8 + Math.sin(t * 6) * .2;
+      ctx.font = `bold ${Math.max(10, Math.floor(T * .35))}px sans-serif`;
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      for (const { x, y } of event.add || []) {
+        ctx.strokeRect(x * T + 2, y * T + 2, T - 4, T - 4);
+        ctx.fillText('!', (x + .5) * T, (y + .5) * T);
+      }
+      ctx.restore();
+    }
+  }
   function drawUnit(u, t) {
     let x = u.x, y = u.y;
     if (u.anim) { const k = Math.min(u.anim.path.length - 1e-6, (performance.now() - u.anim.t0) / 110); const i = Math.floor(k), f = k - i; const a = u.anim.path[i], b = u.anim.path[Math.min(i + 1, u.anim.path.length - 1)]; x = a[0] + (b[0] - a[0]) * f; y = a[1] + (b[1] - a[1]) * f; }
@@ -282,6 +322,15 @@ const MAP = (() => {
     const ms = CB.mstats(u), f = Math.max(0, u.hp / ms.hp);
     ctx.fillStyle = 'rgba(0,0,0,0.7)'; ctx.fillRect(px + T * 0.12, py + T - 6, T * 0.76, 4);
     ctx.fillStyle = f < 0.3 ? '#ff4d6d' : f < 0.6 ? '#ffc04d' : col; ctx.fillRect(px + T * 0.12, py + T - 6, T * 0.76 * f, 4);
+    if (u.escortPath) {
+      const size = Math.max(13, Math.floor(T * .26)), x = px + 2, y = py + 2;
+      ctx.fillStyle = '#091c15'; ctx.fillRect(x, y, size, size);
+      ctx.strokeStyle = col; ctx.lineWidth = 1; ctx.strokeRect(x, y, size, size);
+      ctx.fillStyle = col; ctx.font = `700 ${Math.round(size * .7)}px sans-serif`;
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.fillText(String(st.ch.win.escort.indexOf(u.tag) + 1), x + size / 2, y + size / 2);
+      ctx.textBaseline = 'alphabetic';
+    }
     // status pips
     const ss = Object.keys(u.status); ss.forEach((k, i) => { ctx.fillStyle = STATUS[k].color; ctx.beginPath(); ctx.arc(px + T * 0.88 - i * 7, py + 6, 3, 0, 7); ctx.fill(); });
     if (Object.keys(u.buf).some(k => u.buf[k])) { ctx.fillStyle = '#7dffb0'; ctx.beginPath(); ctx.arc(px + 6, py + T - 12, 3, 0, 7); ctx.fill(); }
@@ -422,7 +471,7 @@ const MAP = (() => {
   async function battle(a, d, w) {
     let mode;
     if (d.team === 'player') mode = SAVE.settings.defAuto ? (CB.bestWeapon(d, a, false, true) ? 'counter' : 'defend') : await UI.defensePrompt(a, d, w);
-    else mode = aiDefMode(d, a);
+    else mode = d.escortPath ? 'defend' : aiDefMode(d, a);
     let intercept=null;
     if(typeof mode==='string'&&mode.startsWith('guard:')){const guard=COMBOS.guards(d).find(u=>u.uid===Number(mode.split(':')[1]));if(guard){intercept={target:d,guard};d=guard;d.supportDefended=true;}mode='defend';}
     const comboPartner=w.combo?COMBOS.partner(a,w):null;
@@ -441,6 +490,7 @@ const MAP = (() => {
     if (d.hp > 0 && counterW && CB.usable(d, counterW, CB.dist(a, d), false, true) === null) {
       CB.spend(d, counterW); const r2 = CB.roll(d, a, counterW, 'none'); CB.applyResult(d, a, r2); events.push({ by: 'D', w: counterW, res: r2, mode: 'none', hpAfter: a.hp });
     }
+    if (d.escortPath && d.hp < hp0.d) d.escortDamaged = true;
     // play animation
     const playerLeft = false;
     const leftU = a.team === 'enemy' ? a : d, rightU = leftU === a ? d : a;
@@ -455,8 +505,8 @@ const MAP = (() => {
     }
     if (pm.flank.pincer) floater(d.x, d.y - 0.5, 'PINCER!', '#ffb347', 14); else if (pm.flank.n) floater(d.x, d.y - 0.5, 'FLANK', '#ffb347', 13);
     // knockback
-    const pull=r1.hit&&typeof ENEMIES!=='undefined'?ENEMIES.pullTile(st,a,d,w):null;
-    if(pull){await animateMove(d,[[pull.x,pull.y]]);floater(d.x,d.y,'PULLED','#ffb347',14);}else if (r1.hit && d.hp > 0 && CB.pushes(w) && !['XL'].includes(MECHS[d.mech].size) && !MECHS[d.mech].ship) await knockback(a, d);
+    const pull=r1.hit&&!d.escortPath&&typeof ENEMIES!=='undefined'?ENEMIES.pullTile(st,a,d,w):null;
+    if(pull){await animateMove(d,[[pull.x,pull.y]]);floater(d.x,d.y,'PULLED','#ffb347',14);}else if (r1.hit && d.hp > 0 && !d.escortPath && CB.pushes(w) && !['XL'].includes(MECHS[d.mech].size) && !MECHS[d.mech].ship) await knockback(a, d);
     // rewards & deaths
     for (const [att, def] of [[a, d], [d, a]]) if (att.team === 'player' || att.team === 'ally') rewards(att, def, def.hp <= 0, events);
     for (const u of [a, d]) if (u.hp <= 0) await unitDown(u);
@@ -562,6 +612,7 @@ const MAP = (() => {
     await phaseStart('player');
   }
   async function aiAct(e) {
+    if (e.escortPath) { await advanceEscort(e); return; }
     const holding = e.hold && (e.hold >= 99 || st.turn <= e.hold);
     const foes = st.units.filter(o => o.hp > 0 && foeOf(o, e));
     if (!foes.length) return;
@@ -593,6 +644,21 @@ const MAP = (() => {
     let bt = null, bd = 1e9; rr.tiles.forEach(k => { const [x, y] = k.split(',').map(Number); const d = Math.abs(x - tgt.x) + Math.abs(y - tgt.y); if (d < bd) { bd = d; bt = [x, y]; } });
     if (bt && (bt[0] !== e.x || bt[1] !== e.y)) await animateMove(e, pathTo(rr, e, bt[0], bt[1]));
   }
+  async function advanceEscort(unit) {
+    const next = unit.escortPath[unit.escortStep + 1];
+    if (st.unitAt(...next)) {
+      floater(unit.x, unit.y, 'ROAD BLOCKED', '#ffd166', 13);
+      return;
+    }
+    await animateMove(unit, [next]);
+    unit.escortStep++;
+    if (unit.escortStep === unit.escortPath.length - 1) {
+      unit.escorted = true;
+      unit.hp = 0;
+      floater(unit.x, unit.y, 'EVACUATED', '#76ffd9', 16);
+      UI.refreshHUD(st);
+    }
+  }
 
   // ---------- events ----------
   async function runEvents() {
@@ -609,6 +675,7 @@ const MAP = (() => {
       if (at.enemies != null) ok = st.units.filter(u => u.team === 'enemy' && u.hp > 0).length <= at.enemies;
       if (at.defeated) ok = st.defeatedTurn[at.defeated] != null;
       if (at.hp) { const u = st.find(at.hp.tag); ok ||= !!u && u.hp <= CB.mstats(u).hp * at.hp.below; }
+      if (at.escorted) ok ||= st.units.some(u => u.tag === at.escorted && u.escorted);
       if (!ok) continue;
       st.fired[key] = st.turn;
       if (ev.script) { const r = await UI.runScript(ev.script, { overlay: true }); if (r === 'endmap:true') { await win(true); return; } }
@@ -632,7 +699,14 @@ const MAP = (() => {
     const win_ = st.ch.win;
     const enemiesLeft = st.units.filter(u => u.team === 'enemy' && u.hp > 0).length;
     let won = false;
-    if (win_ === 'rout') {
+    if (win_.escort) {
+      const carriers = st.units.filter(u => win_.escort.includes(u.tag));
+      if (carriers.some(u => !u.escorted && u.hp <= 0)) {
+        await lose('A shelter carrier was destroyed before reaching the gate.');
+        return true;
+      }
+      won = carriers.length === win_.escort.length && carriers.every(u => u.escorted);
+    } else if (win_ === 'rout') {
       // ensure no pending "enemies:0" events unfired
       const pending = (st.ch.events || []).some((ev, i) => ev.at.enemies != null && !st.fired['e' + i] && (!ev.cond || ev.cond(SAVE)));
       won = enemiesLeft === 0 && !pending;
@@ -644,7 +718,7 @@ const MAP = (() => {
   async function win(viaEvent) {
     const ch = st.ch;
     // story continuity: allies scheduled to arrive later still join if the mission ended early
-    (ch.events || []).forEach((ev, i) => { if (!st.fired['e' + i] && ev.join && (!ev.cond || ev.cond(SAVE))) ev.join.forEach(o => addRoster(o.p)); }); const s = { turn: st.turn, flags: SAVE.flags };
+    (ch.events || []).forEach((ev, i) => { if (!st.fired['e' + i] && ev.join && (!ev.cond || ev.cond(SAVE))) ev.join.forEach(o => addRoster(o.p)); }); const s = { turn: st.turn, flags: SAVE.flags, units: st.units };
     const bonus = ch.bonus && ch.bonus.check(s);
     const credits = st.credits + (ch.reward.credits || 0);
     const parts = (ch.reward.parts || []).slice(); if (bonus && ch.bonus.part) parts.push(ch.bonus.part);
