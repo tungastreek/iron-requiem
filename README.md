@@ -19,3 +19,7 @@ See [ART_PROMPTS.md](ART_PROMPTS.md) for the pose layouts and anchor format. Aft
 ## Verification
 
 See [campaign results](tests/CAMPAIGN_REPORT.md), [balance notes](tests/BALANCE.md), and [browser acceptance](tests/BROWSER_QA.md). Recorded checks cover sprite transparency and offline asset bytes, deployment and routes, combat and support systems, save migration, and simulated animation timelines. Browser screenshots, audible playback, device timings, and Windows launch checks are pending.
+
+## Roadmap
+
+[docs/HANDOFF_COMMERCIAL.md](docs/HANDOFF_COMMERCIAL.md) audits the game against a commercial bar and contains self-contained task prompts for agents. [docs/ASSET_REQUESTS_V2.md](docs/ASSET_REQUESTS_V2.md) lists the art, music, sound and voice still to be generated.
